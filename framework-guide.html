@@ -1,0 +1,2078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Framework reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style id="framework-css"></style>
+<style id="guide-css">
+:root {
+  --sg-bg: #f4f3f9; --sg-surface: #ffffff; --sg-ink: #1c1735; --sg-muted: #58537a;
+  --sg-line: #d9d6e8; --sg-soft: #ece9f6; --sg-bad: #b3261e; --sg-radius: 10px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sg-bg: #15122a; --sg-surface: #1f1b3a; --sg-ink: #efedfb; --sg-muted: #b3aed3;
+    --sg-line: #38335c; --sg-soft: #2a2549; --sg-bad: #ff8a80; color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--sg-bg); color: var(--sg-ink); font-family: "Poppins", system-ui, sans-serif; padding-top: env(safe-area-inset-top,0px); padding-bottom: env(safe-area-inset-bottom,0px); }
+.sg-top { position: sticky; top: env(safe-area-inset-top,0px); z-index: 100; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .85rem 1.25rem; background: color-mix(in srgb, var(--sg-surface) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--sg-line); }
+.sg-brand { font-weight: 700; font-size: 1.15rem; }
+.sg-brand small { font-weight: 400; color: var(--sg-muted); font-size: .8rem; margin-inline-start: .6rem; }
+.sg-wrap { max-width: 74rem; margin: 0 auto; padding: 2.5rem 1.25rem 6rem; }
+.sg-title { font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem); font-weight: 700; margin: 0 0 .5rem; letter-spacing: -.02em; }
+.sg-lead { color: var(--sg-muted); max-width: 62ch; margin: 0 0 2rem; font-size: 1.05rem; }
+.sg-sub { font-size: 1.25rem; font-weight: 600; margin: 2.5rem 0 .5rem; }
+.sg-p { color: var(--sg-muted); max-width: 68ch; margin: 0 0 1rem; font-size: .92rem; }
+.sg-stage { background: var(--sg-surface); border: 1px solid var(--sg-line); border-radius: var(--sg-radius); padding: 1.25rem; margin-top: 1rem; }
+.sg-scroll { overflow-x: auto; }
+.sg-code { font: 500 .76rem/1.3 "JetBrains Mono", monospace; background: var(--sg-soft); color: var(--sg-ink); border: 0; border-radius: 5px; padding: .25rem .5rem; cursor: copy; }
+.sg-toast { position: fixed; inset-inline: 0; bottom: calc(1.25rem + env(safe-area-inset-bottom,0px)); margin-inline: auto; inline-size: max-content; max-inline-size: 90vw; background: #1c1735; color: #fff; padding: .55rem 1rem; border-radius: 999px; font: 500 .8rem "JetBrains Mono", monospace; opacity: 0; transform: translateY(.4rem); pointer-events: none; transition: opacity .18s, transform .18s; z-index: 500; }
+.sg-toast[data-on="true"] { opacity: 1; transform: none; }
+
+/* color card grid */
+.sg-colorgrid { display: grid; gap: 1.5rem; }
+.sg-colorcard { border: 1px solid var(--sg-line); border-radius: var(--sg-radius); overflow: hidden; background: var(--sg-surface); }
+.sg-colorhead { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1.1rem; }
+.sg-colorname { font-weight: 700; font-size: 1rem; }
+.sg-colorbase { display: flex; align-items: center; gap: .5rem; }
+.sg-colorbase input[type=color] { inline-size: 2rem; block-size: 2rem; padding: 0; border: 1px solid var(--sg-line); border-radius: 6px; background: none; cursor: pointer; }
+.sg-colorbase input[type=text] { inline-size: 6.5rem; font: 500 .78rem "JetBrains Mono", monospace; padding: .35rem .5rem; border: 1px solid var(--sg-line); border-radius: 6px; background: var(--sg-surface); color: var(--sg-ink); }
+.sg-steps { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(4.4rem, 1fr); gap: 2px; background: var(--sg-line); overflow-x: auto; min-width: 0; }
+.sg-colorcard { min-width: 0; }
+.sg-step { position: relative; min-block-size: 4.5rem; display: flex; flex-direction: column; justify-content: flex-end; padding: .4rem; cursor: copy; border: 0; font: 500 .68rem "JetBrains Mono", monospace; }
+.sg-step .lbl { opacity: .85; }
+.sg-step .ratio { font-size: .62rem; opacity: .7; }
+.sg-step .ratio[data-fail="true"] { font-weight: 700; opacity: 1; text-decoration: underline; }
+.sg-step.sg-base { outline: 2px solid rgba(0,0,0,.25); outline-offset: -2px; }
+.sg-stepbtns { display: flex; align-items: center; gap: .35rem; padding: .6rem 1.1rem; flex-wrap: wrap; border-top: 1px solid var(--sg-line); }
+.sg-minibtn { font: 600 .72rem "JetBrains Mono", monospace; padding: .3rem .55rem; border-radius: 6px; border: 1px solid var(--sg-line); background: var(--sg-surface); color: var(--sg-ink); cursor: pointer; }
+.sg-minibtn:hover { background: var(--sg-soft); }
+.sg-minibtn[data-danger="true"] { color: var(--sg-bad); }
+.sg-editrow { display: flex; align-items: center; gap: .5rem; padding: 0 1.1rem 1rem; flex-wrap: wrap; }
+.sg-editrow label { display: flex; align-items: center; gap: .35rem; font: 500 .72rem "JetBrains Mono", monospace; color: var(--sg-muted); }
+.sg-editrow input[type=color] { inline-size: 1.6rem; block-size: 1.6rem; padding: 0; border: 1px solid var(--sg-line); border-radius: 4px; }
+.sg-editrow input[type=text] { inline-size: 5.5rem; font: 500 .7rem "JetBrains Mono", monospace; padding: .25rem .4rem; border: 1px solid var(--sg-line); border-radius: 5px; }
+
+.sg-hoverrow { display: flex; align-items: center; gap: .6rem; padding: .8rem 1.1rem; border-top: 1px solid var(--sg-line); background: var(--sg-bg); }
+.sg-hoverrow .swatch { inline-size: 1.8rem; block-size: 1.8rem; border-radius: 6px; border: 1px solid var(--sg-line); }
+.sg-top-actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.25rem; }
+.sg-btn { font: 600 .82rem "Poppins", sans-serif; padding: .55rem 1rem; border-radius: 8px; border: 1px solid var(--sg-line); background: var(--sg-surface); color: var(--sg-ink); cursor: pointer; }
+.sg-btn:hover { background: var(--sg-soft); }
+.sg-btn[data-primary="true"] { background: var(--sg-ink); color: var(--sg-bg); border-color: var(--sg-ink); }
+.sg-addcolor { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; margin-top: .5rem; }
+.sg-addcolor input[type=text] { padding: .5rem .7rem; border-radius: 8px; border: 1px solid var(--sg-line); font: 500 .85rem "JetBrains Mono", monospace; }
+.sg-trans { display: flex; gap: .3rem; margin-top: .5rem; flex-wrap: wrap; }
+.sg-transchip { inline-size: 2.4rem; block-size: 2.4rem; border-radius: 5px; border: 0; cursor: copy; }
+.sg-checker { background: repeating-conic-gradient(#e5e2f0 0 25%, #fff 0 50%) 0 0 / 16px 16px; padding: .5rem; border-radius: 8px; display: inline-flex; }
+
+/* typography */
+.sg-nav2 { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 2rem; border-bottom: 1px solid var(--sg-line); }
+.sg-nav2 a { padding: .6rem 1rem; text-decoration: none; color: var(--sg-muted); font-weight: 600; font-size: .9rem; border-bottom: 2px solid transparent; }
+.sg-nav2 a[aria-current="true"] { color: var(--sg-ink); border-color: var(--sg-ink); }
+.sg-typeform { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem 1.25rem; }
+@media (max-width: 900px) { .sg-typeform { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .sg-typeform { grid-template-columns: 1fr; } }
+.sg-typeform label { display: grid; gap: .3rem; font: 500 .78rem "JetBrains Mono", monospace; color: var(--sg-muted); }
+.sg-typeform input[type=number], .sg-typeform select { font: 500 .9rem "JetBrains Mono", monospace; padding: .5rem .6rem; border: 1px solid var(--sg-line); border-radius: 8px; background: var(--sg-surface); color: var(--sg-ink); }
+.sg-typerow { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; align-items: baseline; padding: .8rem 0; border-bottom: 1px solid var(--sg-soft); }
+.sg-typemeta { display: grid; gap: .15rem; }
+.sg-typemeta b { font-size: .85rem; }
+.sg-typemeta span { font: 500 .68rem "JetBrains Mono", monospace; color: var(--sg-muted); }
+.sg-typesample { min-width: 0; overflow-wrap: break-word; }
+.sg-formcaption { font-size: .8rem; color: var(--sg-muted); margin: -.5rem 0 1rem; }
+.sg-bars { display: grid; gap: .5rem; }
+.sg-barrow { display: grid; grid-template-columns: 9.5rem minmax(0,1fr) 4.5rem; align-items: center; gap: .75rem; font: 500 .74rem "JetBrains Mono", monospace; }
+.sg-bar { block-size: 1.1rem; border-radius: 3px; background: var(--primary, #7c5cff); max-width: 100%; }
+.sg-bar--sec { background: var(--secondary, #ff5c8a); }
+.sg-row { display: flex; flex-wrap: wrap; align-items: center; }
+.sg-checklabel { display: inline-flex; align-items: center; gap: .5rem; font: 500 .85rem "JetBrains Mono", monospace; }
+.sg-btnpreviewrow { display: flex; flex-direction: column; gap: .6rem; margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--sg-soft); }
+.sg-btnpreviewrow:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+.sg-btnpreviewrow > span { font: 600 .78rem "JetBrains Mono", monospace; color: var(--sg-ink); text-transform: uppercase; letter-spacing: .04em; }
+.sg-btnpreviewrow > .sg-btnrow-items { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+.sg-btn-demo { cursor: pointer; }
+.sg-btnvariantform { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem 1.25rem; }
+@media (max-width: 900px) { .sg-btnvariantform { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .sg-btnvariantform { grid-template-columns: 1fr; } }
+.sg-btnfield { display: grid; gap: .3rem; }
+.sg-btnfield-title { display: flex; align-items: center; gap: .4rem; font: 500 .78rem "JetBrains Mono", monospace; color: var(--sg-muted); }
+.sg-btnfield input[type=text] { font: 500 .82rem "JetBrains Mono", monospace; padding: .5rem .6rem; border: 1px solid var(--sg-line); border-radius: 7px; background: var(--sg-surface); color: var(--sg-ink); }
+.sg-hovericon { display: inline-flex; align-items: center; justify-content: center; inline-size: 1.3rem; block-size: 1.3rem; padding: 0; margin-inline-start: auto; border: 1px solid var(--sg-line); border-radius: 5px; background: var(--sg-surface); color: var(--sg-muted); cursor: pointer; }
+.sg-hovericon:hover { background: var(--sg-soft); color: var(--sg-ink); }
+.sg-hovericon[aria-pressed="true"] { background: var(--sg-ink); border-color: var(--sg-ink); color: var(--sg-bg); }
+.sg-leveltabs { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.sg-leveltab { font: 600 .78rem "JetBrains Mono", monospace; padding: .4rem .8rem; border-radius: 7px; border: 1px solid var(--sg-line); background: var(--sg-surface); color: var(--sg-muted); cursor: pointer; }
+.sg-leveltab:hover { background: var(--sg-soft); }
+.sg-leveltab[aria-current="true"] { background: var(--sg-ink); color: var(--sg-bg); border-color: var(--sg-ink); }
+.sg-typeform input[type=text]::placeholder { color: #b7b2d6; font-style: italic; }
+.sg-export { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.sg-export input { inline-size: 14rem; max-inline-size: 100%; font: 500 .8rem "JetBrains Mono", monospace; padding: .5rem .7rem; border: 1px solid var(--sg-line); border-radius: 8px; background: var(--sg-surface); color: var(--sg-ink); }
+.sg-loader { max-width: 40rem; margin: 3rem auto; }
+.sg-loader code { font-family: "JetBrains Mono", monospace; }
+</style>
+</head>
+<body>
+<header class="sg-top">
+  <div class="sg-brand">Framework reference</div>
+  <div class="sg-export">
+    <input type="text" id="export-name" placeholder="client-name.css" spellcheck="false" aria-label="File name for the downloaded CSS">
+    <button class="sg-btn" id="export-bricks" type="button">Download for Bricks</button>
+    <button class="sg-btn" id="export" data-primary="true" type="button">Download CSS</button>
+  </div>
+</header>
+<div class="sg-stage sg-loader" id="fw-loader" hidden>
+  <h2 class="sg-sub" style="margin-top:0">Couldn't load framework.css</h2>
+  <p class="sg-p">The guide reads its defaults from framework.css, and browsers don't let a page opened by double-clicking read other files. Close this tab and run <code>python3 build.py serve</code> in the Framework folder, or choose the file here for this session.</p>
+  <label class="sg-btn" style="display:inline-block">Choose framework.css…<input type="file" id="fw-pick" accept=".css,text/css" hidden></label>
+</div>
+<div class="sg-wrap" hidden>
+  <h1 class="sg-title">Color</h1>
+  <p class="sg-lead">Each color is a base you enter by hand, with lighter steps (l-1 up) and darker steps (d-1 up), plus its own hover. Add or remove a step on any color independently. Click a swatch to copy its variable. The outlined swatch is the base.</p>
+
+  <div class="sg-top-actions">
+    <div class="sg-addcolor"><input type="text" id="newcolor" placeholder="new color name, e.g. brand-2"><button class="sg-btn" id="addcolor" type="button">Add color</button></div>
+  </div>
+
+  <div class="sg-nav2"><a href="#color" aria-current="true">Color</a><a href="#type">Typography</a><a href="#spacing">Spacing</a><a href="#layout">Layout</a><a href="#radius">Radius</a><a href="#focus">Focus</a><a href="#buttons">Buttons</a><a href="#links">Links</a></div>
+
+  <div class="sg-colorgrid" id="colors"></div>
+
+  <h2 class="sg-sub">Transparency</h2>
+  <p class="sg-p">Ten to ninety percent of each base color, mixed with transparent.</p>
+  <div class="sg-stage">
+    <label style="font:500 .8rem 'JetBrains Mono',monospace;color:var(--sg-muted)">Color <select id="tr-color" class="sg-btn"></select></label>
+    <div class="sg-checker"><div class="sg-trans" id="trans"></div></div>
+  </div>
+
+  <h2 class="sg-sub">Classes generated</h2>
+  <p class="sg-p">No utility classes right now. Every color, step, hover, and transparency is still available as a variable via <code class="sg-code">var()</code>, e.g. <code class="sg-code">background: var(--primary)</code> or <code class="sg-code">color: var(--primary-d-2)</code>.</p>
+
+  <h1 class="sg-title" id="type" style="margin-top:4rem">Typography</h1>
+  <p class="sg-lead">Same method as your type scale calculator: pick a min and max viewport, a base size at each end for the anchor step (h4 for headings, text-m for text), and a ratio. Every other step is the anchor times the ratio to a power, then clamped between its mobile and desktop value.</p>
+
+  <div class="sg-stage">
+    <div class="sg-typeform">
+      <label>Root font size (%)<input type="number" id="t-root" value="100"></label>
+      <label>Viewport min (px)<input type="number" id="t-vmin" value="320"></label>
+      <label>Viewport max (px)<input type="number" id="t-vmax" value="1366"></label>
+      <label>H4 base, mobile (px)<input type="number" id="t-hbm" value="24"></label>
+      <label>H4 base, desktop (px)<input type="number" id="t-hbd" value="28"></label>
+      <label>Heading ratio, mobile<select id="t-hr-m"></select></label>
+      <label>Heading ratio, desktop<select id="t-hr-d"></select></label>
+      <label>text-m base, mobile (px)<input type="number" id="t-tbm" value="16"></label>
+      <label>text-m base, desktop (px)<input type="number" id="t-tbd" value="18"></label>
+      <label>Text ratio, mobile<select id="t-tr-m"></select></label>
+      <label>Text ratio, desktop<select id="t-tr-d"></select></label>
+    </div>
+  </div>
+
+  <h3 class="sg-sub">Headings</h3>
+  <p class="sg-formcaption">h4 is the anchor. h3–h1 scale up, h5–h6 scale down. Pixel values shown are at the current window width.</p>
+  <div class="sg-stage" id="heads"></div>
+
+  <h3 class="sg-sub">Heading style</h3>
+  <p class="sg-formcaption">Set the default for every heading on the All tab. Switch to a level to override just that level; leave a field blank to keep it inheriting the default. Text color and font size can be any value you type, including a reference to another variable, e.g. var(--primary).</p>
+  <div class="sg-stage">
+    <div class="sg-leveltabs" id="leveltabs"></div>
+    <div class="sg-typeform" id="headform"></div>
+    <p class="sg-typesample" id="headstylesample" style="margin-top:1.25rem;font-size:var(--h3)">The quick brown fox jumps</p>
+  </div>
+
+  <h3 class="sg-sub">Text sizes</h3>
+  <p class="sg-formcaption">text-m is the anchor.</p>
+  <div class="sg-stage" id="texts"></div>
+
+  <h3 class="sg-sub">Text colors</h3>
+  <p class="sg-formcaption">Four independent, hand-entered colors -- the two muted variants aren't derived from --text-dark/--text-light; they just start at a trans-80 of those defaults. Body's own text color isn't set here -- it reuses the Text color field on the Text style panel below, defaulted to --text-dark.</p>
+  <div class="sg-stage">
+    <div class="sg-row">
+      <div class="sg-col"><span class="sg-hoverrow" style="border:1px solid var(--sg-line);border-radius:8px"><span class="swatch" id="swatch-text-dark"></span><input type="text" id="tc-dark-t" spellcheck="false"></span><code class="sg-code" style="margin-top:.4rem;display:inline-block" data-copy="var(--text-dark)">--text-dark</code></div>
+      <div class="sg-col"><span class="sg-hoverrow" style="border:1px solid var(--sg-line);border-radius:8px"><span class="swatch" id="swatch-text-light"></span><input type="text" id="tc-light-t" spellcheck="false"></span><code class="sg-code" style="margin-top:.4rem;display:inline-block" data-copy="var(--text-light)">--text-light</code></div>
+    </div>
+    <div class="sg-row" style="margin-top:1rem">
+      <div class="sg-col"><span class="sg-hoverrow" style="border:1px solid var(--sg-line);border-radius:8px"><span class="swatch" id="swatch-text-dark-muted"></span><input type="text" id="tc-dark-muted-t" spellcheck="false"></span><code class="sg-code" style="margin-top:.4rem;display:inline-block" data-copy="var(--text-dark-muted)">--text-dark-muted</code></div>
+      <div class="sg-col"><span class="sg-hoverrow" style="border:1px solid var(--sg-line);border-radius:8px"><span class="swatch" id="swatch-text-light-muted"></span><input type="text" id="tc-light-muted-t" spellcheck="false"></span><code class="sg-code" style="margin-top:.4rem;display:inline-block" data-copy="var(--text-light-muted)">--text-light-muted</code></div>
+    </div>
+  </div>
+
+  <h3 class="sg-sub">Text style</h3>
+  <p class="sg-formcaption">Set the default for every text size on the All tab, including the font and text color used by the body element (font-family here is --text-font-family, color is --text-color). Switch to a level to override just that level; leave a field blank to keep it inheriting the default.</p>
+  <div class="sg-stage">
+    <div class="sg-leveltabs" id="textleveltabs"></div>
+    <div class="sg-typeform" id="textstyleform"></div>
+    <p class="sg-typesample" id="textstylesample" style="margin-top:1.25rem;font-size:var(--text-m)">The quick brown fox jumps over the lazy dog. This paragraph is long enough to show line wrapping and a max-width limit if one is set on the current level.</p>
+  </div>
+
+  <h1 class="sg-title" id="spacing" style="margin-top:4rem">Spacing</h1>
+  <p class="sg-lead">Same method as Typography: a base value at M (mobile px to desktop px) and a scale ratio, split mobile/desktop, generate XS to XXL. Section spacing takes that same scale and multiplies it, fluidly, using a separate mobile and desktop multiplier. Uses the same viewport range set on the Typography page.</p>
+
+  <div class="sg-stage">
+    <div class="sg-typeform">
+      <label>Base value, mobile (px)<input type="number" id="sp-bm" value="16"></label>
+      <label>Base value, desktop (px)<input type="number" id="sp-bd" value="24"></label>
+      <label>Scale ratio, mobile<select id="sp-rm"></select></label>
+      <label>Scale ratio, desktop<select id="sp-rd"></select></label>
+      <label>Section multiplier, mobile<input type="number" step="0.1" id="sp-sm" value="2"></label>
+      <label>Section multiplier, desktop<input type="number" step="0.1" id="sp-sd" value="3"></label>
+      <label>Gutter, mobile (px)<input type="number" id="sp-gm" value="20"></label>
+      <label>Gutter, desktop (px)<input type="number" id="sp-gd" value="80"></label>
+    </div>
+  </div>
+
+  <h3 class="sg-sub">Base spacing</h3>
+  <p class="sg-formcaption">M is the anchor. Used for padding, margin, and gap alike — spacing is just spacing.</p>
+  <div class="sg-stage"><div class="sg-bars" id="space-bars"></div></div>
+
+  <h3 class="sg-sub">Section spacing</h3>
+  <p class="sg-formcaption">The base scale above, multiplied. "M" section spacing applies to every &lt;section&gt; by default.</p>
+  <div class="sg-stage"><div class="sg-bars" id="section-bars"></div></div>
+
+  <h3 class="sg-sub">Gutter</h3>
+  <p class="sg-formcaption">The section's inline edge spacing, independent of the scale above.</p>
+  <div class="sg-stage">
+    <div class="sg-barrow" data-bar="--gutter" style="grid-template-columns:9.5rem minmax(0,1fr) 4.5rem"><span>--gutter</span><span><div class="sg-bar"></div></span><span class="pxv"></span></div>
+    <button type="button" class="sg-code" style="margin-top:.75rem" data-copy="var(--gutter)">var(--gutter)</button>
+  </div>
+
+  <h3 class="sg-sub">Contextual gaps</h3>
+  <p class="sg-formcaption">Container gap (between containers in a section), content gap (between content elements), and grid gap (between grid items) — each just points at one of the sizes above.</p>
+  <div class="sg-stage">
+    <div class="sg-typeform">
+      <label>Container gap<select id="ctx-container"></select></label>
+      <label>Content gap<select id="ctx-content"></select></label>
+      <label>Grid gap<select id="ctx-grid"></select></label>
+    </div>
+    <div class="sg-bars" id="ctx-bars" style="margin-top:1rem"></div>
+  </div>
+
+  <h3 class="sg-sub">Automatic spacing</h3>
+  <p class="sg-formcaption">Applied sitewide with zero specificity: every &lt;section&gt; gets container gap, every div gets content gap. Any class or ID you add still overrides it. Turning a toggle off sets its variable to 0 instead of removing the rule, so nothing needs to be edited to turn it back on.</p>
+  <div class="sg-stage">
+    <div class="sg-row" style="gap:2rem">
+      <label style="display:flex;align-items:center;gap:.5rem;font:500 .85rem 'JetBrains Mono',monospace"><input type="checkbox" id="auto-container" checked> Auto container gap</label>
+      <label style="display:flex;align-items:center;gap:.5rem;font:500 .85rem 'JetBrains Mono',monospace"><input type="checkbox" id="auto-content" checked> Auto content gap</label>
+    </div>
+    <p class="sg-formcaption" style="margin-top:.75rem;margin-bottom:0">Auto grid gap will appear here once grid utility classes are built.</p>
+  </div>
+
+  <h3 class="sg-sub">Smart spacing</h3>
+  <p class="sg-formcaption">Only applies inside an element with the .smart-spacing class (or a selector listed under Target Additional Selectors below) — best for content you don't fully control the markup of, like a WYSIWYG editor or an imported blog post. Use .smart-spacing--off to cancel it locally.</p>
+  <div class="sg-stage">
+    <div class="sg-typeform">
+      <label>Paragraph spacing<input type="text" id="ss-paragraph" spellcheck="false"></label>
+      <label>Heading spacing<input type="text" id="ss-heading" spellcheck="false"></label>
+      <label>List spacing<input type="text" id="ss-list" spellcheck="false"></label>
+      <label>List item spacing<input type="text" id="ss-list-item" spellcheck="false"></label>
+      <label>Flow spacing (catch-all)<input type="text" id="ss-flow" spellcheck="false"></label>
+      <label>List indent<input type="text" id="ss-list-indent" spellcheck="false"></label>
+      <label>Nested list spacing<input type="text" id="ss-nested-list" spellcheck="false"></label>
+      <label>Nested list indent<input type="text" id="ss-nested-indent" spellcheck="false"></label>
+      <label>Nested list item spacing<input type="text" id="ss-nested-item" spellcheck="false"></label>
+      <label>Figures<input type="text" id="ss-figure" spellcheck="false"></label>
+      <label>Figcaptions<input type="text" id="ss-figcaption" spellcheck="false"></label>
+      <label>Blockquotes<input type="text" id="ss-blockquote" spellcheck="false"></label>
+    </div>
+  </div>
+
+  <h3 class="sg-sub">Heading spacing</h3>
+  <p class="sg-formcaption">All (H2-H6) sets the default; override a specific level below it. H1 isn't included, same as ACSS.</p>
+  <div class="sg-stage">
+    <div class="sg-leveltabs" id="ss-head-tabs"></div>
+    <div class="sg-typeform" id="ss-head-form"></div>
+  </div>
+
+  <h3 class="sg-sub">Advanced targeting</h3>
+  <p class="sg-formcaption">Target Additional Selectors: extra selectors (comma-separated, quoted) also treated as smart-spacing containers, for markup you can't add the .smart-spacing class to. Avoid Duplicate Margins: elements matching this selector get both top and bottom margin, so whatever follows one has its top margin zeroed to prevent double spacing. These two affect the downloaded CSS; they aren't demoed live above since the demo box only has default markup to show.</p>
+  <div class="sg-stage">
+    <div class="sg-row" style="gap:1.5rem;align-items:flex-start;flex-wrap:wrap">
+      <label style="flex:1;min-width:14rem;display:grid;gap:.3rem;font:500 .78rem 'JetBrains Mono',monospace;color:var(--sg-muted)">Target additional selectors<textarea id="ss-targets" rows="2" spellcheck="false" placeholder='".custom-selector"' style="font:500 .8rem 'JetBrains Mono',monospace;padding:.6rem;border:1px solid var(--sg-line);border-radius:8px;resize:vertical"></textarea></label>
+      <label style="flex:1;min-width:14rem;display:grid;gap:.3rem;font:500 .78rem 'JetBrains Mono',monospace;color:var(--sg-muted)">Avoid duplicate margins<textarea id="ss-dupe" rows="2" spellcheck="false" style="font:500 .8rem 'JetBrains Mono',monospace;padding:.6rem;border:1px solid var(--sg-line);border-radius:8px;resize:vertical"></textarea></label>
+    </div>
+  </div>
+
+  <h3 class="sg-sub">Smart spacing demo</h3>
+  <p class="sg-formcaption">A .smart-spacing container with mixed content. No manual margins, no gap on the parent — this is the spacing being re-applied automatically.</p>
+  <div class="sg-stage">
+    <div class="smart-spacing" style="background:var(--sg-bg);border-radius:8px;padding:1.5rem">
+      <h3 style="font-size:var(--text-l)">A heading</h3>
+      <p style="font-size:var(--text-m)">A first paragraph, to show the space above it now that it follows a heading.</p>
+      <p style="font-size:var(--text-m)">A second paragraph, showing paragraph-to-paragraph spacing.</p>
+      <ul style="font-size:var(--text-m)"><li>First list item</li><li>Second list item</li><li>Third list item</li></ul>
+      <p style="font-size:var(--text-m)">A closing paragraph after the list.</p>
+    </div>
+  </div>
+
+  <h3 class="sg-sub">Bridge variables</h3>
+  <p class="sg-formcaption">A wider fluid range: the desktop max of the larger size down to the mobile min of the smaller size. Same pattern for section spacing.</p>
+  <div class="sg-stage sg-scroll" id="bridge-list" style="display:flex;flex-wrap:wrap;gap:.5rem"></div>
+
+  <h1 class="sg-title" id="layout" style="margin-top:4rem">Layout</h1>
+  <p class="sg-lead">Grid templates to use with grid-template-columns, and the content width the auto-fit grids size against.</p>
+
+  <div class="sg-stage">
+    <div class="sg-typeform">
+      <label>Content width<input type="text" id="lay-content-width" spellcheck="false"></label>
+      <label>Auto-grid aggressiveness<input type="number" step="0.05" min="0" max="1" id="lay-aggressiveness"></label>
+    </div>
+  </div>
+
+  <h3 class="sg-sub">Grid templates</h3>
+  <p class="sg-formcaption">Equal columns (--grid-1 to --grid-12), ratio columns (--grid-1-2 is one part, then two parts), and auto-fit grids. --grid-auto-4 shows up to 4 columns and drops to fewer once a column would get narrower than a quarter of the content width times the aggressiveness, so lower aggressiveness keeps more columns on smaller screens. Click a name to copy it.</p>
+  <div class="sg-stage">
+    <label style="display:inline-flex;flex-direction:column;gap:.3rem;font:500 .78rem 'JetBrains Mono',monospace;color:var(--sg-muted)">Preview<select id="lay-grid-select" class="sg-btn"></select></label>
+    <div id="lay-grid-demo" style="display:grid;gap:var(--grid-gap);margin-top:1rem"></div>
+    <div id="lay-grid-list" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem"></div>
+  </div>
+
+  <h3 class="sg-sub">Breakpoints</h3>
+  <p class="sg-formcaption">Max-width breakpoints in px. CSS can't use variables in a media query, so these are written straight into the media queries of the downloaded file, and changing one doesn't change this page.</p>
+  <div class="sg-stage">
+    <div class="sg-typeform">
+      <label>XL (px)<input type="number" id="bp-xl" value="1366"></label>
+      <label>L (px)<input type="number" id="bp-l" value="992"></label>
+      <label>M (px)<input type="number" id="bp-m" value="768"></label>
+      <label>S (px)<input type="number" id="bp-s" value="480"></label>
+    </div>
+  </div>
+
+  <h1 class="sg-title" id="radius" style="margin-top:4rem">Radius</h1>
+  <p class="sg-lead">A base value at M (mobile px to desktop px) and one scale ratio generate XS to XL: each step down divides by the ratio, each step up multiplies by it. Uses the same viewport range set on the Typography page.</p>
+
+  <div class="sg-stage">
+    <div class="sg-typeform">
+      <label>Base value, mobile (px)<input type="number" id="rd-bm" value="10"></label>
+      <label>Base value, desktop (px)<input type="number" id="rd-bd" value="12"></label>
+      <label>Scale ratio<select id="rd-r"></select></label>
+    </div>
+  </div>
+
+  <h3 class="sg-sub">Radius scale</h3>
+  <p class="sg-formcaption">M is the anchor. --radius-full makes pills and circles. Pixel values shown are at the current window width; click a name to copy it.</p>
+  <div class="sg-stage">
+    <div id="radius-tiles" class="sg-row" style="gap:1.25rem;align-items:flex-end"></div>
+  </div>
+
+  <h3 class="sg-sub">Contextual radius</h3>
+  <p class="sg-formcaption">--radius is the general default. It just points at one of the sizes above.</p>
+  <div class="sg-stage">
+    <div class="sg-typeform">
+      <label>Radius<select id="ctx-radius"></select></label>
+    </div>
+  </div>
+
+  <h1 class="sg-title" id="focus" style="margin-top:4rem">Focus</h1>
+  <p class="sg-lead">The outline keyboard users see on whatever has focus: links, buttons, form fields, anything focusable. It only appears for keyboard focus (:focus-visible), not mouse clicks. Each button swaps in its own focus color from the Buttons page.</p>
+
+  <div class="sg-stage">
+    <div class="sg-typeform">
+      <label>Color<input type="text" id="focus-color" spellcheck="false"></label>
+      <label>Width<input type="text" id="focus-width" spellcheck="false"></label>
+      <label>Offset<input type="text" id="focus-offset" spellcheck="false"></label>
+    </div>
+  </div>
+
+  <h3 class="sg-sub">Preview</h3>
+  <p class="sg-formcaption">The first box shows the ring as it's set now. Click in the page, then press Tab to move real focus through the link and buttons; this page uses your framework's focus rule too.</p>
+  <div class="sg-stage">
+    <div class="sg-row" style="gap:1.5rem;align-items:center">
+      <span style="display:inline-block;padding:.6rem 1rem;border-radius:6px;background:var(--sg-soft);outline:var(--focus-width) solid var(--focus-color);outline-offset:var(--focus-offset)">Focused element</span>
+      <a href="#focus" onclick="return false">A link</a>
+      <button type="button" class="btn--primary">Primary button</button>
+      <button type="button" class="btn--secondary btn--outline">Outline button</button>
+    </div>
+  </div>
+
+  <h1 class="sg-title" id="buttons" style="margin-top:4rem">Buttons</h1>
+  <p class="sg-lead">One class per color, never the status colors. Check a color to give it a button style (.btn--{color}, plus light, dark, and outline); uncheck it to remove that button entirely. Every button shares one set of global settings below, matching ACSS's own button variables.</p>
+
+  <div class="sg-stage">
+    <div id="btn-color-checks" class="sg-row" style="gap:1.25rem;flex-wrap:wrap"></div>
+  </div>
+
+  <h3 class="sg-sub">Global settings</h3>
+  <p class="sg-formcaption">Shared by every button color. Change one, every button follows.</p>
+  <div class="sg-stage">
+    <div class="sg-typeform" id="btn-global-form"></div>
+  </div>
+
+  <h3 class="sg-sub">Preview</h3>
+  <div class="sg-stage sg-scroll">
+    <div id="btn-preview"></div>
+  </div>
+
+  <h3 class="sg-sub">Colors, per variant</h3>
+  <p class="sg-formcaption">Each of the 6 variants (solid, dark, light, and their outline versions) has its own background, text color, border color and focus color. Background, text color and border color each have a hover state too — click the small icon next to a field's name to switch it to editing that field's hover value.</p>
+  <div class="sg-stage">
+    <label style="display:inline-flex;flex-direction:column;gap:.3rem;font:500 .78rem 'JetBrains Mono',monospace;color:var(--sg-muted);max-width:16rem">Color to edit<select id="btn-edit-color" class="sg-btn"></select></label>
+    <div class="sg-leveltabs" id="btn-variant-tabs" style="margin-top:1rem"></div>
+    <div class="sg-btnvariantform" id="btn-variant-form"></div>
+    <button type="button" id="btn-variant-sample" class="sg-btn-demo" style="margin-top:1.25rem">Button</button>
+  </div>
+
+  <h3 class="sg-sub">Sizes</h3>
+  <p class="sg-formcaption">.btn--xs through .btn--xxl, mixed with any color and style.</p>
+  <div class="sg-stage sg-scroll">
+    <div id="btn-sizes" class="sg-row" style="gap:.75rem;align-items:center"></div>
+  </div>
+
+  <h1 class="sg-title" id="links" style="margin-top:4rem">Links</h1>
+  <p class="sg-lead">Default styling for every &lt;a&gt; on the site, plus a .link--{color} class for every active color (status colors included, matching ACSS). A class on the link itself or on a wrapping parent both work, since these are just custom properties and they inherit down.</p>
+
+  <h3 class="sg-sub">Default styles</h3>
+  <div class="sg-stage">
+    <div class="sg-typeform">
+      <label>Color<input type="text" id="link-color" spellcheck="false"></label>
+      <label>Weight<select id="link-weight"></select></label>
+      <label>Decoration<select id="link-decoration"></select></label>
+      <label>Decoration color<input type="text" id="link-decoration-color" spellcheck="false"></label>
+      <label>Decoration thickness<input type="text" id="link-decoration-thickness" spellcheck="false"></label>
+      <label>Underline offset<input type="text" id="link-underline-offset" spellcheck="false"></label>
+    </div>
+    <div class="sg-row" style="margin-top:1rem;gap:.5rem">
+      <label style="display:flex;align-items:center;gap:.5rem;font:500 .85rem 'JetBrains Mono',monospace"><input type="checkbox" id="link-global-transition" checked> Use global transition style (follows button transition duration)</label>
+    </div>
+    <div class="sg-typeform" id="link-transition-row" style="margin-top:1rem;display:none">
+      <label>Transition duration<input type="text" id="link-transition-duration" spellcheck="false"></label>
+    </div>
+  </div>
+
+  <h3 class="sg-sub">Preview</h3>
+  <div class="sg-stage">
+    <p class="sg-typesample" style="margin:0 0 1rem">A paragraph with a <a href="#" id="link-sample-default">default link</a> inside it, to show real inline behavior.</p>
+    <div class="sg-scroll" id="link-color-preview" style="display:flex;flex-wrap:wrap;gap:1.25rem"></div>
+  </div>
+
+  <h3 class="sg-sub">Style exclusions</h3>
+  <p class="sg-formcaption">Selectors to exclude from default link styling (comma-separated, quoted) — common example: header and footer navigation, so it keeps its own look instead of picking up link colors.</p>
+  <div class="sg-stage">
+    <textarea id="link-exclusions" rows="2" spellcheck="false" placeholder='"header a", "footer a"' style="inline-size:100%;box-sizing:border-box;font:500 .8rem &quot;JetBrains Mono&quot;,monospace;padding:.6rem;border:1px solid var(--sg-line);border-radius:8px;resize:vertical"></textarea>
+  </div>
+</div>
+<div class="sg-toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* framework.css is the only copy of the defaults: the guide loads its text into
+   <style id="framework-css"> and reads every setting back out of it. Browsers
+   block a double-clicked page from reading other files, so `python3 build.py serve`
+   serves the guide locally; opened directly, it asks for the file instead. */
+(() => {
+'use strict';
+const loader = document.getElementById('fw-loader');
+fetch('framework.css', { cache: 'no-store' })
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+  .then(startGuide)
+  .catch(() => {
+    loader.hidden = false;
+    document.getElementById('fw-pick').addEventListener('change', async (e) => {
+      const f = e.target.files[0];
+      if (f) { loader.hidden = true; startGuide(await f.text()); }
+    });
+  });
+
+function startGuide(cssText) {
+document.getElementById('framework-css').textContent = cssText;
+document.querySelector('.sg-wrap').hidden = false;
+const root = document.documentElement;
+const $ = (s, e = document) => e.querySelector(s);
+const $$ = (s, e = document) => [...e.querySelectorAll(s)];
+const h = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
+const cs = () => getComputedStyle(root);
+
+const toast = $('#toast'); let tt;
+function say(msg) { toast.textContent = msg; toast.dataset.on = 'true'; clearTimeout(tt); tt = setTimeout(() => toast.dataset.on = 'false', 1500); }
+async function copy(text) {
+  try { await navigator.clipboard.writeText(text); } catch (e) {
+    const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (_) {} ta.remove();
+  }
+  say('Copied ' + text);
+}
+document.addEventListener('click', (e) => { const t = e.target.closest('[data-copy]'); if (t) copy(t.dataset.copy); });
+
+const rgbOf = (s) => (s.match(/[\d.]+/g) || [0, 0, 0]).slice(0, 3).map(Number);
+const lum = ([r, g, b]) => { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }; return .2126 * f(r) + .7152 * f(g) + .0722 * f(b); };
+const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + .05) / (y + .05); };
+
+function toHsl(hex) {
+  const n = parseInt(hex.slice(1), 16), r = (n >> 16) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255;
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn; let hh = 0, s = 0;
+  if (d) { s = d / (1 - Math.abs(2 * l - 1)); hh = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; hh = (hh * 60 + 360) % 360; }
+  return [hh, s * 100, l * 100];
+}
+function toHex(hh, s, l) {
+  s /= 100; l /= 100; const a = s * Math.min(l, 1 - l);
+  const f = n => { const k = (n + hh / 30) % 12; const c = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)); return Math.round(255 * c).toString(16).padStart(2, '0'); };
+  return '#' + f(0) + f(8) + f(4);
+}
+const HEX = /^#[0-9a-f]{6}$/i;
+
+/* ---- discover colors from the CSS itself ---- */
+function discover() {
+  const sheet = $('#framework-css').textContent;
+  const names = new Set();
+  for (const m of sheet.matchAll(/--([a-z0-9-]+?)-l-1:/g)) names.add(m[1]);
+  for (const m of sheet.matchAll(/--([a-z0-9-]+?)-d-1:/g)) names.add(m[1]);
+  const colors = [];
+  names.forEach(name => {
+    let nl = 0, nd = 0;
+    while (sheet.includes(`--${name}-l-${nl + 1}:`)) nl++;
+    while (sheet.includes(`--${name}-d-${nd + 1}:`)) nd++;
+    colors.push({ name, nl, nd });
+  });
+  colors.sort((a, b) => sheet.indexOf(`--${a.name}:`) - sheet.indexOf(`--${b.name}:`));
+  return colors;
+}
+let STATE = discover();
+
+function read(name, key) { return cs().getPropertyValue('--' + name + (key ? '-' + key : '')).trim(); }
+function write(name, key, val) { root.style.setProperty('--' + name + (key ? '-' + key : ''), val); }
+
+function paintStep(btn, bg) {
+  const rgb = rgbOf(getComputedStyle(btn).backgroundColor);
+  const w = ratio(rgb, [255, 255, 255]), bl = ratio(rgb, [0, 0, 0]);
+  const white = w >= bl, best = Math.max(w, bl);
+  btn.style.color = white ? '#fff' : '#000';
+  const r = $('.ratio', btn); if (r) { r.textContent = best.toFixed(1) + (white ? ' w' : ' b'); r.dataset.fail = best < 4.5; }
+}
+
+function card(c) {
+  const el = h(`<div class="sg-colorcard" data-color="${c.name}">
+    <div class="sg-colorhead">
+      <div class="sg-colorname">${c.name}</div>
+      <div class="sg-colorbase"><input type="color" class="base-color"><input type="text" class="base-text" spellcheck="false"></div>
+    </div>
+    <div class="sg-steps"></div>
+    <div class="sg-stepbtns">
+      <button class="sg-minibtn" data-act="add-l">+ lighter step</button>
+      <button class="sg-minibtn" data-act="rm-l" data-danger="true">− lighter step</button>
+      <button class="sg-minibtn" data-act="add-d">+ darker step</button>
+      <button class="sg-minibtn" data-act="rm-d" data-danger="true">− darker step</button>
+      <button class="sg-minibtn" data-act="fill">Fill from base</button>
+      <button class="sg-minibtn" data-act="remove-color" data-danger="true" style="margin-inline-start:auto">Remove color</button>
+    </div>
+    <div class="sg-hoverrow"><span class="swatch" id="hoverswatch"></span><label style="font:500 .74rem 'JetBrains Mono',monospace;color:var(--sg-muted)">--${c.name}-hover</label><input type="color" class="hover-color"><input type="text" class="hover-text" spellcheck="false"></div>
+  </div>`);
+  renderSteps(el, c);
+  const bc = $('.base-color', el), bt = $('.base-text', el);
+  const cur = read(c.name); bc.value = HEX.test(cur) ? cur : '#000000'; bt.value = cur;
+  bc.oninput = () => { bt.value = bc.value; write(c.name, '', bc.value); refreshCard(el, c); };
+  bt.oninput = () => { if (HEX.test(bt.value)) { bc.value = bt.value; write(c.name, '', bt.value); refreshCard(el, c); } };
+  const hc = $('.hover-color', el), ht = $('.hover-text', el);
+  const hv = read(c.name, 'hover'); hc.value = HEX.test(hv) ? hv : '#000000'; ht.value = hv;
+  $('#hoverswatch', el).style.background = 'var(--' + c.name + '-hover)';
+  hc.oninput = () => { ht.value = hc.value; write(c.name, 'hover', hc.value); $('#hoverswatch', el).style.background = hc.value; };
+  ht.oninput = () => { if (HEX.test(ht.value)) { hc.value = ht.value; write(c.name, 'hover', ht.value); $('#hoverswatch', el).style.background = ht.value; } };
+  el.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    const act = b.dataset.act;
+    if (act === 'add-l') { c.nl++; addStepVar(c.name, 'l', c.nl); renderSteps(el, c); }
+    if (act === 'rm-l' && c.nl > 0) { root.style.removeProperty(`--${c.name}-l-${c.nl}`); c.nl--; renderSteps(el, c); }
+    if (act === 'add-d') { c.nd++; addStepVar(c.name, 'd', c.nd); renderSteps(el, c); }
+    if (act === 'rm-d' && c.nd > 0) { root.style.removeProperty(`--${c.name}-d-${c.nd}`); c.nd--; renderSteps(el, c); }
+    if (act === 'fill') { fillFromBase(c); refreshCard(el, c); }
+    if (act === 'remove-color') { if (confirm('Remove ' + c.name + ' and all its steps?')) removeColor(c, el); }
+  });
+  return el;
+}
+function addStepVar(name, dir, k) {
+  const base = read(name); if (!HEX.test(base)) { write(name, `${dir}-${k}`, '#888888'); return; }
+  const [hh, s, l] = toHsl(base);
+  const val = dir === 'l' ? toHex(hh, s, l + (96 - l) * k / (k + 1)) : toHex(hh, s, l - (l - 8) * k / (k + 1));
+  write(name, `${dir}-${k}`, val);
+}
+function fillFromBase(c) {
+  const base = read(c.name); if (!HEX.test(base)) return say('Base must be a hex color');
+  const [hh, s, l] = toHsl(base);
+  for (let k = 1; k <= c.nl; k++) write(c.name, `l-${k}`, toHex(hh, s, l + (96 - l) * k / (c.nl + 1)));
+  for (let k = 1; k <= c.nd; k++) write(c.name, `d-${k}`, toHex(hh, s, l - (l - 8) * k / (c.nd + 1)));
+  say('Filled ' + c.name + ' from base');
+}
+function removeColor(c, el) {
+  ['', 'hover'].concat(Array.from({length:c.nl},(_,i)=>`l-${i+1}`), Array.from({length:c.nd},(_,i)=>`d-${i+1}`), [10,20,30,40,50,60,70,80,90].map(t=>`trans-${t}`))
+    .forEach(k => root.style.removeProperty(`--${c.name}${k?'-'+k:''}`));
+  STATE = STATE.filter(x => x !== c); el.remove(); renderClassList(); renderTransSelect();
+  if (typeof renderButtonChecks === 'function') { renderButtonChecks(); applyDynamicButtonCSS(); renderButtonPreview(); renderButtonSizes(); }
+  if (typeof renderLinkColorPreview === 'function') renderLinkColorPreview();
+}
+function renderSteps(el, c) {
+  const box = $('.sg-steps', el); box.innerHTML = '';
+  for (let k = c.nl; k >= 1; k--) {
+    const key = `l-${k}`;
+    box.appendChild(h(`<button type="button" class="sg-step" style="background:var(--${c.name}-${key})" data-copy="var(--${c.name}-${key})" title="--${c.name}-${key}"><span class="lbl">${key}</span><span class="ratio"></span></button>`));
+  }
+  box.appendChild(h(`<button type="button" class="sg-step sg-base" style="background:var(--${c.name})" data-copy="var(--${c.name})" title="--${c.name}"><span class="lbl">base</span><span class="ratio"></span></button>`));
+  for (let k = 1; k <= c.nd; k++) {
+    const key = `d-${k}`;
+    box.appendChild(h(`<button type="button" class="sg-step" style="background:var(--${c.name}-${key})" data-copy="var(--${c.name}-${key})" title="--${c.name}-${key}"><span class="lbl">${key}</span><span class="ratio"></span></button>`));
+  }
+  $$('.sg-step', box).forEach(paintStep);
+}
+function refreshCard(el, c) { renderSteps(el, c); const hv = read(c.name, 'hover'); $('#hoverswatch', el).style.background = 'var(--' + c.name + '-hover)'; renderTransSelect(); renderTrans($('#tr-color').value); }
+
+function renderAll() {
+  const grid = $('#colors'); grid.innerHTML = '';
+  STATE.forEach(c => grid.appendChild(card(c)));
+  renderClassList(); renderTransSelect(); renderTrans(STATE[0] ? STATE[0].name : '');
+  $$('.sg-colorcard').forEach(el => $$('.sg-step', el).forEach(paintStep));
+}
+function renderClassList() { /* no utility classes generated right now */ }
+function renderTransSelect() {
+  const sel = $('#tr-color'); const cur = sel.value; sel.innerHTML = '';
+  STATE.forEach(c => sel.add(new Option(c.name, c.name)));
+  ['white', 'black'].forEach(c => sel.add(new Option(c, c)));
+  if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
+}
+function renderTrans(name) {
+  const box = $('#trans'); box.innerHTML = ''; if (!name) return;
+  for (let t = 10; t <= 90; t += 10) {
+    box.appendChild(h(`<button type="button" class="sg-transchip" style="background:var(--${name}-trans-${t})" data-copy="var(--${name}-trans-${t})" title="--${name}-trans-${t}"></button>`));
+  }
+}
+$('#tr-color').addEventListener('change', e => renderTrans(e.target.value));
+
+$('#addcolor').addEventListener('click', () => {
+  const input = $('#newcolor'); let name = input.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/^-+|-+$/g, '');
+  if (!name) return say('Enter a name first');
+  if (STATE.some(c => c.name === name)) return say(name + ' already exists');
+  const c = { name, nl: 4, nd: 4 };
+  write(name, '', '#888888');
+  for (let k = 1; k <= 4; k++) { addStepVar(name, 'l', k); addStepVar(name, 'd', k); }
+  write(name, 'hover', '#666666');
+  for (let t = 10; t <= 90; t += 10) write(name, `trans-${t}`, `color-mix(in srgb, var(--${name}) ${t}%, transparent)`);
+  STATE.push(c); const el = card(c); $('#colors').appendChild(el);
+  $$('.sg-step', el).forEach(paintStep);
+  renderClassList(); renderTransSelect();
+  if (typeof renderButtonChecks === 'function') { renderButtonChecks(); applyDynamicButtonCSS(); renderButtonPreview(); renderButtonSizes(); }
+  if (typeof renderLinkColorPreview === 'function') renderLinkColorPreview();
+  input.value = ''; say('Added ' + name);
+});
+
+/* ---------------- typography ---------------- */
+const HEAD_LEVELS = [['h6', -2], ['h5', -1], ['h4', 0], ['h3', 1], ['h2', 2], ['h1', 3]];
+const TEXT_LEVELS = [['xs', -2], ['s', -1], ['m', 0], ['l', 1], ['xl', 2], ['xxl', 3]];
+function fluidPx(vmin, vmax, loPx, hiPx) {
+  const lo = loPx / 16, hi = hiPx / 16;
+  if (Math.abs(hi - lo) < 1e-9) return (+lo.toFixed(4)) + 'rem';
+  const a = vmin / 16, b = vmax / 16;
+  const slope = (hi - lo) / (b - a);
+  const inter = lo - slope * a;
+  const mn = Math.min(lo, hi), mx = Math.max(lo, hi);
+  return `clamp(${+mn.toFixed(4)}rem, calc(${+(slope * 100).toFixed(4)}vw + ${+inter.toFixed(4)}rem), ${+mx.toFixed(4)}rem)`;
+}
+const SCALE_RATIOS = [
+  [1.067, 'Minor second — 1.067'],
+  [1.125, 'Major second — 1.125'],
+  [1.2, 'Minor third — 1.2'],
+  [1.25, 'Major third — 1.25'],
+  [1.333, 'Perfect fourth — 1.333'],
+  [1.414, 'Augmented fourth — 1.414'],
+  [1.5, 'Perfect fifth — 1.5'],
+  [1.618, 'Golden ratio — 1.618'],
+];
+function fillRatioSelect(sel, def) {
+  sel.innerHTML = '';
+  SCALE_RATIOS.forEach(([v, label]) => sel.add(new Option(label, v)));
+  sel.value = def;
+}
+fillRatioSelect($('#t-hr-m'), 1.2);
+fillRatioSelect($('#t-hr-d'), 1.25);
+fillRatioSelect($('#t-tr-m'), 1.125);
+fillRatioSelect($('#t-tr-d'), 1.125);
+
+function typeInputs() {
+  return {
+    root: +$('#t-root').value,
+    vmin: +$('#t-vmin').value, vmax: +$('#t-vmax').value,
+    hbm: +$('#t-hbm').value, hbd: +$('#t-hbd').value,
+    hrm: +$('#t-hr-m').value, hrd: +$('#t-hr-d').value,
+    tbm: +$('#t-tbm').value, tbd: +$('#t-tbd').value,
+    trm: +$('#t-tr-m').value, trd: +$('#t-tr-d').value,
+  };
+}
+function naturalHeadingSize(name) {
+  const t = typeInputs(); const [, k] = HEAD_LEVELS.find(([n]) => n === name);
+  const lo = t.hbm * Math.pow(t.hrm, k), hi = t.hbd * Math.pow(t.hrd, k);
+  return fluidPx(t.vmin, t.vmax, lo, hi);
+}
+function naturalTextSize(name) {
+  const t = typeInputs(); const [, k] = TEXT_LEVELS.find(([n]) => n === name);
+  const lo = t.tbm * Math.pow(t.trm, k), hi = t.tbd * Math.pow(t.trd, k);
+  return fluidPx(t.vmin, t.vmax, lo, hi);
+}
+function applyType() {
+  const t = typeInputs();
+  root.style.setProperty('--root-font-size', t.root + '%');
+  HEAD_LEVELS.forEach(([name]) => {
+    // a level with its own font-size override keeps it; the scale recompute skips it
+    if (typeof LEVEL_OVERRIDES !== 'undefined' && LEVEL_OVERRIDES[name] && LEVEL_OVERRIDES[name]['font-size']) return;
+    root.style.setProperty('--' + name, naturalHeadingSize(name));
+  });
+  TEXT_LEVELS.forEach(([name]) => {
+    if (typeof TEXT_LEVEL_OVERRIDES !== 'undefined' && TEXT_LEVEL_OVERRIDES[name] && TEXT_LEVEL_OVERRIDES[name]['font-size']) return;
+    root.style.setProperty('--text-' + name, naturalTextSize(name));
+  });
+  renderType();
+  if (typeof renderHeadForm === 'function' && $('#headform')) renderHeadForm();
+  if (typeof renderTextStyleForm === 'function' && $('#textstyleform')) renderTextStyleForm();
+}
+function renderType() {
+  const hs = $('#heads'); hs.innerHTML = '';
+  HEAD_LEVELS.slice().reverse().forEach(([name]) => {
+    hs.appendChild(h(`<div class="sg-typerow"><div class="sg-typemeta"><b>${name}</b><span class="px"></span><button type="button" class="sg-code" data-copy="var(--${name})">var(--${name})</button></div><div class="sg-typesample ${name}" style="margin:0">The quick brown fox jumps</div></div>`));
+  });
+  const ts = $('#texts'); ts.innerHTML = '';
+  TEXT_LEVELS.slice().reverse().forEach(([name]) => {
+    ts.appendChild(h(`<div class="sg-typerow"><div class="sg-typemeta"><b>text-${name}</b><span class="px"></span><button type="button" class="sg-code" data-copy="var(--text-${name})">var(--text-${name})</button></div><p class="sg-typesample text--${name}" style="margin:0">The quick brown fox jumps over the lazy dog</p></div>`));
+  });
+  $$('.sg-typerow').forEach(r => {
+    const sample = $('.sg-typesample', r);
+    const px = parseFloat(getComputedStyle(sample).fontSize);
+    $('.px', r).textContent = px.toFixed(1) + 'px at ' + window.innerWidth + 'px viewport';
+  });
+}
+/* ---------------- heading style (All / H1-H6) ---------------- */
+const HEADING_PROPS = ['font-family', 'color', 'line-height', 'font-weight', 'letter-spacing', 'font-style', 'text-transform', 'text-wrap'];
+const HEADING_DEFAULTS = { 'font-family': 'system-ui, -apple-system, "Segoe UI", sans-serif', 'color': 'inherit', 'line-height': 'calc(4px + 2ex)', 'font-weight': '700', 'letter-spacing': 'normal', 'font-style': 'normal', 'text-transform': 'none', 'text-wrap': 'pretty' };
+const LEVELS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+const LEVEL_OVERRIDES = { h1: {}, h2: {}, h3: {}, h4: {}, h5: {}, h6: {} };
+let currentLevelTab = 'all';
+let TEXT_WIDTHS = discoverTextWidths();
+function discoverTextWidths() {
+  const sheet = $('#framework-css').textContent;
+  const names = [];
+  for (const m of sheet.matchAll(/--text-width-([a-z0-9-]+):/g)) if (!names.includes(m[1])) names.push(m[1]);
+  return names;
+}
+const FIELD_DEFS = [
+  { prop: 'font-size', label: 'Font size (overrides the type scale)', type: 'text', levelOnly: true },
+  { prop: 'max-width', label: 'Max width', type: 'select', options: TEXT_WIDTHS.map(n => `var(--text-width-${n})`), levelOnly: true },
+  { prop: 'font-family', label: 'Font family', type: 'text' },
+  { prop: 'color', label: 'Text color', type: 'text' },
+  { prop: 'line-height', label: 'Line height', type: 'text' },
+  { prop: 'font-weight', label: 'Font weight', type: 'number' },
+  { prop: 'letter-spacing', label: 'Letter spacing', type: 'text' },
+  { prop: 'font-style', label: 'Font style', type: 'select', options: ['normal', 'italic', 'oblique'] },
+  { prop: 'text-transform', label: 'Text transform', type: 'select', options: ['none', 'uppercase', 'lowercase', 'capitalize'] },
+  { prop: 'text-wrap', label: 'Text wrap', type: 'select', options: ['wrap', 'nowrap', 'balance', 'pretty'] },
+];
+function rawDefault(name) {
+  const sheet = $('#framework-css').textContent;
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp('(?<![\\w-])' + escaped + '\\s*:\\s*([^;]+);', 'g');
+  // only match inside :root { ... } blocks -- some variables (like --link-color)
+  // are also set inside other selectors (e.g. .link--primary) as overrides, and a
+  // plain whole-stylesheet scan would wrongly pick up the last of those instead
+  // of the actual default.
+  // Media queries are skipped too: a default is the value outside any @media
+  // (e.g. --header-height, which the breakpoint queries redefine).
+  const unconditional = sheet.replace(/\/\*[\s\S]*?\*\//g, '').replace(/@media[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/g, '');
+  const rootBlocks = unconditional.match(/:root\s*\{[^}]*\}/g) || [];
+  let last = '';
+  rootBlocks.forEach(block => { let m; while ((m = re.exec(block))) last = m[1].trim(); });
+  return last;
+}
+// the value of one property in a single-selector rule (e.g. a utility class) in framework.css
+function ruleValue(selector, prop) {
+  const esc = t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const sheet = $('#framework-css').textContent.replace(/\/\*[\s\S]*?\*\//g, '');
+  const m = sheet.match(new RegExp('(?:^|[}\\s])' + esc(selector) + '\\s*\\{[^}]*?(?<![\\w-])' + esc(prop) + '\\s*:\\s*([^;}]+)'));
+  return m ? m[1].trim() : '';
+}
+// a type step ending in /* override */ in framework.css keeps its own value instead of the scale
+function markedOverride(name) {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const m = $('#framework-css').textContent.match(new RegExp('(?<![\\w-])' + escaped + '\\s*:\\s*([^;]+);[ \\t]*/\\*\\s*override\\s*\\*/'));
+  return m ? m[1].trim() : '';
+}
+function readVar(name) {
+  const inline = root.style.getPropertyValue(name).trim();
+  if (inline) return inline;
+  return rawDefault(name);
+}
+function headingDefault(prop) { return readVar('--heading-' + prop) || HEADING_DEFAULTS[prop]; }
+function renderLevelTabs() {
+  const box = $('#leveltabs'); box.innerHTML = '';
+  ['all', ...LEVELS].forEach(tb => {
+    const b = h(`<button type="button" class="sg-leveltab">${tb === 'all' ? 'All' : tb.toUpperCase()}</button>`);
+    b.setAttribute('aria-current', String(tb === currentLevelTab));
+    b.onclick = () => { currentLevelTab = tb; renderLevelTabs(); renderHeadForm(); };
+    box.appendChild(b);
+  });
+}
+function updateHeadSample() {
+  const s = $('#headstylesample'); if (!s) return;
+  const cls = currentLevelTab === 'all' ? 'h3' : currentLevelTab;
+  s.className = 'sg-typesample ' + cls;
+}
+function renderHeadForm() {
+  const box = $('#headform'); box.innerHTML = '';
+  const isAll = currentLevelTab === 'all';
+  FIELD_DEFS.filter(f => !(f.levelOnly && isAll)).forEach(f => {
+    const dflt = f.prop === 'font-size' ? naturalHeadingSize(currentLevelTab) : headingDefault(f.prop);
+    const override = !isAll ? (LEVEL_OVERRIDES[currentLevelTab][f.prop] || '') : '';
+    let inner;
+    if (f.type === 'select') {
+      const opts = (isAll ? [] : [['', '— inherit —']]).concat(f.options.map(o => [o, o]));
+      inner = `<select data-prop="${f.prop}">` + opts.map(([v, l]) => `<option value="${v}">${l}</option>`).join('') + `</select>`;
+    } else if (f.type === 'number') {
+      inner = `<input type="number" min="100" max="900" step="100" data-prop="${f.prop}" placeholder="${isAll ? '' : dflt}">`;
+    } else {
+      inner = `<input type="text" data-prop="${f.prop}" placeholder="${isAll ? '' : dflt}" spellcheck="false">`;
+    }
+    const wrap = h(`<label>${f.label}${inner}</label>`);
+    const el = $('[data-prop]', wrap);
+    el.value = isAll ? dflt : override;
+    box.appendChild(wrap);
+  });
+  $$('#headform [data-prop]').forEach(el => {
+    const evt = el.tagName === 'SELECT' ? 'change' : 'input';
+    el.addEventListener(evt, () => {
+      const prop = el.dataset.prop, val = el.value.trim();
+      if (currentLevelTab === 'all') {
+        if (val) root.style.setProperty('--heading-' + prop, val);
+      } else if (prop === 'font-size') {
+        if (val) { LEVEL_OVERRIDES[currentLevelTab][prop] = val; root.style.setProperty('--' + currentLevelTab, val); }
+        else { delete LEVEL_OVERRIDES[currentLevelTab][prop]; applyType(); }
+      } else {
+        if (val) { LEVEL_OVERRIDES[currentLevelTab][prop] = val; root.style.setProperty(`--${currentLevelTab}-${prop}`, val); }
+        else { delete LEVEL_OVERRIDES[currentLevelTab][prop]; root.style.removeProperty(`--${currentLevelTab}-${prop}`); }
+      }
+    });
+  });
+  updateHeadSample();
+}
+
+$$('#t-vmin, #t-vmax, #t-hbm, #t-hbd, #t-tbm, #t-tbd, #t-root').forEach(inp => inp.addEventListener('input', applyType));
+$$('#t-hr-m, #t-hr-d, #t-tr-m, #t-tr-d').forEach(sel => sel.addEventListener('change', applyType));
+
+/* ---------------- text width ---------------- */
+/* ---------------- text colors ---------------- */
+function initTextColors() {
+  const pairs = [['dark', 'tc-dark'], ['light', 'tc-light'], ['dark-muted', 'tc-dark-muted'], ['light-muted', 'tc-light-muted']];
+  pairs.forEach(([key, id]) => {
+    const t = $('#' + id + '-t'), sw = $('#swatch-text-' + key);
+    t.value = readVar('--text-' + key); sw.style.background = 'var(--text-' + key + ')';
+    t.addEventListener('input', () => {
+      const v = t.value.trim();
+      if (v) { root.style.setProperty('--text-' + key, v); sw.style.background = v; }
+    });
+  });
+}
+
+/* ---------------- text style (All / XS-XXL) ---------------- */
+const TEXT_STYLE_PROPS = ['color', 'font-family', 'line-height', 'font-weight', 'letter-spacing', 'max-width', 'font-style', 'text-transform', 'text-wrap'];
+const TEXT_STYLE_DEFAULTS = { color: 'var(--text-dark)', 'font-family': 'system-ui, -apple-system, "Segoe UI", sans-serif', 'line-height': 'calc(6px + 2ex)', 'font-weight': '400', 'letter-spacing': 'normal', 'max-width': '', 'font-style': 'normal', 'text-transform': 'none', 'text-wrap': 'pretty' };
+const TSIZE_LEVELS = ['xs', 's', 'm', 'l', 'xl', 'xxl'];
+const TEXT_LEVEL_OVERRIDES = { xs: {}, s: {}, m: {}, l: {}, xl: {}, xxl: {} };
+let currentTextTab = 'all';
+let TEXT_FIELD_DEFS = [];
+function renderMaxWidthOptions() {
+  TEXT_FIELD_DEFS = [
+    { prop: 'font-size', label: 'Font size (overrides the type scale)', type: 'text', levelOnly: true },
+    { prop: 'font-family', label: 'Font family', type: 'text' },
+    { prop: 'color', label: 'Text color', type: 'text' },
+    { prop: 'line-height', label: 'Line height', type: 'text' },
+    { prop: 'font-weight', label: 'Font weight', type: 'number' },
+    { prop: 'letter-spacing', label: 'Letter spacing', type: 'text' },
+    { prop: 'max-width', label: 'Max width', type: 'select', options: TEXT_WIDTHS.map(n => `var(--text-width-${n})`) },
+    { prop: 'font-style', label: 'Font style', type: 'select', options: ['normal', 'italic', 'oblique'] },
+    { prop: 'text-transform', label: 'Text transform', type: 'select', options: ['none', 'uppercase', 'lowercase', 'capitalize'] },
+    { prop: 'text-wrap', label: 'Text wrap', type: 'select', options: ['wrap', 'nowrap', 'balance', 'pretty'] },
+  ];
+  if (currentTextTab) renderTextStyleForm();
+}
+function textVarName(prop) { return '--text-' + prop; }
+function textStyleDefault(prop) { return readVar(textVarName(prop)) || TEXT_STYLE_DEFAULTS[prop]; }
+function renderTextLevelTabs() {
+  const box = $('#textleveltabs'); box.innerHTML = '';
+  ['all', ...TSIZE_LEVELS].forEach(tb => {
+    const b = h(`<button type="button" class="sg-leveltab">${tb === 'all' ? 'All' : tb.toUpperCase()}</button>`);
+    b.setAttribute('aria-current', String(tb === currentTextTab));
+    b.onclick = () => { currentTextTab = tb; renderTextLevelTabs(); renderTextStyleForm(); };
+    box.appendChild(b);
+  });
+}
+function updateTextStyleSample() {
+  const s = $('#textstylesample'); if (!s) return;
+  s.className = 'sg-typesample text--' + (currentTextTab === 'all' ? 'm' : currentTextTab);
+}
+function renderTextStyleForm() {
+  const box = $('#textstyleform'); box.innerHTML = '';
+  const isAll = currentTextTab === 'all';
+  TEXT_FIELD_DEFS.filter(f => !(f.levelOnly && isAll)).forEach(f => {
+    let dflt = f.prop === 'font-size' ? naturalTextSize(currentTextTab) : textStyleDefault(f.prop);
+    const override = !isAll ? (TEXT_LEVEL_OVERRIDES[currentTextTab][f.prop] || '') : '';
+    let inner;
+    if (f.type === 'select') {
+      const blankLabel = f.prop === 'max-width' ? (isAll ? 'none' : '— inherit (none) —') : '— inherit —';
+      const opts = (isAll && f.prop !== 'max-width' ? [] : [['', blankLabel]]).concat(f.options.map(o => [o, o]));
+      inner = `<select data-prop="${f.prop}">` + opts.map(([v, l]) => `<option value="${v}">${l}</option>`).join('') + `</select>`;
+    } else if (f.type === 'number') {
+      inner = `<input type="number" min="100" max="900" step="100" data-prop="${f.prop}" placeholder="${isAll ? '' : dflt}">`;
+    } else {
+      inner = `<input type="text" data-prop="${f.prop}" placeholder="${isAll ? '' : dflt}" spellcheck="false">`;
+    }
+    const wrap = h(`<label>${f.label}${inner}</label>`);
+    const el = $('[data-prop]', wrap);
+    el.value = isAll ? dflt : override;
+    box.appendChild(wrap);
+  });
+  $$('#textstyleform [data-prop]').forEach(el => {
+    const evt = el.tagName === 'SELECT' ? 'change' : 'input';
+    el.addEventListener(evt, () => {
+      const prop = el.dataset.prop, val = el.value.trim();
+      if (currentTextTab === 'all') {
+        if (val) root.style.setProperty(textVarName(prop), val);
+        else root.style.removeProperty(textVarName(prop));
+      } else if (prop === 'font-size') {
+        if (val) { TEXT_LEVEL_OVERRIDES[currentTextTab][prop] = val; root.style.setProperty('--text-' + currentTextTab, val); }
+        else { delete TEXT_LEVEL_OVERRIDES[currentTextTab][prop]; applyType(); }
+      } else {
+        if (val) { TEXT_LEVEL_OVERRIDES[currentTextTab][prop] = val; root.style.setProperty(`--text-${currentTextTab}-${prop}`, val); }
+        else { delete TEXT_LEVEL_OVERRIDES[currentTextTab][prop]; root.style.removeProperty(`--text-${currentTextTab}-${prop}`); }
+      }
+    });
+  });
+  updateTextStyleSample();
+}
+window.addEventListener('resize', () => { renderType(); readouts(); });
+
+/* ---------------- rules shared by both downloads ----------------
+   Download CSS and Download for Bricks write these same rules, so each lives here once. */
+const HEADER_TRANSPARENT_CSS = '#brx-header.header-transparent:not(.sticky) {\n  position: absolute;\n  inset-inline: 0;\n  inset-block-start: 0;\n  z-index: var(--header-z-index);\n}';
+const HERO_OFFSET_CSS = '.hero-offset {\n  padding-block-start: var(--header-height);\n}';
+const HEADER_ANCHOR_CSS = 'body:has(#brx-header.sticky) :target {\n  scroll-margin-block-start: var(--header-height);\n}';
+const BODY_CSS = 'body {\n  color: var(--text-color);\n  font-family: var(--text-font-family);\n  font-size: var(--text-m);\n}';
+const SECTION_CSS = 'section {\n  padding-block: var(--section-space-m);\n  padding-inline: var(--gutter);\n}';
+const AUTO_SPACING_CSS = ':where(section) {\n  gap: calc(var(--container-gap) * var(--auto-container-gap));\n}\n:where(div) {\n  gap: calc(var(--content-gap) * var(--auto-content-gap));\n}';
+const SMART_SPACING_VARS = ['paragraph-spacing', 'heading-spacing', 'h2-spacing', 'h3-spacing', 'h4-spacing', 'h5-spacing', 'h6-spacing', 'list-spacing', 'list-indent-spacing', 'list-item-spacing', 'nested-list-spacing', 'nested-list-indent-spacing', 'nested-list-item-spacing', 'flow-spacing', 'figure-spacing', 'figcaption-spacing', 'blockquote-spacing'];
+const SMART_SPACING_BASE_CSS = [
+  ':where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, figcaption, blockquote) {\n  margin: 0;\n}',
+  ':where(ul, ol) {\n  padding-inline-start: var(--list-indent-spacing);\n}',
+  ':where(li ul, li ol) {\n  padding-inline-start: var(--nested-list-indent-spacing);\n}',
+];
+const SMART_SPACING_OFF_CSS = '.smart-spacing--off,\n.smart-spacing--off * {\n  margin-block-start: 0;\n}';
+const FOCUS_CSS = ':focus-visible {\n  outline: var(--focus-width) solid var(--focus-color);\n  outline-offset: var(--focus-offset);\n}';
+const unquote = s => s.trim().replace(/^["']|["']$/g, '').trim();
+// a guide field holding comma-separated, quoted selectors, as a plain list
+function quotedList(text) { return text.split(',').map(unquote).filter(Boolean); }
+function headerHeightMediaCSS() {
+  return HEADER_BREAKPOINTS.map(bp => `@media (max-width: ${+$('#bp-' + bp).value}px) {\n  :root { --header-height: var(--header-height-${bp}); }\n}`);
+}
+function headingDecls(lv) {
+  return [`font-size: var(--${lv});`]
+    .concat(HEADING_PROPS.map(p => `${p}: var(--${lv}-${p}, var(--heading-${p}));`))
+    .concat(`max-width: var(--${lv}-max-width);`);
+}
+function textDecls(lv) {
+  return [`font-size: var(--text-${lv});`].concat(TEXT_STYLE_PROPS.map(p => `${p}: var(--text-${lv}-${p}, var(${textVarName(p)}));`));
+}
+function smartSpacingRules(targets) {
+  const w = `:where(${targets})`;
+  return [
+    `${w} > * + * {\n  margin-block-start: var(--flow-spacing);\n}`,
+    `${w} > * + p {\n  margin-block-start: var(--paragraph-spacing);\n}`,
+    `${w} > * + :where(ul, ol) {\n  margin-block: var(--list-spacing);\n}`,
+    ...['h2', 'h3', 'h4', 'h5', 'h6'].map(lv => `${w} > * + ${lv} {\n  margin-block-start: var(--${lv}-spacing);\n}`),
+    `${w} li + li {\n  margin-block-start: var(--list-item-spacing);\n}`,
+    `${w} li ul,\n${w} li ol {\n  margin-block: var(--nested-list-spacing);\n}`,
+    `${w} li li + li {\n  margin-block-start: var(--nested-list-item-spacing);\n}`,
+    `${w} > * + figure {\n  margin-block: var(--figure-spacing);\n}`,
+    `${w} > * + blockquote {\n  margin-block: var(--blockquote-spacing);\n}`,
+    `${w} figure > * + figcaption {\n  margin-block-start: var(--figcaption-spacing);\n}`,
+  ];
+}
+function duplicateMarginCSS() {
+  return `${unquote(DUPLICATE_MARGIN_SELECTORS) || ':is(figure, blockquote, ul, ol)'} + * {\n  margin-block-start: 0;\n}`;
+}
+function clickableParentRules() {
+  const HEADS = ':is(h1, h2, h3, h4, h5, h6)';
+  const trigger = `:is(.clickable-parent:not(a, button) > a, a.clickable-parent, button.clickable-parent)`;
+  const card = `:not(${HEADS}):has(> .clickable-parent, > ${HEADS} > a.clickable-parent)`;
+  return [
+    '/* the card is positioned so the overlay below fills it (zero specificity, easy to override) */',
+    `:where(${card}) {\n  position: relative;\n}`,
+    '/* the link and the element holding the class stay unpositioned, or the overlay would stop at them */',
+    `.clickable-parent, ${trigger} {\n  position: static;\n}`,
+    `${trigger}::after {\n  content: "";\n  position: absolute;\n  inset: 0;\n  z-index: 1;\n  cursor: pointer !important;\n}`,
+    '/* other links and buttons in the card sit above the overlay */',
+    `:where(${card}) :is(a, button):not(${trigger}) {\n  position: relative;\n  z-index: 2;\n}`,
+    '/* keyboard focus on the link outlines the whole card instead of the link */',
+    `:where(${card}):has(> .clickable-parent:not(a, button) > a:focus-visible, > .clickable-parent:focus-visible, > ${HEADS} > a.clickable-parent:focus-visible) {\n  outline: var(--focus-width) solid var(--focus-color);\n  outline-offset: var(--focus-offset);\n}`,
+    `${trigger}:focus-visible {\n  outline: none;\n}`,
+  ];
+}
+function linkRules() {
+  const exclusions = quotedList(LINK_EXCLUSIONS);
+  const sel = exclusions.length ? 'a' + exclusions.map(e => `:not(${e})`).join('') : 'a';
+  return [
+    `:where(${sel}) {\n  color: var(--link-color);\n  font-weight: var(--link-font-weight);\n  text-decoration: var(--link-text-decoration);\n  text-decoration-color: var(--link-decoration-color);\n  text-decoration-thickness: var(--link-decoration-thickness);\n  text-underline-offset: var(--link-underline-offset);\n  transition: color var(--link-transition-duration) ease-in-out;\n}`,
+    `:where(${sel}:hover) {\n  color: var(--link-color-hover);\n}`,
+  ];
+}
+function linkColorCSS(c) { return `.link--${c} { --link-color: var(--${c}); --link-color-hover: var(--${c}-hover); }`; }
+
+function buildFullCSS() {
+  const L = [];
+  const head = (title, note) => { L.push('', '/* ' + '='.repeat(70), '   ' + title + (note ? '\n   ' + note : ''), '   ' + '='.repeat(70) + ' */'); };
+
+  head('GUIDE SETTINGS', "The inputs framework-guide.html rebuilds the type scale, spacing scale, breakpoints and selector lists from.\n   They style nothing themselves. Unitless numbers are px, except the ratios and multipliers.");
+  L.push(':root {');
+  GUIDE_SETTINGS.forEach(([id, name]) => L.push(`  --fw-${name}: ${+$('#' + id).value};`));
+  L.push(`  --fw-smart-spacing-targets: ${SMART_TARGETS_EXTRA.trim()};`);
+  L.push(`  --fw-duplicate-margin-selectors: ${DUPLICATE_MARGIN_SELECTORS.trim()};`);
+  L.push(`  --fw-link-exclusions: ${LINK_EXCLUSIONS.trim()};`);
+  L.push('}');
+
+  head('HEADER', "For the Bricks header template. Set the header heights and z-index here -- they have no fields\n   in framework-guide.html, which keeps whatever is set here. A transparent header that isn't\n   sticky overlays the hero; .hero-offset keeps the hero's content clear of it. Anchor links clear\n   the header only when it's sticky (set on the header template in Bricks).");
+  L.push(':root {');
+  L.push('  /* header height per breakpoint: XL applies at full width, each smaller one below its breakpoint */');
+  HEADER_HEIGHTS.forEach(([name]) => L.push(`  --${name}: ${readVar('--' + name) || '0rem'};`));
+  L.push('  --header-height: var(--header-height-xl);');
+  L.push(`  --header-z-index: ${readVar('--header-z-index') || '1000'};`);
+  L.push('}');
+  L.push(...headerHeightMediaCSS());
+  L.push('/* transparent header, not sticky: taken out of the flow so it overlays the hero */');
+  L.push(HEADER_TRANSPARENT_CSS);
+  L.push('/* hero content clears the header while the background runs behind it */');
+  L.push(HERO_OFFSET_CSS);
+  L.push('/* anchor links clear the header, only when it is sticky */');
+  L.push(HEADER_ANCHOR_CSS);
+
+  head('COLOR');
+  L.push('/* Each color is entered by hand: a base, lighter steps (l-1 up), darker steps');
+  L.push('   (d-1 up), and its own hover. Add or remove steps and colors on the Color page');
+  L.push('   of framework-guide.html and re-download; nothing here is calculated from');
+  L.push('   anything else at load time. */');
+  L.push(':root {');
+  L.push('  --white: #ffffff;');
+  L.push('  --black: #000000;');
+  for (let t = 10; t <= 90; t += 10) {
+    L.push(`  --white-trans-${t}: color-mix(in srgb, var(--white) ${t}%, transparent);`);
+    L.push(`  --black-trans-${t}: color-mix(in srgb, var(--black) ${t}%, transparent);`);
+  }
+  STATE.forEach(c => {
+    L.push('', `  /* ${c.name} */`);
+    L.push(`  --${c.name}: ${readVar('--' + c.name)};`);
+    for (let k = c.nl; k >= 1; k--) L.push(`  --${c.name}-l-${k}: ${readVar(`--${c.name}-l-${k}`)};`);
+    for (let k = 1; k <= c.nd; k++) L.push(`  --${c.name}-d-${k}: ${readVar(`--${c.name}-d-${k}`)};`);
+    L.push(`  --${c.name}-hover: ${readVar(`--${c.name}-hover`)};  /* set by hand per project */`);
+    for (let t = 10; t <= 90; t += 10) L.push(`  --${c.name}-trans-${t}: color-mix(in srgb, var(--${c.name}) ${t}%, transparent);`);
+  });
+  L.push('', '  --action: var(--primary);');
+  L.push('  --action-hover: var(--primary-hover);');
+  L.push('}');
+
+  head("COLOR CLASSES", "None generated right now. Every color, step, hover and transparency is still available as a variable via var().");
+
+  head('TYPOGRAPHY');
+  const t = typeInputs();
+  L.push('/* Fluid type scale: pick a min/max viewport, a base size at each end for the');
+  L.push('   anchor step (h4 for headings, text-m for text), and mobile/desktop ratios.');
+  L.push('   Every other step is base * ratio^k, rebuilt from the GUIDE SETTINGS above.');
+  L.push('   To pin one step to your own value, follow it on the same line with a comment');
+  L.push('   containing just the word override. */');
+  L.push('html {');
+  L.push(`  --root-font-size: ${t.root}%;`);
+  L.push('  font-size: var(--root-font-size);');
+  L.push('}');
+  L.push(':root {');
+  L.push(`  /* headings: anchored on h4, ${t.hrm} ratio mobile / ${t.hrd} ratio desktop, ${t.hbm}px at ${t.vmin}px viewport to ${t.hbd}px at ${t.vmax}px */`);
+  HEAD_LEVELS.forEach(([name, k]) => {
+    const override = LEVEL_OVERRIDES[name] && LEVEL_OVERRIDES[name]['font-size'];
+    if (override) { L.push(`  --${name}: ${override};  /* override */`); return; }
+    const lo = t.hbm * Math.pow(t.hrm, k), hi = t.hbd * Math.pow(t.hrd, k); L.push(`  --${name}: ${fluidPx(t.vmin, t.vmax, lo, hi)};`);
+  });
+  L.push('', `  /* text: anchored on text-m, ${t.trm} ratio mobile / ${t.trd} ratio desktop, ${t.tbm}px at ${t.vmin}px viewport to ${t.tbd}px at ${t.vmax}px */`);
+  TEXT_LEVELS.forEach(([name, k]) => {
+    const override = TEXT_LEVEL_OVERRIDES[name] && TEXT_LEVEL_OVERRIDES[name]['font-size'];
+    if (override) { L.push(`  --text-${name}: ${override};  /* override */`); return; }
+    const lo = t.tbm * Math.pow(t.trm, k), hi = t.tbd * Math.pow(t.trd, k); L.push(`  --text-${name}: ${fluidPx(t.vmin, t.vmax, lo, hi)};`);
+  });
+  L.push('}');
+
+  head('HEADING DEFAULTS', "Applies to every h1-h6 and .h1-.h6. A level's own override wins over the default.");
+  L.push(':root {');
+  HEADING_PROPS.forEach(p => L.push(`  --heading-${p}: ${headingDefault(p)};`));
+  L.push('}');
+  LEVELS.forEach(lv => {
+    const overrides = HEADING_PROPS.filter(p => LEVEL_OVERRIDES[lv] && LEVEL_OVERRIDES[lv][p]);
+    const maxWidthOverride = LEVEL_OVERRIDES[lv] && LEVEL_OVERRIDES[lv]['max-width'];
+    const rootDecls = overrides.map(p => `--${lv}-${p}: ${LEVEL_OVERRIDES[lv][p]};`);
+    if (maxWidthOverride) rootDecls.push(`--${lv}-max-width: ${maxWidthOverride};`);
+    if (rootDecls.length) L.push(`:root { ${rootDecls.join(' ')} }`);
+    L.push(`${lv}, .${lv} {\n  ${headingDecls(lv).join('\n  ')}\n}`);
+  });
+  head('TEXT WIDTH', 'A named scale of line-length limits in ch units.');
+  L.push(':root {');
+  TEXT_WIDTHS.forEach(n => L.push(`  --text-width-${n}: ${readVar('--text-width-' + n)};`));
+  L.push('}');
+
+  head('TEXT COLORS', "The two -muted variants are independent variables, not derived from --text-dark/--text-light -- their starting values happen to match a trans-80 of the defaults, but editing --text-dark won't move --text-dark-muted.");
+  L.push(':root {');
+  L.push(`  --text-dark: ${readVar('--text-dark')};`);
+  L.push(`  --text-light: ${readVar('--text-light')};`);
+  L.push(`  --text-dark-muted: ${readVar('--text-dark-muted')};`);
+  L.push(`  --text-light-muted: ${readVar('--text-light-muted')};`);
+  L.push('}');
+  L.push("/* Body's text color reuses --text-color, the same variable every .text--size already");
+  L.push('   reads -- edit it on the Text style panel (All tab, Text color field), no separate variable. */');
+  L.push(BODY_CSS);
+
+  head('TEXT STYLE DEFAULTS', "Applies to every .text--xs through .text--xxl. A level's own override wins over the default.");
+  L.push(':root {');
+  TEXT_STYLE_PROPS.forEach(p => L.push(`  ${textVarName(p)}: ${textStyleDefault(p)};`));
+  L.push('}');
+  TSIZE_LEVELS.forEach(lv => {
+    const overrides = TEXT_STYLE_PROPS.filter(p => TEXT_LEVEL_OVERRIDES[lv] && TEXT_LEVEL_OVERRIDES[lv][p]);
+    if (overrides.length) L.push(`:root { ${overrides.map(p => `--text-${lv}-${p}: ${TEXT_LEVEL_OVERRIDES[lv][p]};`).join(' ')} }`);
+    L.push(`.text--${lv} {\n  ${textDecls(lv).join('\n  ')}\n}`);
+  });
+
+  head('SPACING');
+  L.push('/* Base spacing: a Base Value at M and a Base Scale ratio (mobile/desktop)');
+  L.push('   generate XS-XXL. Section spacing multiplies that same scale, fluidly. */');
+  const s = spaceInputs();
+  const base = spaceEndpoints(s);
+  const sect = sectionEndpoints(s, base);
+  L.push(':root {');
+  L.push(`  /* base spacing: anchored on M, ${s.rm} ratio mobile / ${s.rd} ratio desktop, ${s.bm}px at ${s.vmin}px viewport to ${s.bd}px at ${s.vmax}px */`);
+  SIZE_ORDER.forEach(name => L.push(`  --space-${name}: ${fluidPx(s.vmin, s.vmax, ...base[name])};`));
+  L.push('', `  /* section spacing: base spacing x${s.sm} mobile / x${s.sd} desktop, fluid */`);
+  SIZE_ORDER.forEach(name => L.push(`  --section-space-${name}: ${fluidPx(s.vmin, s.vmax, ...sect[name])};`));
+  L.push('', "  /* gutter: the website's inline edge spacing */");
+  L.push(`  --gutter: ${fluidPx(s.vmin, s.vmax, s.gm, s.gd)};`);
+  L.push('', '  /* bridge variables: desktop max of the larger size, mobile min of the smaller size */');
+  bridgePairs().forEach(([large, small]) => L.push(`  --space-${large}-to-${small}: ${fluidPx(s.vmin, s.vmax, base[small][0], base[large][1])};`));
+  bridgePairs().forEach(([large, small]) => L.push(`  --section-space-${large}-to-${small}: ${fluidPx(s.vmin, s.vmax, sect[small][0], sect[large][1])};`));
+  L.push('}');
+  L.push(SECTION_CSS);
+
+  head('CONTEXTUAL SPACING', "Each just points at one of the --space-* sizes above; change which size backs each context here.");
+  L.push(':root {');
+  Object.entries(CTX).forEach(([key, varName]) => L.push(`  --${varName}: ${readVar('--' + varName)};`));
+  L.push('}');
+
+  head('AUTOMATIC SPACING', "Applies container/content gap sitewide with zero specificity, so any class or ID still overrides it. Set the toggle variable to 0 to turn one off without touching these selectors. Auto grid gap hooks in once grid classes exist.");
+  L.push(':root {');
+  L.push(`  --auto-container-gap: ${readVar('--auto-container-gap')};`);
+  L.push(`  --auto-content-gap: ${readVar('--auto-content-gap')};`);
+  L.push('}');
+  L.push(AUTO_SPACING_CSS);
+
+  head('LAYOUT', 'Grid templates for grid-template-columns, and the content width the auto-fit grids size against.');
+  L.push(':root {');
+  L.push(`  --content-width: ${readVar('--content-width') || '1366px'};`);
+  L.push(`  --auto-grid-aggressiveness: ${readVar('--auto-grid-aggressiveness') || '0.7'};`);
+  L.push('', '  /* grid templates are generated -- equal columns, ratio columns (1-2 is one part, then two),');
+  L.push('     and auto-fit: up to N columns, each at least (content width / N) x aggressiveness wide */');
+  gridTemplates().forEach(([name, value]) => L.push(`  --${name}: ${value};`));
+  L.push('}');
+
+  head('ASPECT RATIOS', 'Utility classes: add .aspect-ratio-16-9 (or any below) to an element.');
+  ASPECT_RATIOS.forEach(([name, value]) => L.push(`.aspect-ratio-${name} { aspect-ratio: ${ruleValue('.aspect-ratio-' + name, 'aspect-ratio') || value}; }`));
+
+  head('LISTS', 'Utility class: .list--none removes the bullets or numbers from a list.');
+  L.push(`.list--none { list-style-type: ${ruleValue('.list--none', 'list-style-type') || 'none'}; }`);
+
+  head('RADIUS');
+  const r = radiusInputs();
+  L.push('/* Radius scale: a base value at M (mobile/desktop) and one scale ratio generate XS-XL,');
+  L.push('   rebuilt from the GUIDE SETTINGS above. */');
+  L.push(':root {');
+  L.push(`  /* anchored on M, ${r.ratio} ratio, ${r.bm}px at ${r.vmin}px viewport to ${r.bd}px at ${r.vmax}px */`);
+  RADIUS_LEVELS.forEach(([name]) => L.push(`  --radius-${name}: ${radiusSize(name)};`));
+  L.push(`  --radius-full: ${readVar('--radius-full') || '999rem'};`);
+  L.push('', '  /* contextual radius: points at one of the sizes above */');
+  Object.keys(RADIUS_CTX).forEach(v => L.push(`  --${v}: ${readVar('--' + v) || 'var(--radius-' + RADIUS_CTX[v] + ')'};`));
+  L.push('}');
+
+  head('SMART SPACING', "Full ACSS parity: paragraph, heading (with H2-H6 overrides), list, list indent, list item, nested list variants, flow, figure, figcaption, blockquote spacing, custom target selectors, and duplicate-margin avoidance.");
+  L.push("/* Smart Spacing only applies inside an element with the .smart-spacing class (or a");
+  L.push("   selector added under Target Additional Selectors) -- best for content you don't");
+  L.push("   fully control the markup of, like a WYSIWYG editor or an imported blog post. */");
+  const targets = ['.smart-spacing', ...quotedList(SMART_TARGETS_EXTRA)].join(', ');
+  L.push(':root {');
+  SMART_SPACING_VARS.forEach(v => L.push(`  --${v}: ${readVar('--' + v)};`));
+  L.push('}');
+  L.push(...SMART_SPACING_BASE_CSS);
+  L.push(...smartSpacingRules(targets));
+  L.push(duplicateMarginCSS());
+  L.push(SMART_SPACING_OFF_CSS);
+
+  head('FOCUS', 'Keyboard focus ring for every focusable element. Buttons set --focus-color to their own\n   per-variant focus color, so each button gets a matching ring.');
+  L.push(':root {');
+  FOCUS_FIELDS.forEach(([varName, dflt]) => L.push(`  ${varName}: ${readVar(varName) || dflt};`));
+  L.push('}');
+  L.push(FOCUS_CSS);
+
+  head('CLICKABLE PARENT', "Same convention as Automatic.css: put .clickable-parent on a card's heading (<h3><a>) or on\n   the link itself (<h3><a> or <a><h3>). The card -- the closest parent that isn't a heading --\n   becomes clickable through that link; any other links or buttons in it stay clickable on top.");
+  L.push(...clickableParentRules());
+
+  head('BUTTONS', "One class per color -- never the status colors. Each of solid/dark/light, plain and outline (6 variant groups total) has its own editable background, text color, border color and focus color, matching ACSS's per-variant button settings. Shared --btn-* tokens (matching ACSS's own variable names) apply to every button regardless of variant.");
+  const btnColors = buttonColorList().filter(isButtonEnabled);
+  L.push(':root {');
+  BTN_GLOBAL_PROPS.forEach(f => L.push(`  --btn-${f.prop}: ${readVar('--btn-' + f.prop) || f.default};`));
+  btnColors.forEach(c => {
+    L.push(`  /* ${c} */`);
+    BTN_VARIANTS.forEach(variant => {
+      BTN_PROPS.forEach(prop => L.push(`  --btn-${c}-${variant}-${prop}: ${btnVariantValue(c, variant, prop)};`));
+    });
+  });
+  L.push('}');
+  L.push(buildButtonCSS(btnColors));
+
+  head('BUTTON OUTLINE VARIANT', "Combine with .btn--{color}, .btn--{color}-light or .btn--{color}-dark; reads whichever outline-context variables that base class points at.");
+  L.push(BTN_OUTLINE_CSS);
+
+  head('BUTTON SIZE CLASSES');
+  Object.keys(BTN_SIZES).forEach(sz => L.push(btnSizeCSS(sz)));
+
+  head('LINKS', "Default styling for every <a>, plus .link--{color} for every active color (status colors included, matching ACSS). Override --link-color / --link-color-hover directly, or use a .link--{color} class on the link itself or a parent element -- custom properties inherit down, so a class on a wrapping div colors every link inside it.");
+  L.push(':root {');
+  L.push(`  --link-color: ${readVar('--link-color')};`);
+  L.push(`  --link-color-hover: ${readVar('--link-color-hover')};`);
+  L.push(`  --link-font-weight: ${readVar('--link-font-weight')};`);
+  L.push(`  --link-text-decoration: ${readVar('--link-text-decoration')};`);
+  L.push(`  --link-decoration-color: ${readVar('--link-decoration-color')};`);
+  L.push(`  --link-decoration-thickness: ${readVar('--link-decoration-thickness')};`);
+  L.push(`  --link-underline-offset: ${readVar('--link-underline-offset')};`);
+  L.push(`  --link-transition-duration: ${readVar('--link-transition-duration')};`);
+  L.push('}');
+  L.push(...linkRules());
+
+  head('LINK COLOR CLASSES');
+  linkColorList().forEach(c => L.push(linkColorCSS(c)));
+
+  return L.join('\n') + '\n';
+}
+
+/* ---------------- Bricks export ----------------
+   Download for Bricks writes one JSON file for importing the framework into Bricks
+   natively: the scale inputs (Bricks generates the steps itself), a color palette,
+   every other variable by category, one global class per framework class with its
+   CSS, theme style values, and the element CSS with no native home in Bricks.
+   Variables are read back out of buildFullCSS(), so both downloads always agree. */
+const BRICKS_FORMAT = 'blueprint-bricks/1';
+// framework.css section title -> Bricks variable category
+const BRICKS_CATEGORIES = {
+  'GUIDE SETTINGS': 'Framework Settings', 'HEADER': 'Header', 'COLOR': 'Colors', 'TEXT COLORS': 'Colors',
+  'TYPOGRAPHY': 'Typography', 'HEADING DEFAULTS': 'Heading Defaults', 'TEXT WIDTH': 'Text Defaults',
+  'TEXT STYLE DEFAULTS': 'Text Defaults', 'SPACING': 'Spacing', 'CONTEXTUAL SPACING': 'Contextual Spacing',
+  'AUTOMATIC SPACING': 'Contextual Spacing', 'LAYOUT': 'Layout & Grid', 'RADIUS': 'Radius',
+  'SMART SPACING': 'Smart Spacing', 'FOCUS': 'Focus', 'BUTTONS': 'Buttons', 'LINKS': 'Links',
+};
+// heading props a theme style's typography controls can hold; the rest stay in globalCss
+const THEME_HEADING_PROPS = ['font-size', 'font-family', 'color', 'line-height', 'font-weight', 'letter-spacing', 'font-style', 'text-transform'];
+
+// every unconditional custom property in the CSS, with the section it was declared in
+function cssVariables(css) {
+  const vars = new Map();
+  css.split(/\/\* ={70}\n {3}/).slice(1).forEach(part => {
+    const section = part.slice(0, part.indexOf('\n')).trim();
+    const body = part.replace(/\/\*[\s\S]*?\*\//g, '').replace(/@media[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/g, '');
+    for (const block of body.matchAll(/(?:^|\n)\s*(?::root|html)\s*\{([^}]*)\}/g)) {
+      for (const [, name, value] of block[1].matchAll(/--([\w-]+)\s*:\s*([^;]*);/g)) vars.set(name, { section, value: value.trim() });
+    }
+  });
+  return vars;
+}
+function declsToObject(decls) {
+  return Object.fromEntries(decls.map(d => d.replace(/;$/, '').split(/:\s*(.*)/s).slice(0, 2)));
+}
+function bricksScales(vars) {
+  const t = typeInputs(), s = spaceInputs();
+  const scale = (category, scope, prefix, levels, baseline, min, max, minRatio, maxRatio, overrideFor) => {
+    const names = levels.map(([n]) => n.replace(/^h/, ''));
+    const overrides = {};
+    names.forEach(n => { const o = overrideFor(n); if (o) overrides[n] = o; });
+    return {
+      category, scope, prefix, names, baseline,
+      scaleRange: { from: levels[0][1], to: levels[levels.length - 1][1] },
+      minSize: min, maxSize: max, minRatio, maxRatio,
+      // the framework's own clamp() values, for checking Bricks' output against
+      values: Object.fromEntries(names.map(n => [n, (vars.get(prefix + n) || {}).value])),
+      overrides,
+    };
+  };
+  const none = () => '';
+  return [
+    scale('Headings', 'typography', 'h', HEAD_LEVELS, '4', t.hbm, t.hbd, t.hrm, t.hrd, n => (LEVEL_OVERRIDES['h' + n] || {})['font-size']),
+    scale('Text', 'typography', 'text-', TEXT_LEVELS, 'm', t.tbm, t.tbd, t.trm, t.trd, n => (TEXT_LEVEL_OVERRIDES[n] || {})['font-size']),
+    scale('Space', 'spacing', 'space-', SPACE_LEVELS, 'm', s.bm, s.bd, s.rm, s.rd, none),
+    scale('Section Space', 'spacing', 'section-space-', SPACE_LEVELS, 'm', s.bm * s.sm, s.bd * s.sd, s.rm, s.rd, none),
+  ];
+}
+function bricksPalette(vars) {
+  const v = name => (vars.get(name) || {}).value || readVar('--' + name);
+  return [{ name: 'white', base: v('white') }, { name: 'black', base: v('black') }].concat(STATE.map(c => ({
+    name: c.name,
+    base: v(c.name),
+    hover: v(`${c.name}-hover`),
+    light: Array.from({ length: c.nl }, (_, i) => v(`${c.name}-l-${i + 1}`)),
+    dark: Array.from({ length: c.nd }, (_, i) => v(`${c.name}-d-${i + 1}`)),
+  })));
+}
+function bricksClasses() {
+  const out = [];
+  const add = (category, name, css) => out.push({ name, category, css: Array.isArray(css) ? css.join('\n') : css });
+  add('Header', 'hero-offset', HERO_OFFSET_CSS);
+  add('Header', 'header-transparent', HEADER_TRANSPARENT_CSS);
+  LEVELS.forEach(lv => add('Typography', lv, `.${lv} {\n  ${headingDecls(lv).join('\n  ')}\n}`));
+  TSIZE_LEVELS.forEach(lv => add('Typography', `text--${lv}`, `.text--${lv} {\n  ${textDecls(lv).join('\n  ')}\n}`));
+  ASPECT_RATIOS.forEach(([name, value]) => add('Utilities', `aspect-ratio-${name}`, `.aspect-ratio-${name} { aspect-ratio: ${ruleValue('.aspect-ratio-' + name, 'aspect-ratio') || value}; }`));
+  add('Utilities', 'list--none', `.list--none { list-style-type: ${ruleValue('.list--none', 'list-style-type') || 'none'}; }`);
+  add('Utilities', 'clickable-parent', clickableParentRules());
+  add('Smart Spacing', 'smart-spacing', smartSpacingRules('.smart-spacing'));
+  add('Smart Spacing', 'smart-spacing--off', SMART_SPACING_OFF_CSS);
+  buttonColorList().filter(isButtonEnabled).forEach(c => BTN_CLASS_VARIANTS.forEach(([suffix, variant]) => {
+    const cls = `.btn--${c}${suffix}`;
+    add('Buttons', cls.slice(1), [`${cls} {\n${BTN_BASE_DECLS}\n}`, btnVariantBlock(c, suffix, variant), `${cls}:hover {\n${BTN_HOVER_DECLS}\n}`]);
+  }));
+  // Bricks doesn't promise to print classes in this order, so the outline rules double
+  // the class to beat the color class they're combined with, instead of relying on order
+  add('Buttons', 'btn--outline', BTN_OUTLINE_CSS.replace(/\.btn--outline/g, '.btn--outline.btn--outline'));
+  Object.keys(BTN_SIZES).forEach(sz => add('Buttons', `btn--${sz}`, btnSizeCSS(sz)));
+  linkColorList().forEach(c => add('Links', `link--${c}`, linkColorCSS(c)));
+  return out;
+}
+function bricksThemeStyle() {
+  const headings = {};
+  LEVELS.forEach(lv => {
+    const all = declsToObject(headingDecls(lv));
+    headings[lv] = Object.fromEntries(THEME_HEADING_PROPS.map(p => [p, all[p]]));
+  });
+  return {
+    conditions: [{ main: 'any' }],
+    body: declsToObject(BODY_CSS.split('\n').slice(1, -1).map(l => l.trim())),
+    headings,
+    section: declsToObject(SECTION_CSS.split('\n').slice(1, -1).map(l => l.trim())),
+  };
+}
+// element rules with no class and no theme style control: pasted into Bricks > Settings > Custom code
+function bricksGlobalCSS() {
+  const L = ['/* Global CSS from the Blueprint framework -- paste into Bricks > Settings > Custom code > Custom CSS. */'];
+  const part = (note, ...rules) => L.push('', `/* ${note} */`, ...rules);
+  part('root font size', 'html {\n  font-size: var(--root-font-size);\n}');
+  part('header height per breakpoint (a Bricks variable holds one value only)', ...headerHeightMediaCSS());
+  part('anchor links clear the header, only when it is sticky', HEADER_ANCHOR_CSS);
+  part('automatic spacing', AUTO_SPACING_CSS);
+  part('heading props the theme style has no control for',
+    ...LEVELS.map(lv => `${lv} {\n  ${headingDecls(lv).filter(d => !THEME_HEADING_PROPS.includes(d.split(':')[0])).join('\n  ')}\n}`));
+  const extraTargets = quotedList(SMART_TARGETS_EXTRA);
+  part('smart spacing base: margin reset, list indents, duplicate-margin avoidance', ...SMART_SPACING_BASE_CSS,
+    ...(extraTargets.length ? smartSpacingRules(extraTargets.join(', ')) : []), duplicateMarginCSS());
+  part('keyboard focus ring', FOCUS_CSS);
+  part('default links', ...linkRules());
+  return L.join('\n') + '\n';
+}
+function buildBricksExport(project) {
+  const css = buildFullCSS();
+  const vars = cssVariables(css);
+  const t = typeInputs();
+  const scales = bricksScales(vars);
+  const palette = bricksPalette(vars);
+  // names the scales and palette already create, so they aren't listed as plain variables too
+  const owned = new Set(scales.flatMap(sc => sc.names.map(n => sc.prefix + n)));
+  palette.forEach(c => {
+    owned.add(c.name);
+    if (c.hover) owned.add(`${c.name}-hover`);
+    (c.light || []).forEach((_, i) => owned.add(`${c.name}-l-${i + 1}`));
+    (c.dark || []).forEach((_, i) => owned.add(`${c.name}-d-${i + 1}`));
+  });
+  const btnColorRe = new RegExp(`^btn-(${buttonColorList().join('|')})-`);
+  const variables = {};
+  vars.forEach(({ section, value }, name) => {
+    if (owned.has(name) || !value) return;  // an empty guide setting has nothing to import
+    let category = BRICKS_CATEGORIES[section] || section;
+    if (section === 'SPACING' && name.includes('-to-')) category = 'Spacing Bridges';
+    if (section === 'BUTTONS' && btnColorRe.test(name)) category = 'Button Colors';
+    (variables[category] = variables[category] || {})[name] = value;
+  });
+  return {
+    format: BRICKS_FORMAT,
+    project,
+    styleManager: { htmlFontSize: `${16 * t.root / 100}px`, minScreenWidth: `${t.vmin}px`, maxScreenWidth: `${t.vmax}px` },
+    breakpoints: Object.fromEntries(['xl', 'l', 'm', 's'].map(bp => [bp, +$('#bp-' + bp).value])),
+    scales,
+    palette: { name: project, colors: palette },
+    variables,
+    classes: bricksClasses(),
+    themeStyle: bricksThemeStyle(),
+    globalCss: bricksGlobalCSS(),
+  };
+}
+
+let downloadsApi = null;
+(async () => { try { downloadsApi = await (window.claude && window.claude.use ? window.claude.use('downloads') : Promise.resolve(null)); } catch (e) { downloadsApi = null; } })();
+
+async function saveFile(filename, data, type) {
+  if (downloadsApi) {
+    try {
+      const res = await downloadsApi.save({ filename, data });
+      if (res) { say('Saved ' + filename); return; }
+    } catch (e) { /* fall through to manual fallback */ }
+  }
+  // fallback: plain browser download (works when opened outside the artifact viewer)
+  try {
+    const blob = new Blob([data], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    say('Downloading ' + filename);
+  } catch (e) { copy(data); say('Copied ' + filename + ' (download unavailable here)'); }
+}
+
+// downloads always go to a file you name -- never framework.css, which holds the defaults
+const exportName = $('#export-name');
+try { exportName.value = localStorage.getItem('fw-export-name') || ''; } catch (e) { /* storage unavailable */ }
+function exportFileName() {
+  let name = exportName.value.trim().replace(/[\/\\:*?"<>|]+/g, '-');
+  if (!name) return null;
+  if (!/\.css$/i.test(name)) name += '.css';
+  return name;
+}
+function checkedExportName() {
+  const filename = exportFileName();
+  if (!filename) { say('Type a file name first'); exportName.focus(); return null; }
+  if (filename.toLowerCase() === 'framework.css') { say('framework.css holds your defaults, so pick another name'); exportName.focus(); return null; }
+  try { localStorage.setItem('fw-export-name', exportName.value.trim()); } catch (e) { /* storage unavailable */ }
+  return filename;
+}
+$('#export').addEventListener('click', () => {
+  const filename = checkedExportName();
+  if (filename) saveFile(filename, buildFullCSS(), 'text/css');
+});
+// the Bricks file shares the CSS file's name: acme.css -> acme-bricks.json
+$('#export-bricks').addEventListener('click', () => {
+  const filename = checkedExportName();
+  if (!filename) return;
+  const project = filename.replace(/\.css$/i, '');
+  saveFile(project + '-bricks.json', JSON.stringify(buildBricksExport(project), null, 2) + '\n', 'application/json');
+});
+
+/* tab nav */
+$$('.sg-nav2 a').forEach(a => a.addEventListener('click', (e) => {
+  e.preventDefault();
+  $$('.sg-nav2 a').forEach(x => x.removeAttribute('aria-current'));
+  a.setAttribute('aria-current', 'true');
+  document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}));
+
+/* ---------------- spacing ---------------- */
+const SPACE_LEVELS = [['xs', -2], ['s', -1], ['m', 0], ['l', 1], ['xl', 2], ['xxl', 3]];
+const SIZE_ORDER = ['xs', 's', 'm', 'l', 'xl', 'xxl'];
+fillRatioSelect($('#sp-rm'), 1.333);
+fillRatioSelect($('#sp-rd'), 1.5);
+function spaceInputs() {
+  const t = typeInputs(); // reuse the shared viewport from Typography
+  return {
+    vmin: t.vmin, vmax: t.vmax,
+    bm: +$('#sp-bm').value, bd: +$('#sp-bd').value,
+    rm: +$('#sp-rm').value, rd: +$('#sp-rd').value,
+    sm: +$('#sp-sm').value, sd: +$('#sp-sd').value,
+    gm: +$('#sp-gm').value, gd: +$('#sp-gd').value,
+  };
+}
+function spaceEndpoints(s) {
+  const pts = {};
+  SPACE_LEVELS.forEach(([name, k]) => { pts[name] = [s.bm * Math.pow(s.rm, k), s.bd * Math.pow(s.rd, k)]; });
+  return pts;
+}
+function sectionEndpoints(s, pts) {
+  const out = {};
+  SIZE_ORDER.forEach(name => { const [lo, hi] = pts[name]; out[name] = [lo * s.sm, hi * s.sd]; });
+  return out;
+}
+function bridgePairs() {
+  const pairs = [];
+  SIZE_ORDER.forEach((large, i) => SIZE_ORDER.slice(0, i).forEach(small => pairs.push([large, small])));
+  return pairs;
+}
+function applySpacing() {
+  const s = spaceInputs();
+  const base = spaceEndpoints(s);
+  const sect = sectionEndpoints(s, base);
+  SIZE_ORDER.forEach(name => {
+    root.style.setProperty('--space-' + name, fluidPx(s.vmin, s.vmax, ...base[name]));
+    root.style.setProperty('--section-space-' + name, fluidPx(s.vmin, s.vmax, ...sect[name]));
+  });
+  root.style.setProperty('--gutter', fluidPx(s.vmin, s.vmax, s.gm, s.gd));
+  bridgePairs().forEach(([large, small]) => {
+    root.style.setProperty(`--space-${large}-to-${small}`, fluidPx(s.vmin, s.vmax, base[small][0], base[large][1]));
+    root.style.setProperty(`--section-space-${large}-to-${small}`, fluidPx(s.vmin, s.vmax, sect[small][0], sect[large][1]));
+  });
+  renderSpacing();
+}
+function probeWidth(varName) {
+  const d = document.createElement('div');
+  d.style.cssText = 'position:absolute;visibility:hidden;inline-size:var(' + varName + ')';
+  document.body.appendChild(d);
+  const w = d.getBoundingClientRect().width;
+  d.remove();
+  return w;
+}
+function readouts() {
+  const maxBar = Math.max(1, ...$$('[data-bar]').map(r => probeWidth(r.dataset.bar)));
+  $$('[data-bar]').forEach(r => {
+    const w = probeWidth(r.dataset.bar);
+    const bar = $('.sg-bar', r);
+    if (bar) bar.style.inlineSize = Math.max(2, (w / maxBar) * 100) + '%';
+    const px = $('.pxv', r); if (px) px.textContent = Math.round(w) + 'px';
+  });
+}
+function renderSpacing() {
+  const sb = $('#space-bars'), secb = $('#section-bars');
+  if (!sb || !secb) return;
+  sb.innerHTML = ''; secb.innerHTML = '';
+  SIZE_ORDER.forEach(name => sb.appendChild(h(`<div class="sg-barrow" data-bar="--space-${name}"><span>--space-${name}</span><span><div class="sg-bar"></div></span><span class="pxv"></span></div>`)));
+  SIZE_ORDER.forEach(name => secb.appendChild(h(`<div class="sg-barrow" data-bar="--section-space-${name}"><span>--section-space-${name}</span><span><div class="sg-bar sg-bar--sec"></div></span><span class="pxv"></span></div>`)));
+  const bl = $('#bridge-list');
+  if (bl) {
+    bl.innerHTML = '';
+    bridgePairs().forEach(([large, small]) => bl.appendChild(h(`<button type="button" class="sg-code" data-copy="var(--space-${large}-to-${small})">--space-${large}-to-${small}</button>`)));
+    bridgePairs().forEach(([large, small]) => bl.appendChild(h(`<button type="button" class="sg-code" data-copy="var(--section-space-${large}-to-${small})">--section-space-${large}-to-${small}</button>`)));
+  }
+  readouts();
+}
+$$('#sp-bm, #sp-bd, #sp-sm, #sp-sd, #sp-gm, #sp-gd').forEach(inp => inp.addEventListener('input', applySpacing));
+$$('#sp-rm, #sp-rd').forEach(sel => sel.addEventListener('change', applySpacing));
+
+/* contextual gaps */
+const CTX = { container: 'container-gap', content: 'content-gap', grid: 'grid-gap' };
+const CTX_DEFAULTS = { container: 'l', content: 'm', grid: 'm' };
+function fillSpaceSelect(sel, def) {
+  sel.innerHTML = '';
+  SIZE_ORDER.forEach(n => sel.add(new Option('var(--space-' + n + ')', n)));
+  sel.value = def;
+}
+function initContextualGaps() {
+  Object.entries(CTX).forEach(([key, varName]) => {
+    const sel = $('#ctx-' + key);
+    const current = (readVar('--' + varName).match(/^var\(--space-([a-z]+)\)$/) || [])[1];
+    fillSpaceSelect(sel, SIZE_ORDER.includes(current) ? current : CTX_DEFAULTS[key]);
+    sel.addEventListener('change', () => { root.style.setProperty('--' + varName, 'var(--space-' + sel.value + ')'); renderContextualGaps(); });
+  });
+}
+function renderContextualGaps() {
+  const box = $('#ctx-bars'); if (!box) return;
+  box.innerHTML = '';
+  Object.entries(CTX).forEach(([key, varName]) => {
+    box.appendChild(h(`<div class="sg-barrow" data-bar="--${varName}"><span>--${varName}</span><span><div class="sg-bar"></div></span><span class="pxv"></span></div>`));
+  });
+  readouts();
+}
+
+/* automatic spacing toggles */
+function initSmartSpacing() {
+  const fields = [
+    ['ss-paragraph', 'paragraph-spacing'], ['ss-heading', 'heading-spacing'], ['ss-list', 'list-spacing'],
+    ['ss-list-item', 'list-item-spacing'], ['ss-flow', 'flow-spacing'], ['ss-list-indent', 'list-indent-spacing'],
+    ['ss-nested-list', 'nested-list-spacing'], ['ss-nested-indent', 'nested-list-indent-spacing'], ['ss-nested-item', 'nested-list-item-spacing'],
+    ['ss-figure', 'figure-spacing'], ['ss-figcaption', 'figcaption-spacing'], ['ss-blockquote', 'blockquote-spacing'],
+  ];
+  fields.forEach(([id, varName]) => {
+    const el = $('#' + id);
+    el.value = readVar('--' + varName);
+    el.addEventListener('input', () => {
+      const v = el.value.trim();
+      if (v) root.style.setProperty('--' + varName, v);
+    });
+  });
+  $('#ss-targets').value = SMART_TARGETS_EXTRA;
+  $('#ss-targets').addEventListener('input', (e) => { SMART_TARGETS_EXTRA = e.target.value; });
+  $('#ss-dupe').value = DUPLICATE_MARGIN_SELECTORS;
+  $('#ss-dupe').addEventListener('input', (e) => { DUPLICATE_MARGIN_SELECTORS = e.target.value; });
+}
+
+/* heading spacing: All (H2-H6) + per-level, same pattern as the Typography heading panel */
+let SMART_TARGETS_EXTRA = rawDefault('--fw-smart-spacing-targets');
+let DUPLICATE_MARGIN_SELECTORS = rawDefault('--fw-duplicate-margin-selectors') || ':is(figure, blockquote, ul, ol)';
+const HEAD_SPACING_LEVELS = ['h2', 'h3', 'h4', 'h5', 'h6'];
+const HEAD_SPACING_OVERRIDES = { h2: '', h3: '', h4: '', h5: '', h6: '' };
+let currentHeadSpacingTab = 'all';
+function renderHeadSpacingTabs() {
+  const box = $('#ss-head-tabs'); box.innerHTML = '';
+  ['all', ...HEAD_SPACING_LEVELS].forEach(tb => {
+    const b = h(`<button type="button" class="sg-leveltab">${tb === 'all' ? 'All' : tb.toUpperCase()}</button>`);
+    b.setAttribute('aria-current', String(tb === currentHeadSpacingTab));
+    b.onclick = () => { currentHeadSpacingTab = tb; renderHeadSpacingTabs(); renderHeadSpacingForm(); };
+    box.appendChild(b);
+  });
+}
+function renderHeadSpacingForm() {
+  const box = $('#ss-head-form'); box.innerHTML = '';
+  const isAll = currentHeadSpacingTab === 'all';
+  const dflt = readVar('--heading-spacing');
+  const val = isAll ? dflt : (HEAD_SPACING_OVERRIDES[currentHeadSpacingTab] || '');
+  const wrap = h(`<label>Heading spacing<input type="text" spellcheck="false" placeholder="${isAll ? '' : dflt}"></label>`);
+  const el = $('input', wrap);
+  el.value = val;
+  el.addEventListener('input', () => {
+    const v = el.value.trim();
+    if (isAll) { if (v) root.style.setProperty('--heading-spacing', v); }
+    else {
+      if (v) { HEAD_SPACING_OVERRIDES[currentHeadSpacingTab] = v; root.style.setProperty(`--${currentHeadSpacingTab}-spacing`, v); }
+      else { HEAD_SPACING_OVERRIDES[currentHeadSpacingTab] = ''; root.style.removeProperty(`--${currentHeadSpacingTab}-spacing`); }
+    }
+  });
+  box.appendChild(wrap);
+}
+function initAutoSpacing() {
+  [['container', 'auto-container-gap'], ['content', 'auto-content-gap']].forEach(([id, varName]) => {
+    const box = $('#auto-' + id);
+    box.checked = readVar('--' + varName) !== '0';
+    box.addEventListener('change', () => root.style.setProperty('--' + varName, box.checked ? '1' : '0'));
+  });
+}
+
+/* ---------------- layout ---------------- */
+const GRID_RATIOS = [[1, 2], [1, 3], [2, 1], [2, 3], [3, 1], [3, 2]];
+const HEADER_BREAKPOINTS = ['l', 'm', 's'];  // XL is the full-width value, so it needs no media query
+// header settings have no fields in the guide -- they're edited in framework.css and read back from it
+const HEADER_HEIGHTS = [['header-height-xl', 'XL'], ['header-height-l', 'L'], ['header-height-m', 'M'], ['header-height-s', 'S']];
+function gridTemplates() {
+  const out = [];
+  for (let n = 1; n <= 12; n++) out.push([`grid-${n}`, `repeat(${n}, minmax(0, 1fr))`]);
+  GRID_RATIOS.forEach(([a, b]) => out.push([`grid-${a}-${b}`, `minmax(0, ${a}fr) minmax(0, ${b}fr)`]));
+  // a column never drops below its share of the content width (scaled by aggressiveness),
+  // and never gets narrower than 1/N of the container, so there are at most N columns
+  for (let n = 2; n <= 12; n++) out.push([`grid-auto-${n}`, `repeat(auto-fit, minmax(min(100%, max((var(--content-width) - ${n - 1} * var(--grid-gap)) / ${n} * var(--auto-grid-aggressiveness), (100% - ${n - 1} * var(--grid-gap)) / ${n})), 1fr))`]);
+  return out;
+}
+// aspect ratio classes have no panel in the guide -- they're only written to framework.css
+const ASPECT_RATIOS = [['1', '1'], ['4-3', '4 / 3'], ['3-4', '3 / 4'], ['3-2', '3 / 2'], ['2-3', '2 / 3'], ['16-9', '16 / 9'], ['9-16', '9 / 16']];
+function initLayout() {
+  [['lay-content-width', '--content-width', '1366px'], ['lay-aggressiveness', '--auto-grid-aggressiveness', '0.7']].forEach(([id, varName, dflt]) => {
+    const el = $('#' + id);
+    el.value = readVar(varName) || dflt;
+    el.addEventListener('input', () => { const v = el.value.trim(); if (v) root.style.setProperty(varName, v); });
+  });
+  // templates are set inline too, so the preview works before framework.css has a LAYOUT section
+  const sel = $('#lay-grid-select'), list = $('#lay-grid-list'), demo = $('#lay-grid-demo');
+  gridTemplates().forEach(([name, value]) => {
+    if (!readVar('--' + name)) root.style.setProperty('--' + name, value);
+    sel.add(new Option('--' + name, name));
+    list.appendChild(h(`<button type="button" class="sg-code" data-copy="var(--${name})">--${name}</button>`));
+  });
+  for (let i = 1; i <= 8; i++) demo.appendChild(h(`<div style="background:var(--primary-trans-20);border-radius:6px;padding:.75rem;font:500 .8rem 'JetBrains Mono',monospace">${i}</div>`));
+  const show = () => { demo.style.gridTemplateColumns = `var(--${sel.value})`; };
+  sel.value = 'grid-auto-4';
+  sel.addEventListener('change', show);
+  show();
+}
+
+/* ---------------- radius ---------------- */
+const RADIUS_LEVELS = [['xs', -2], ['s', -1], ['m', 0], ['l', 1], ['xl', 2]];
+const RADIUS_CTX = { radius: 'm' };
+fillRatioSelect($('#rd-r'), 1.5);
+function radiusInputs() {
+  const t = typeInputs(); // reuse the shared viewport from Typography
+  return { vmin: t.vmin, vmax: t.vmax, bm: +$('#rd-bm').value, bd: +$('#rd-bd').value, ratio: +$('#rd-r').value };
+}
+function radiusSize(name) {
+  const r = radiusInputs(); const [, k] = RADIUS_LEVELS.find(([n]) => n === name);
+  return fluidPx(r.vmin, r.vmax, r.bm * Math.pow(r.ratio, k), r.bd * Math.pow(r.ratio, k));
+}
+function applyRadius() {
+  RADIUS_LEVELS.forEach(([name]) => root.style.setProperty('--radius-' + name, radiusSize(name)));
+  renderRadius();
+}
+function renderRadius() {
+  const box = $('#radius-tiles'); box.innerHTML = '';
+  RADIUS_LEVELS.map(([n]) => n).concat('full').forEach(name => {
+    // data-bar gives each tile a live px readout; --radius-full is left out since 999rem means nothing as a number
+    box.appendChild(h(`<div style="display:grid;gap:.4rem;justify-items:center"${name === 'full' ? '' : ` data-bar="--radius-${name}"`}>
+      <div style="inline-size:5rem;block-size:5rem;background:var(--primary-trans-20);border:2px solid var(--primary);border-radius:var(--radius-${name})"></div>
+      <button type="button" class="sg-code" data-copy="var(--radius-${name})">--radius-${name}</button>
+      <span class="pxv" style="font:500 .7rem 'JetBrains Mono',monospace;color:var(--sg-muted)">${name === 'full' ? 'pill' : ''}</span>
+    </div>`));
+  });
+  readouts();
+}
+function initRadius() {
+  Object.entries(RADIUS_CTX).forEach(([varName, dflt]) => {
+    const sel = $('#ctx-' + varName);
+    RADIUS_LEVELS.map(([n]) => n).concat('full').forEach(n => sel.add(new Option('var(--radius-' + n + ')', n)));
+    const current = (readVar('--' + varName).match(/^var\(--radius-([a-z]+)\)$/) || [])[1];
+    sel.value = [...sel.options].some(o => o.value === current) ? current : dflt;
+    sel.addEventListener('change', () => root.style.setProperty('--' + varName, 'var(--radius-' + sel.value + ')'));
+  });
+}
+$$('#rd-bm, #rd-bd').forEach(inp => inp.addEventListener('input', applyRadius));
+$('#rd-r').addEventListener('change', applyRadius);
+// spacing and radius share Typography's viewport range, so they follow it too
+$$('#t-vmin, #t-vmax').forEach(inp => inp.addEventListener('input', () => { applySpacing(); applyRadius(); }));
+
+/* ---------------- focus ---------------- */
+const FOCUS_FIELDS = [['--focus-color', 'var(--primary)'], ['--focus-width', '2px'], ['--focus-offset', '2px']];
+function initFocus() {
+  FOCUS_FIELDS.forEach(([varName, dflt]) => {
+    const el = $('#' + varName.slice(2));
+    el.value = readVar(varName) || dflt;
+    el.addEventListener('input', () => { const v = el.value.trim(); if (v) root.style.setProperty(varName, v); });
+  });
+}
+
+/* ---------------- buttons ---------------- */
+const STATUS_COLORS = ['success', 'warning', 'danger', 'info'];
+const BTN_GLOBAL_PROPS = [
+  { prop: 'padding-block', label: 'Padding (block)', default: '0.75em' },
+  { prop: 'padding-inline', label: 'Padding (inline)', default: '1.5em' },
+  { prop: 'min-width', label: 'Min width', default: '0' },
+  { prop: 'border-width', label: 'Border width', default: '2px' },
+  { prop: 'border-style', label: 'Border style', default: 'solid' },
+  { prop: 'border-radius', label: 'Border radius', default: '0.5rem' },
+  { prop: 'font-family', label: 'Font family', default: 'inherit' },
+  { prop: 'font-size', label: 'Font size', default: 'var(--text-m)' },
+  { prop: 'font-weight', label: 'Font weight', default: '600' },
+  { prop: 'font-style', label: 'Font style', default: 'normal' },
+  { prop: 'line-height', label: 'Line height', default: '1' },
+  { prop: 'letter-spacing', label: 'Letter spacing', default: 'normal' },
+  { prop: 'text-transform', label: 'Text transform', default: 'none' },
+  { prop: 'text-decoration', label: 'Text decoration', default: 'none' },
+  { prop: 'text-decoration-hover', label: 'Text decoration (hover)', default: 'none' },
+  { prop: 'transition-duration', label: 'Transition duration', default: '0.2s' },
+  { prop: 'outline-background-color', label: 'Outline background', default: 'transparent' },
+  { prop: 'outline-border-width', label: 'Outline border width', default: 'var(--btn-border-width)' },
+];
+const BTN_ENABLED = {};
+const BTN_VARIANTS = ['solid', 'dark', 'light', 'outline', 'outline-dark', 'outline-light'];
+const BTN_VARIANT_LABELS = { solid: 'Solid', dark: 'Dark', light: 'Light', outline: 'Outline', 'outline-dark': 'Dark outline', 'outline-light': 'Light outline' };
+const BTN_PROPS = ['background', 'text-color', 'border-color', 'focus-color', 'background-hover', 'text-color-hover', 'border-color-hover'];
+const BTN_PROP_LABELS = { background: 'Background', 'text-color': 'Text color', 'border-color': 'Border color', 'focus-color': 'Focus color', 'background-hover': 'Background (hover)', 'text-color-hover': 'Text color (hover)', 'border-color-hover': 'Border color (hover)' };
+function buttonColorList() { return STATE.map(c => c.name).filter(n => !STATUS_COLORS.includes(n)); }
+function isButtonEnabled(name) { return BTN_ENABLED[name] !== false; }
+function btnVariantDefaults(c) {
+  return {
+    solid: { background: `var(--${c})`, 'text-color': `var(--${c}-l-4)`, 'border-color': `var(--${c})`, 'focus-color': `var(--${c}-l-2)`,
+      'background-hover': `var(--${c}-hover)`, 'text-color-hover': `var(--${c}-l-4)`, 'border-color-hover': `var(--${c}-hover)` },
+    dark: { background: `var(--${c}-d-2)`, 'text-color': `var(--${c}-l-4)`, 'border-color': `var(--${c}-d-2)`, 'focus-color': `var(--${c}-d-1)`,
+      'background-hover': `var(--${c}-d-4)`, 'text-color-hover': `var(--${c}-l-4)`, 'border-color-hover': `var(--${c}-d-4)` },
+    light: { background: `var(--${c}-l-4)`, 'text-color': `var(--${c})`, 'border-color': `var(--${c}-l-4)`, 'focus-color': `var(--${c}-l-2)`,
+      'background-hover': `var(--${c}-l-2)`, 'text-color-hover': `var(--${c})`, 'border-color-hover': `var(--${c}-l-2)` },
+    outline: { background: 'transparent', 'text-color': `var(--${c})`, 'border-color': `var(--${c})`, 'focus-color': `var(--${c}-l-1)`,
+      'background-hover': `var(--${c})`, 'text-color-hover': `var(--${c}-l-4)`, 'border-color-hover': `var(--${c})` },
+    'outline-dark': { background: 'transparent', 'text-color': `var(--${c}-d-2)`, 'border-color': `var(--${c}-d-2)`, 'focus-color': `var(--${c}-d-1)`,
+      'background-hover': `var(--${c}-d-2)`, 'text-color-hover': `var(--${c}-l-4)`, 'border-color-hover': `var(--${c}-d-2)` },
+    'outline-light': { background: 'transparent', 'text-color': `var(--${c}-l-2)`, 'border-color': `var(--${c}-l-2)`, 'focus-color': `var(--${c}-l-2)`,
+      'background-hover': `var(--${c}-l-4)`, 'text-color-hover': `var(--${c})`, 'border-color-hover': `var(--${c}-l-4)` },
+  };
+}
+function btnVariantValue(c, variant, prop) {
+  return readVar(`--btn-${c}-${variant}-${prop}`) || btnVariantDefaults(c)[variant][prop];
+}
+
+const BTN_BASE_DECLS = `  display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
+  box-sizing: border-box; cursor: pointer;
+  padding-block: var(--btn-padding-block); padding-inline: var(--btn-padding-inline);
+  min-inline-size: var(--btn-min-width);
+  font-family: var(--btn-font-family); font-size: var(--btn-font-size); font-weight: var(--btn-font-weight);
+  font-style: var(--btn-font-style); line-height: var(--btn-line-height);
+  letter-spacing: var(--btn-letter-spacing); text-transform: var(--btn-text-transform);
+  text-decoration: var(--btn-text-decoration); text-align: center;
+  background: var(--btn-background); color: var(--btn-text-color);
+  border: var(--btn-border-width) var(--btn-border-style) var(--btn-border-color);
+  border-radius: var(--btn-border-radius);
+  transition: background var(--btn-transition-duration) ease-in-out, color var(--btn-transition-duration) ease-in-out, border-color var(--btn-transition-duration) ease-in-out;`;
+const BTN_HOVER_DECLS = `  background: var(--btn-background-hover); color: var(--btn-text-color-hover);
+  border-color: var(--btn-border-color-hover); text-decoration: var(--btn-text-decoration-hover);`;
+// each button class and the variant its variables come from; outline variables follow the same variant
+const BTN_CLASS_VARIANTS = [['', 'solid'], ['-light', 'light'], ['-dark', 'dark']];
+function btnVariantBlock(c, clsSuffix, variant) {
+  const outlineVariant = variant === 'solid' ? 'outline' : `outline-${variant}`;
+  return `.btn--${c}${clsSuffix} {
+  --btn-background: var(--btn-${c}-${variant}-background); --btn-background-hover: var(--btn-${c}-${variant}-background-hover);
+  --btn-text-color: var(--btn-${c}-${variant}-text-color); --btn-text-color-hover: var(--btn-${c}-${variant}-text-color-hover);
+  --btn-border-color: var(--btn-${c}-${variant}-border-color); --btn-border-color-hover: var(--btn-${c}-${variant}-border-color-hover);
+  --focus-color: var(--btn-${c}-${variant}-focus-color);
+  --btn-outline-background: var(--btn-${c}-${outlineVariant}-background);
+  --btn-outline-text-color: var(--btn-${c}-${outlineVariant}-text-color);
+  --btn-outline-border-color: var(--btn-${c}-${outlineVariant}-border-color);
+  --btn-outline-focus-color: var(--btn-${c}-${outlineVariant}-focus-color);
+  --btn-outline-background-hover: var(--btn-${c}-${outlineVariant}-background-hover);
+  --btn-outline-text-color-hover: var(--btn-${c}-${outlineVariant}-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-${c}-${outlineVariant}-border-color-hover);
+}`;
+}
+function buildButtonCSS(colors) {
+  const L = [];
+  if (!colors.length) return '';
+  const baseSel = colors.map(c => `.btn--${c}`).concat(colors.flatMap(c => [`.btn--${c}-light`, `.btn--${c}-dark`])).join(', ');
+  L.push(`${baseSel} {\n${BTN_BASE_DECLS}\n}`);
+  colors.forEach(c => BTN_CLASS_VARIANTS.forEach(([suffix, variant]) => L.push(btnVariantBlock(c, suffix, variant))));
+  L.push(colors.flatMap(c => [`.btn--${c}:hover`, `.btn--${c}-light:hover`, `.btn--${c}-dark:hover`]).join(',\n') + ` {\n${BTN_HOVER_DECLS}\n}`);
+  return L.join('\n');
+}
+const BTN_SIZES = { xs: 0.75, s: 0.875, m: 1, l: 1.25, xl: 1.5, xxl: 1.875 };
+function btnSizeCSS(sz) { return `.btn--${sz} { --btn-font-size: calc(var(--text-m) * ${BTN_SIZES[sz]}); }`; }
+const BTN_OUTLINE_CSS = `.btn--outline {
+  background: var(--btn-outline-background);
+  color: var(--btn-outline-text-color);
+  border-width: var(--btn-outline-border-width);
+  border-color: var(--btn-outline-border-color);
+  --focus-color: var(--btn-outline-focus-color);
+}
+.btn--outline:hover {
+  background: var(--btn-outline-background-hover);
+  color: var(--btn-outline-text-color-hover);
+  border-color: var(--btn-outline-border-color-hover);
+}`;
+function applyDynamicButtonCSS() {
+  const sheet = $('#framework-css').textContent;
+  // only colors with no button rules in framework.css (added or switched on in the
+  // guide) need CSS generated live; the outline rules are repeated after them so
+  // .btn--outline still wins over their base rules, as it does in framework.css.
+  const missing = buttonColorList().filter(isButtonEnabled).filter(c => !sheet.includes(`.btn--${c} {`));
+  let tag = $('#dynamic-buttons');
+  if (!tag) { tag = document.createElement('style'); tag.id = 'dynamic-buttons'; document.head.appendChild(tag); }
+  tag.textContent = missing.length ? buildButtonCSS(missing) + '\n' + BTN_OUTLINE_CSS : '';
+}
+function renderButtonChecks() {
+  const box = $('#btn-color-checks'); box.innerHTML = '';
+  buttonColorList().forEach(name => {
+    const label = h(`<label class="sg-checklabel"><input type="checkbox" ${isButtonEnabled(name) ? 'checked' : ''}> .btn--${name}</label>`);
+    $('input', label).addEventListener('change', (e) => {
+      BTN_ENABLED[name] = e.target.checked; renderButtonChecks(); applyDynamicButtonCSS(); renderButtonPreview(); renderButtonSizes(); renderButtonColorSelect();
+    });
+    box.appendChild(label);
+  });
+}
+function renderButtonGlobalForm() {
+  const box = $('#btn-global-form'); box.innerHTML = '';
+  BTN_GLOBAL_PROPS.forEach(f => {
+    const wrap = h(`<label>${f.label}<input type="text" spellcheck="false"></label>`);
+    const el = $('input', wrap);
+    el.value = readVar('--btn-' + f.prop) || f.default;
+    el.addEventListener('input', () => { const v = el.value.trim(); if (v) root.style.setProperty('--btn-' + f.prop, v); });
+    box.appendChild(wrap);
+  });
+}
+function renderButtonPreview() {
+  const box = $('#btn-preview'); box.innerHTML = '';
+  const colors = buttonColorList().filter(isButtonEnabled);
+  if (!colors.length) { box.innerHTML = '<p class="sg-formcaption" style="margin:0">No button colors checked.</p>'; return; }
+  colors.forEach(c => {
+    const row = h(`<div class="sg-btnpreviewrow"><span>${c}</span><div class="sg-btnrow-items"></div></div>`);
+    const items = $('.sg-btnrow-items', row);
+    ['', '-light', '-dark'].forEach(variant => {
+      items.appendChild(h(`<button type="button" class="sg-btn-demo btn--${c}${variant}">Button</button>`));
+      items.appendChild(h(`<button type="button" class="sg-btn-demo btn--${c}${variant} btn--outline">Button</button>`));
+    });
+    box.appendChild(row);
+  });
+}
+function renderButtonSizes() {
+  const box = $('#btn-sizes'); box.innerHTML = '';
+  const first = buttonColorList().filter(isButtonEnabled)[0];
+  if (!first) return;
+  ['xs', 's', 'm', 'l', 'xl', 'xxl'].forEach(sz => box.appendChild(h(`<button type="button" class="sg-btn-demo btn--${first} btn--${sz}">.btn--${sz}</button>`)));
+}
+
+/* ---------------- per-variant color editor ---------------- */
+let currentBtnEditColor = null, currentBtnVariantTab = 'solid';
+let btnFieldShowingHover = {};
+const BTN_BASE_PROPS = ['background', 'text-color', 'border-color', 'focus-color'];
+const BTN_HOVERABLE_PROPS = ['background', 'text-color', 'border-color'];
+const HOVER_ICON = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M5 1.5v7.3l2-1.3 1.3 3.3 1.5-.6L8.5 7l2.3-.7z" fill="currentColor"/></svg>';
+function renderButtonColorSelect() {
+  const sel = $('#btn-edit-color'); if (!sel) return;
+  const cur = sel.value; sel.innerHTML = '';
+  buttonColorList().filter(isButtonEnabled).forEach(c => sel.add(new Option(c, c)));
+  if ([...sel.options].some(o => o.value === cur)) sel.value = cur;
+  currentBtnEditColor = sel.value || null;
+  btnFieldShowingHover = {};
+  renderButtonVariantTabs(); renderButtonVariantForm();
+}
+function renderButtonVariantTabs() {
+  const box = $('#btn-variant-tabs'); if (!box) return; box.innerHTML = '';
+  BTN_VARIANTS.forEach(v => {
+    const b = h(`<button type="button" class="sg-leveltab">${BTN_VARIANT_LABELS[v]}</button>`);
+    b.setAttribute('aria-current', String(v === currentBtnVariantTab));
+    b.onclick = () => { currentBtnVariantTab = v; btnFieldShowingHover = {}; renderButtonVariantTabs(); renderButtonVariantForm(); };
+    box.appendChild(b);
+  });
+}
+function renderButtonVariantForm() {
+  const box = $('#btn-variant-form'); if (!box) return; box.innerHTML = '';
+  const c = currentBtnEditColor; if (!c) { box.innerHTML = '<p class="sg-formcaption" style="margin:0">Check a button color above first.</p>'; return; }
+  BTN_BASE_PROPS.forEach(prop => {
+    const canHover = BTN_HOVERABLE_PROPS.includes(prop);
+    const showingHover = canHover && btnFieldShowingHover[prop];
+    const activeProp = showingHover ? prop + '-hover' : prop;
+    const labelText = BTN_PROP_LABELS[prop];
+    const iconBtn = canHover ? `<button type="button" class="sg-hovericon" aria-label="Edit ${labelText} hover state" aria-pressed="${showingHover}" data-prop="${prop}">${HOVER_ICON}</button>` : '';
+    const wrap = h(`<label class="sg-btnfield"><span class="sg-btnfield-title">${showingHover ? labelText + ' (hover)' : labelText}${iconBtn}</span><input type="text" spellcheck="false"></label>`);
+    const el = $('input', wrap);
+    el.value = btnVariantValue(c, currentBtnVariantTab, activeProp);
+    el.addEventListener('input', () => {
+      const v = el.value.trim();
+      if (v) root.style.setProperty(`--btn-${c}-${currentBtnVariantTab}-${activeProp}`, v);
+    });
+    if (canHover) {
+      $('.sg-hovericon', wrap).addEventListener('click', () => {
+        btnFieldShowingHover[prop] = !btnFieldShowingHover[prop];
+        renderButtonVariantForm();
+      });
+    }
+    box.appendChild(wrap);
+  });
+  const sample = $('#btn-variant-sample');
+  if (sample) {
+    const isOutline = currentBtnVariantTab.startsWith('outline');
+    const base = currentBtnVariantTab === 'outline' ? '' : currentBtnVariantTab === 'outline-dark' ? '-dark' : currentBtnVariantTab === 'outline-light' ? '-light' : currentBtnVariantTab === 'dark' ? '-dark' : currentBtnVariantTab === 'light' ? '-light' : '';
+    sample.className = 'sg-btn-demo btn--' + c + base + (isOutline ? ' btn--outline' : '');
+  }
+}
+function initButtons() {
+  applyDynamicButtonCSS();
+  renderButtonChecks();
+  renderButtonGlobalForm();
+  renderButtonPreview();
+  renderButtonSizes();
+  renderButtonColorSelect();
+}
+
+/* ---------------- links ---------------- */
+let LINK_EXCLUSIONS = rawDefault('--fw-link-exclusions');
+function linkColorList() { return STATE.map(c => c.name); }  // every color, status colors included, matching ACSS
+function applyDynamicLinkCSS() {
+  const exclusions = LINK_EXCLUSIONS.split(',').map(s => s.trim().replace(/^["']|["']$/g, '').trim()).filter(Boolean);
+  const sel = exclusions.length ? 'a' + exclusions.map(e => `:not(${e})`).join('') : 'a';
+  let tag = $('#dynamic-link-exclusions');
+  if (!tag) { tag = document.createElement('style'); tag.id = 'dynamic-link-exclusions'; document.head.appendChild(tag); }
+  // re-declares the two base rules with the current exclusion selector; harmless
+  // duplication of a zero-specificity rule, same trick used for custom button colors
+  tag.textContent = exclusions.length ? `
+:where(${sel}) { color: var(--link-color); font-weight: var(--link-font-weight); text-decoration: var(--link-text-decoration); text-decoration-color: var(--link-decoration-color); text-decoration-thickness: var(--link-decoration-thickness); text-underline-offset: var(--link-underline-offset); transition: color var(--link-transition-duration) ease-in-out; }
+:where(${sel}:hover) { color: var(--link-color-hover); }` : '';
+}
+const LINK_FIELDS = [
+  ['link-color', '--link-color'],
+  ['link-decoration-color', '--link-decoration-color'],
+  ['link-decoration-thickness', '--link-decoration-thickness'],
+  ['link-underline-offset', '--link-underline-offset'],
+];
+function initLinks() {
+  LINK_FIELDS.forEach(([id, varName]) => {
+    const el = $('#' + id);
+    el.value = readVar(varName);
+    el.addEventListener('input', () => { const v = el.value.trim(); if (v) root.style.setProperty(varName, v); });
+  });
+  const weightSel = $('#link-weight');
+  ['inherit', '100', '200', '300', '400', '500', '600', '700', '800', '900'].forEach(w => weightSel.add(new Option(w, w)));
+  weightSel.value = readVar('--link-font-weight') || 'inherit';
+  weightSel.addEventListener('change', () => root.style.setProperty('--link-font-weight', weightSel.value));
+
+  const decoSel = $('#link-decoration');
+  ['inherit', 'none', 'underline', 'overline', 'line-through'].forEach(d => decoSel.add(new Option(d, d)));
+  decoSel.value = readVar('--link-text-decoration') || 'inherit';
+  decoSel.addEventListener('change', () => root.style.setProperty('--link-text-decoration', decoSel.value));
+
+  const globalToggle = $('#link-global-transition');
+  const durationRow = $('#link-transition-row');
+  const durationInput = $('#link-transition-duration');
+  const currentDuration = readVar('--link-transition-duration');
+  const followsGlobal = currentDuration.includes('--btn-transition-duration');
+  globalToggle.checked = followsGlobal;
+  durationRow.style.display = followsGlobal ? 'none' : '';
+  durationInput.value = followsGlobal ? readVar('--btn-transition-duration') : currentDuration;
+  globalToggle.addEventListener('change', () => {
+    durationRow.style.display = globalToggle.checked ? 'none' : '';
+    root.style.setProperty('--link-transition-duration', globalToggle.checked ? 'var(--btn-transition-duration)' : (durationInput.value.trim() || '0.2s'));
+  });
+  durationInput.addEventListener('input', () => {
+    if (!globalToggle.checked) { const v = durationInput.value.trim(); if (v) root.style.setProperty('--link-transition-duration', v); }
+  });
+
+  $('#link-exclusions').value = LINK_EXCLUSIONS;
+  $('#link-exclusions').addEventListener('input', (e) => { LINK_EXCLUSIONS = e.target.value; applyDynamicLinkCSS(); });
+
+  renderLinkColorPreview();
+}
+function renderLinkColorPreview() {
+  const box = $('#link-color-preview'); if (!box) return; box.innerHTML = '';
+  linkColorList().forEach(c => box.appendChild(h(`<a href="#" class="link--${c}" onclick="return false">${c}</a>`)));
+}
+
+/* ---------------- seed the guide from framework.css ---------------- */
+// the scale inputs aren't CSS values themselves, so framework.css stores them as --fw-* variables
+const GUIDE_SETTINGS = [
+  ['t-vmin', 'viewport-min'], ['t-vmax', 'viewport-max'],
+  ['t-hbm', 'heading-base-mobile'], ['t-hbd', 'heading-base-desktop'],
+  ['t-hr-m', 'heading-ratio-mobile'], ['t-hr-d', 'heading-ratio-desktop'],
+  ['t-tbm', 'text-base-mobile'], ['t-tbd', 'text-base-desktop'],
+  ['t-tr-m', 'text-ratio-mobile'], ['t-tr-d', 'text-ratio-desktop'],
+  ['sp-bm', 'space-base-mobile'], ['sp-bd', 'space-base-desktop'],
+  ['sp-rm', 'space-ratio-mobile'], ['sp-rd', 'space-ratio-desktop'],
+  ['sp-sm', 'section-multiplier-mobile'], ['sp-sd', 'section-multiplier-desktop'],
+  ['sp-gm', 'gutter-mobile'], ['sp-gd', 'gutter-desktop'],
+  ['bp-xl', 'breakpoint-xl'], ['bp-l', 'breakpoint-l'], ['bp-m', 'breakpoint-m'], ['bp-s', 'breakpoint-s'],
+  ['rd-bm', 'radius-base-mobile'], ['rd-bd', 'radius-base-desktop'],
+  ['rd-r', 'radius-ratio'],
+];
+function seedFromCSS() {
+  const sheet = $('#framework-css').textContent;
+  // a missing or non-numeric setting keeps the input's value from the HTML
+  GUIDE_SETTINGS.forEach(([id, name]) => {
+    const v = parseFloat(rawDefault('--fw-' + name)); if (!Number.isFinite(v)) return;
+    const el = $('#' + id);
+    if (el.tagName === 'SELECT' && ![...el.options].some(o => +o.value === v)) el.add(new Option('Custom — ' + v, v));
+    el.value = el.tagName === 'SELECT' ? [...el.options].find(o => +o.value === v).value : v;
+  });
+  const rootSize = parseFloat(rawDefault('--root-font-size'));
+  if (Number.isFinite(rootSize)) $('#t-root').value = rootSize;
+
+  LEVELS.forEach(lv => {
+    HEADING_PROPS.concat('max-width').forEach(p => { const v = rawDefault(`--${lv}-${p}`); if (v) LEVEL_OVERRIDES[lv][p] = v; });
+    const size = markedOverride('--' + lv); if (size) LEVEL_OVERRIDES[lv]['font-size'] = size;
+  });
+  TSIZE_LEVELS.forEach(lv => {
+    TEXT_STYLE_PROPS.forEach(p => { const v = rawDefault(`--text-${lv}-${p}`); if (v) TEXT_LEVEL_OVERRIDES[lv][p] = v; });
+    const size = markedOverride('--text-' + lv); if (size) TEXT_LEVEL_OVERRIDES[lv]['font-size'] = size;
+  });
+  HEAD_SPACING_LEVELS.forEach(lv => {
+    const v = rawDefault(`--${lv}-spacing`);
+    if (v && v !== 'var(--heading-spacing)') HEAD_SPACING_OVERRIDES[lv] = v;
+  });
+  // a color with no button variables in framework.css had its button turned off
+  buttonColorList().forEach(c => { BTN_ENABLED[c] = sheet.includes(`--btn-${c}-solid-background:`); });
+}
+
+seedFromCSS();
+renderAll();
+applyType();
+applySpacing();
+initContextualGaps();
+renderContextualGaps();
+initAutoSpacing();
+initSmartSpacing();
+renderHeadSpacingTabs();
+renderHeadSpacingForm();
+renderLevelTabs();
+renderHeadForm();
+initTextColors();
+renderMaxWidthOptions();
+renderTextLevelTabs();
+renderTextStyleForm();
+initLayout();
+applyRadius();
+initRadius();
+initFocus();
+initButtons();
+initLinks();
+window.__buildFullCSS = buildFullCSS;
+window.__buildBricksExport = buildBricksExport;
+}
+})();
+</script>
+</body>
+</html>
