@@ -1,0 +1,1479 @@
+
+/* ======================================================================
+   GUIDE SETTINGS
+   The inputs framework-guide.html rebuilds the type scale, spacing scale, breakpoints and selector lists from.
+   They style nothing themselves. Unitless numbers are px, except the ratios and multipliers.
+   ====================================================================== */
+:root {
+  --fw-viewport-min: 320;
+  --fw-viewport-max: 1366;
+  --fw-heading-base-mobile: 24;
+  --fw-heading-base-desktop: 28;
+  --fw-heading-ratio-mobile: 1.2;
+  --fw-heading-ratio-desktop: 1.25;
+  --fw-text-base-mobile: 16;
+  --fw-text-base-desktop: 18;
+  --fw-text-ratio-mobile: 1.125;
+  --fw-text-ratio-desktop: 1.125;
+  --fw-space-base-mobile: 16;
+  --fw-space-base-desktop: 24;
+  --fw-space-ratio-mobile: 1.333;
+  --fw-space-ratio-desktop: 1.5;
+  --fw-section-multiplier-mobile: 2;
+  --fw-section-multiplier-desktop: 3;
+  --fw-gutter-mobile: 20;
+  --fw-gutter-desktop: 80;
+  --fw-breakpoint-xl: 1366;
+  --fw-breakpoint-l: 992;
+  --fw-breakpoint-m: 768;
+  --fw-breakpoint-s: 480;
+  --fw-radius-base-mobile: 10;
+  --fw-radius-base-desktop: 12;
+  --fw-radius-ratio: 1.5;
+  --fw-smart-spacing-targets: ;
+  --fw-duplicate-margin-selectors: :is(figure, blockquote, ul, ol);
+  --fw-link-exclusions: ;
+}
+
+/* ======================================================================
+   HEADER
+   For the Bricks header template. Set the header heights and z-index here -- they have no fields
+   in framework-guide.html, which keeps whatever is set here. A transparent header that isn't
+   sticky overlays the hero; .hero-offset keeps the hero's content clear of it. Anchor links clear
+   the header only when it's sticky (set on the header template in Bricks).
+   ====================================================================== */
+:root {
+  /* header height per breakpoint: XL applies at full width, each smaller one below its breakpoint */
+  --header-height-xl: 0rem;
+  --header-height-l: 0rem;
+  --header-height-m: 0rem;
+  --header-height-s: 0rem;
+  --header-height: var(--header-height-xl);
+  --header-z-index: 1000;
+}
+@media (max-width: 992px) {
+  :root { --header-height: var(--header-height-l); }
+}
+@media (max-width: 768px) {
+  :root { --header-height: var(--header-height-m); }
+}
+@media (max-width: 480px) {
+  :root { --header-height: var(--header-height-s); }
+}
+/* transparent header, not sticky: taken out of the flow so it overlays the hero */
+#brx-header.header-transparent:not(.sticky) {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 0;
+  z-index: var(--header-z-index);
+}
+/* hero content clears the header while the background runs behind it */
+.hero-offset {
+  padding-block-start: var(--header-height);
+}
+/* anchor links clear the header, only when it is sticky */
+body:has(#brx-header.sticky) :target {
+  scroll-margin-block-start: var(--header-height);
+}
+
+/* ======================================================================
+   COLOR
+   ====================================================================== */
+/* Each color is entered by hand: a base, lighter steps (l-1 up), darker steps
+   (d-1 up), and its own hover. Add or remove steps and colors on the Color page
+   of framework-guide.html and re-download; nothing here is calculated from
+   anything else at load time. */
+:root {
+  --white: #ffffff;
+  --black: #000000;
+  --white-trans-10: color-mix(in srgb, var(--white) 10%, transparent);
+  --black-trans-10: color-mix(in srgb, var(--black) 10%, transparent);
+  --white-trans-20: color-mix(in srgb, var(--white) 20%, transparent);
+  --black-trans-20: color-mix(in srgb, var(--black) 20%, transparent);
+  --white-trans-30: color-mix(in srgb, var(--white) 30%, transparent);
+  --black-trans-30: color-mix(in srgb, var(--black) 30%, transparent);
+  --white-trans-40: color-mix(in srgb, var(--white) 40%, transparent);
+  --black-trans-40: color-mix(in srgb, var(--black) 40%, transparent);
+  --white-trans-50: color-mix(in srgb, var(--white) 50%, transparent);
+  --black-trans-50: color-mix(in srgb, var(--black) 50%, transparent);
+  --white-trans-60: color-mix(in srgb, var(--white) 60%, transparent);
+  --black-trans-60: color-mix(in srgb, var(--black) 60%, transparent);
+  --white-trans-70: color-mix(in srgb, var(--white) 70%, transparent);
+  --black-trans-70: color-mix(in srgb, var(--black) 70%, transparent);
+  --white-trans-80: color-mix(in srgb, var(--white) 80%, transparent);
+  --black-trans-80: color-mix(in srgb, var(--black) 80%, transparent);
+  --white-trans-90: color-mix(in srgb, var(--white) 90%, transparent);
+  --black-trans-90: color-mix(in srgb, var(--black) 90%, transparent);
+
+  /* primary */
+  --primary: #e633a4;
+  --primary-l-4: #f8c8e6;
+  --primary-l-3: #f4a2d6;
+  --primary-l-2: #ef7dc5;
+  --primary-l-1: #eb58b5;
+  --primary-d-1: #d0198c;
+  --primary-d-2: #a5146f;
+  --primary-d-3: #7a0f52;
+  --primary-d-4: #4f0a36;
+  --primary-hover: #c41884;  /* set by hand per project */
+  --primary-trans-10: color-mix(in srgb, var(--primary) 10%, transparent);
+  --primary-trans-20: color-mix(in srgb, var(--primary) 20%, transparent);
+  --primary-trans-30: color-mix(in srgb, var(--primary) 30%, transparent);
+  --primary-trans-40: color-mix(in srgb, var(--primary) 40%, transparent);
+  --primary-trans-50: color-mix(in srgb, var(--primary) 50%, transparent);
+  --primary-trans-60: color-mix(in srgb, var(--primary) 60%, transparent);
+  --primary-trans-70: color-mix(in srgb, var(--primary) 70%, transparent);
+  --primary-trans-80: color-mix(in srgb, var(--primary) 80%, transparent);
+  --primary-trans-90: color-mix(in srgb, var(--primary) 90%, transparent);
+
+  /* secondary */
+  --secondary: #7c1fd1;
+  --secondary-l-4: #ddc2f6;
+  --secondary-l-3: #c596ef;
+  --secondary-l-2: #ad6be9;
+  --secondary-l-1: #953fe3;
+  --secondary-d-1: #671aae;
+  --secondary-d-2: #53158c;
+  --secondary-d-3: #3e1069;
+  --secondary-d-4: #2a0a46;
+  --secondary-hover: #5c179c;  /* set by hand per project */
+  --secondary-trans-10: color-mix(in srgb, var(--secondary) 10%, transparent);
+  --secondary-trans-20: color-mix(in srgb, var(--secondary) 20%, transparent);
+  --secondary-trans-30: color-mix(in srgb, var(--secondary) 30%, transparent);
+  --secondary-trans-40: color-mix(in srgb, var(--secondary) 40%, transparent);
+  --secondary-trans-50: color-mix(in srgb, var(--secondary) 50%, transparent);
+  --secondary-trans-60: color-mix(in srgb, var(--secondary) 60%, transparent);
+  --secondary-trans-70: color-mix(in srgb, var(--secondary) 70%, transparent);
+  --secondary-trans-80: color-mix(in srgb, var(--secondary) 80%, transparent);
+  --secondary-trans-90: color-mix(in srgb, var(--secondary) 90%, transparent);
+
+  /* tertiary */
+  --tertiary: #1a8a91;
+  --tertiary-l-4: #b8eff2;
+  --tertiary-l-3: #82e2e9;
+  --tertiary-l-2: #4cd6df;
+  --tertiary-l-1: #24bdc7;
+  --tertiary-d-1: #16757b;
+  --tertiary-d-2: #126065;
+  --tertiary-d-3: #0e4b4f;
+  --tertiary-d-4: #0a3639;
+  --tertiary-hover: #11595d;  /* set by hand per project */
+  --tertiary-trans-10: color-mix(in srgb, var(--tertiary) 10%, transparent);
+  --tertiary-trans-20: color-mix(in srgb, var(--tertiary) 20%, transparent);
+  --tertiary-trans-30: color-mix(in srgb, var(--tertiary) 30%, transparent);
+  --tertiary-trans-40: color-mix(in srgb, var(--tertiary) 40%, transparent);
+  --tertiary-trans-50: color-mix(in srgb, var(--tertiary) 50%, transparent);
+  --tertiary-trans-60: color-mix(in srgb, var(--tertiary) 60%, transparent);
+  --tertiary-trans-70: color-mix(in srgb, var(--tertiary) 70%, transparent);
+  --tertiary-trans-80: color-mix(in srgb, var(--tertiary) 80%, transparent);
+  --tertiary-trans-90: color-mix(in srgb, var(--tertiary) 90%, transparent);
+
+  /* accent */
+  --accent: #e0a300;
+  --accent-l-4: #ffebb5;
+  --accent-l-3: #ffdd80;
+  --accent-l-2: #ffce4b;
+  --accent-l-1: #ffc016;
+  --accent-d-1: #bb8800;
+  --accent-d-2: #976e00;
+  --accent-d-3: #725300;
+  --accent-d-4: #4d3800;
+  --accent-hover: #a37600;  /* set by hand per project */
+  --accent-trans-10: color-mix(in srgb, var(--accent) 10%, transparent);
+  --accent-trans-20: color-mix(in srgb, var(--accent) 20%, transparent);
+  --accent-trans-30: color-mix(in srgb, var(--accent) 30%, transparent);
+  --accent-trans-40: color-mix(in srgb, var(--accent) 40%, transparent);
+  --accent-trans-50: color-mix(in srgb, var(--accent) 50%, transparent);
+  --accent-trans-60: color-mix(in srgb, var(--accent) 60%, transparent);
+  --accent-trans-70: color-mix(in srgb, var(--accent) 70%, transparent);
+  --accent-trans-80: color-mix(in srgb, var(--accent) 80%, transparent);
+  --accent-trans-90: color-mix(in srgb, var(--accent) 90%, transparent);
+
+  /* base */
+  --base: #4a4560;
+  --base-l-4: #d0cddb;
+  --base-l-3: #aca8c0;
+  --base-l-2: #8882a5;
+  --base-l-1: #676086;
+  --base-d-1: #3f3b52;
+  --base-d-2: #343043;
+  --base-d-3: #292635;
+  --base-d-4: #1d1b26;
+  --base-hover: #2f2b3c;  /* set by hand per project */
+  --base-trans-10: color-mix(in srgb, var(--base) 10%, transparent);
+  --base-trans-20: color-mix(in srgb, var(--base) 20%, transparent);
+  --base-trans-30: color-mix(in srgb, var(--base) 30%, transparent);
+  --base-trans-40: color-mix(in srgb, var(--base) 40%, transparent);
+  --base-trans-50: color-mix(in srgb, var(--base) 50%, transparent);
+  --base-trans-60: color-mix(in srgb, var(--base) 60%, transparent);
+  --base-trans-70: color-mix(in srgb, var(--base) 70%, transparent);
+  --base-trans-80: color-mix(in srgb, var(--base) 80%, transparent);
+  --base-trans-90: color-mix(in srgb, var(--base) 90%, transparent);
+
+  /* neutral */
+  --neutral: #737373;
+  --neutral-l-4: #dbdbdb;
+  --neutral-l-3: #c1c1c1;
+  --neutral-l-2: #a7a7a7;
+  --neutral-l-1: #8d8d8d;
+  --neutral-d-1: #606060;
+  --neutral-d-2: #4d4d4d;
+  --neutral-d-3: #3a3a3a;
+  --neutral-d-4: #272727;
+  --neutral-hover: #545454;  /* set by hand per project */
+  --neutral-trans-10: color-mix(in srgb, var(--neutral) 10%, transparent);
+  --neutral-trans-20: color-mix(in srgb, var(--neutral) 20%, transparent);
+  --neutral-trans-30: color-mix(in srgb, var(--neutral) 30%, transparent);
+  --neutral-trans-40: color-mix(in srgb, var(--neutral) 40%, transparent);
+  --neutral-trans-50: color-mix(in srgb, var(--neutral) 50%, transparent);
+  --neutral-trans-60: color-mix(in srgb, var(--neutral) 60%, transparent);
+  --neutral-trans-70: color-mix(in srgb, var(--neutral) 70%, transparent);
+  --neutral-trans-80: color-mix(in srgb, var(--neutral) 80%, transparent);
+  --neutral-trans-90: color-mix(in srgb, var(--neutral) 90%, transparent);
+
+  /* success */
+  --success: #2f9e5c;
+  --success-l-4: #c3edd4;
+  --success-l-3: #98e0b5;
+  --success-l-2: #6cd396;
+  --success-l-1: #40c676;
+  --success-d-1: #27854d;
+  --success-d-2: #206b3f;
+  --success-d-3: #185230;
+  --success-d-4: #113921;
+  --success-hover: #216f41;  /* set by hand per project */
+  --success-trans-10: color-mix(in srgb, var(--success) 10%, transparent);
+  --success-trans-20: color-mix(in srgb, var(--success) 20%, transparent);
+  --success-trans-30: color-mix(in srgb, var(--success) 30%, transparent);
+  --success-trans-40: color-mix(in srgb, var(--success) 40%, transparent);
+  --success-trans-50: color-mix(in srgb, var(--success) 50%, transparent);
+  --success-trans-60: color-mix(in srgb, var(--success) 60%, transparent);
+  --success-trans-70: color-mix(in srgb, var(--success) 70%, transparent);
+  --success-trans-80: color-mix(in srgb, var(--success) 80%, transparent);
+  --success-trans-90: color-mix(in srgb, var(--success) 90%, transparent);
+
+  /* warning */
+  --warning: #e0a300;
+  --warning-l-4: #ffebb5;
+  --warning-l-3: #ffdd80;
+  --warning-l-2: #ffce4b;
+  --warning-l-1: #ffc016;
+  --warning-d-1: #bb8800;
+  --warning-d-2: #976e00;
+  --warning-d-3: #725300;
+  --warning-d-4: #4d3800;
+  --warning-hover: #a37600;  /* set by hand per project */
+  --warning-trans-10: color-mix(in srgb, var(--warning) 10%, transparent);
+  --warning-trans-20: color-mix(in srgb, var(--warning) 20%, transparent);
+  --warning-trans-30: color-mix(in srgb, var(--warning) 30%, transparent);
+  --warning-trans-40: color-mix(in srgb, var(--warning) 40%, transparent);
+  --warning-trans-50: color-mix(in srgb, var(--warning) 50%, transparent);
+  --warning-trans-60: color-mix(in srgb, var(--warning) 60%, transparent);
+  --warning-trans-70: color-mix(in srgb, var(--warning) 70%, transparent);
+  --warning-trans-80: color-mix(in srgb, var(--warning) 80%, transparent);
+  --warning-trans-90: color-mix(in srgb, var(--warning) 90%, transparent);
+
+  /* danger */
+  --danger: #d1274a;
+  --danger-l-4: #f4c5cf;
+  --danger-l-3: #ed9cad;
+  --danger-l-2: #e5748b;
+  --danger-l-1: #dd4b69;
+  --danger-d-1: #ae203e;
+  --danger-d-2: #8b1a31;
+  --danger-d-3: #681325;
+  --danger-d-4: #450d19;
+  --danger-hover: #9d1d38;  /* set by hand per project */
+  --danger-trans-10: color-mix(in srgb, var(--danger) 10%, transparent);
+  --danger-trans-20: color-mix(in srgb, var(--danger) 20%, transparent);
+  --danger-trans-30: color-mix(in srgb, var(--danger) 30%, transparent);
+  --danger-trans-40: color-mix(in srgb, var(--danger) 40%, transparent);
+  --danger-trans-50: color-mix(in srgb, var(--danger) 50%, transparent);
+  --danger-trans-60: color-mix(in srgb, var(--danger) 60%, transparent);
+  --danger-trans-70: color-mix(in srgb, var(--danger) 70%, transparent);
+  --danger-trans-80: color-mix(in srgb, var(--danger) 80%, transparent);
+  --danger-trans-90: color-mix(in srgb, var(--danger) 90%, transparent);
+
+  /* info */
+  --info: #1f8fb0;
+  --info-l-4: #bee7f3;
+  --info-l-3: #8ed6eb;
+  --info-l-2: #5dc4e3;
+  --info-l-1: #2db3da;
+  --info-d-1: #1a7894;
+  --info-d-2: #156177;
+  --info-d-3: #104a5b;
+  --info-d-4: #0b333f;
+  --info-hover: #16657c;  /* set by hand per project */
+  --info-trans-10: color-mix(in srgb, var(--info) 10%, transparent);
+  --info-trans-20: color-mix(in srgb, var(--info) 20%, transparent);
+  --info-trans-30: color-mix(in srgb, var(--info) 30%, transparent);
+  --info-trans-40: color-mix(in srgb, var(--info) 40%, transparent);
+  --info-trans-50: color-mix(in srgb, var(--info) 50%, transparent);
+  --info-trans-60: color-mix(in srgb, var(--info) 60%, transparent);
+  --info-trans-70: color-mix(in srgb, var(--info) 70%, transparent);
+  --info-trans-80: color-mix(in srgb, var(--info) 80%, transparent);
+  --info-trans-90: color-mix(in srgb, var(--info) 90%, transparent);
+
+  --action: var(--primary);
+  --action-hover: var(--primary-hover);
+}
+
+/* ======================================================================
+   COLOR CLASSES
+   None generated right now. Every color, step, hover and transparency is still available as a variable via var().
+   ====================================================================== */
+
+/* ======================================================================
+   TYPOGRAPHY
+   ====================================================================== */
+/* Fluid type scale: pick a min/max viewport, a base size at each end for the
+   anchor step (h4 for headings, text-m for text), and mobile/desktop ratios.
+   Every other step is base * ratio^k, rebuilt from the GUIDE SETTINGS above.
+   To pin one step to your own value, follow it on the same line with a comment
+   containing just the word override. */
+html {
+  --root-font-size: 100%;
+  font-size: var(--root-font-size);
+}
+:root {
+  /* headings: anchored on h4, 1.2 ratio mobile / 1.25 ratio desktop, 24px at 320px viewport to 28px at 1366px */
+  --h6: clamp(1.0417rem, calc(0.1198vw + 1.0177rem), 1.12rem);
+  --h5: clamp(1.25rem, calc(0.2294vw + 1.2041rem), 1.4rem);
+  --h4: clamp(1.5rem, calc(0.3824vw + 1.4235rem), 1.75rem);
+  --h3: clamp(1.8rem, calc(0.5927vw + 1.6815rem), 2.1875rem);
+  --h2: clamp(2.16rem, calc(0.8786vw + 1.9843rem), 2.7344rem);
+  --h1: clamp(2.592rem, calc(1.2634vw + 2.3393rem), 3.418rem);
+
+  /* text: anchored on text-m, 1.125 ratio mobile / 1.125 ratio desktop, 16px at 320px viewport to 18px at 1366px */
+  --text-xs: clamp(0.7901rem, calc(0.1511vw + 0.7599rem), 0.8889rem);
+  --text-s: clamp(0.8889rem, calc(0.17vw + 0.8549rem), 1rem);
+  --text-m: clamp(1rem, calc(0.1912vw + 0.9618rem), 1.125rem);
+  --text-l: clamp(1.125rem, calc(0.2151vw + 1.082rem), 1.2656rem);
+  --text-xl: clamp(1.2656rem, calc(0.242vw + 1.2172rem), 1.4238rem);
+  --text-xxl: clamp(1.4238rem, calc(0.2722vw + 1.3694rem), 1.6018rem);
+}
+
+/* ======================================================================
+   HEADING DEFAULTS
+   Applies to every h1-h6 and .h1-.h6. A level's own override wins over the default.
+   ====================================================================== */
+:root {
+  --heading-font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --heading-color: inherit;
+  --heading-line-height: calc(4px + 2ex);
+  --heading-font-weight: 700;
+  --heading-letter-spacing: normal;
+  --heading-font-style: normal;
+  --heading-text-transform: none;
+  --heading-text-wrap: pretty;
+}
+h1, .h1 {
+  font-size: var(--h1);
+  font-family: var(--h1-font-family, var(--heading-font-family));
+  color: var(--h1-color, var(--heading-color));
+  line-height: var(--h1-line-height, var(--heading-line-height));
+  font-weight: var(--h1-font-weight, var(--heading-font-weight));
+  letter-spacing: var(--h1-letter-spacing, var(--heading-letter-spacing));
+  font-style: var(--h1-font-style, var(--heading-font-style));
+  text-transform: var(--h1-text-transform, var(--heading-text-transform));
+  text-wrap: var(--h1-text-wrap, var(--heading-text-wrap));
+  max-width: var(--h1-max-width);
+}
+h2, .h2 {
+  font-size: var(--h2);
+  font-family: var(--h2-font-family, var(--heading-font-family));
+  color: var(--h2-color, var(--heading-color));
+  line-height: var(--h2-line-height, var(--heading-line-height));
+  font-weight: var(--h2-font-weight, var(--heading-font-weight));
+  letter-spacing: var(--h2-letter-spacing, var(--heading-letter-spacing));
+  font-style: var(--h2-font-style, var(--heading-font-style));
+  text-transform: var(--h2-text-transform, var(--heading-text-transform));
+  text-wrap: var(--h2-text-wrap, var(--heading-text-wrap));
+  max-width: var(--h2-max-width);
+}
+h3, .h3 {
+  font-size: var(--h3);
+  font-family: var(--h3-font-family, var(--heading-font-family));
+  color: var(--h3-color, var(--heading-color));
+  line-height: var(--h3-line-height, var(--heading-line-height));
+  font-weight: var(--h3-font-weight, var(--heading-font-weight));
+  letter-spacing: var(--h3-letter-spacing, var(--heading-letter-spacing));
+  font-style: var(--h3-font-style, var(--heading-font-style));
+  text-transform: var(--h3-text-transform, var(--heading-text-transform));
+  text-wrap: var(--h3-text-wrap, var(--heading-text-wrap));
+  max-width: var(--h3-max-width);
+}
+h4, .h4 {
+  font-size: var(--h4);
+  font-family: var(--h4-font-family, var(--heading-font-family));
+  color: var(--h4-color, var(--heading-color));
+  line-height: var(--h4-line-height, var(--heading-line-height));
+  font-weight: var(--h4-font-weight, var(--heading-font-weight));
+  letter-spacing: var(--h4-letter-spacing, var(--heading-letter-spacing));
+  font-style: var(--h4-font-style, var(--heading-font-style));
+  text-transform: var(--h4-text-transform, var(--heading-text-transform));
+  text-wrap: var(--h4-text-wrap, var(--heading-text-wrap));
+  max-width: var(--h4-max-width);
+}
+h5, .h5 {
+  font-size: var(--h5);
+  font-family: var(--h5-font-family, var(--heading-font-family));
+  color: var(--h5-color, var(--heading-color));
+  line-height: var(--h5-line-height, var(--heading-line-height));
+  font-weight: var(--h5-font-weight, var(--heading-font-weight));
+  letter-spacing: var(--h5-letter-spacing, var(--heading-letter-spacing));
+  font-style: var(--h5-font-style, var(--heading-font-style));
+  text-transform: var(--h5-text-transform, var(--heading-text-transform));
+  text-wrap: var(--h5-text-wrap, var(--heading-text-wrap));
+  max-width: var(--h5-max-width);
+}
+h6, .h6 {
+  font-size: var(--h6);
+  font-family: var(--h6-font-family, var(--heading-font-family));
+  color: var(--h6-color, var(--heading-color));
+  line-height: var(--h6-line-height, var(--heading-line-height));
+  font-weight: var(--h6-font-weight, var(--heading-font-weight));
+  letter-spacing: var(--h6-letter-spacing, var(--heading-letter-spacing));
+  font-style: var(--h6-font-style, var(--heading-font-style));
+  text-transform: var(--h6-text-transform, var(--heading-text-transform));
+  text-wrap: var(--h6-text-wrap, var(--heading-text-wrap));
+  max-width: var(--h6-max-width);
+}
+
+/* ======================================================================
+   TEXT WIDTH
+   A named scale of line-length limits in ch units.
+   ====================================================================== */
+:root {
+  --text-width-xs: 20ch;
+  --text-width-s: 30ch;
+  --text-width-m: 45ch;
+  --text-width-l: 55ch;
+  --text-width-xl: 65ch;
+}
+
+/* ======================================================================
+   TEXT COLORS
+   The two -muted variants are independent variables, not derived from --text-dark/--text-light -- their starting values happen to match a trans-80 of the defaults, but editing --text-dark won't move --text-dark-muted.
+   ====================================================================== */
+:root {
+  --text-dark: var(--black);
+  --text-light: var(--white);
+  --text-dark-muted: color-mix(in srgb, var(--black) 80%, transparent);
+  --text-light-muted: color-mix(in srgb, var(--white) 80%, transparent);
+}
+/* Body's text color reuses --text-color, the same variable every .text--size already
+   reads -- edit it on the Text style panel (All tab, Text color field), no separate variable. */
+body {
+  color: var(--text-color);
+  font-family: var(--text-font-family);
+  font-size: var(--text-m);
+}
+
+/* ======================================================================
+   TEXT STYLE DEFAULTS
+   Applies to every .text--xs through .text--xxl. A level's own override wins over the default.
+   ====================================================================== */
+:root {
+  --text-color: var(--text-dark);
+  --text-font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --text-line-height: calc(6px + 2ex);
+  --text-font-weight: 400;
+  --text-letter-spacing: normal;
+  --text-max-width: ;
+  --text-font-style: normal;
+  --text-text-transform: none;
+  --text-text-wrap: pretty;
+}
+.text--xs {
+  font-size: var(--text-xs);
+  color: var(--text-xs-color, var(--text-color));
+  font-family: var(--text-xs-font-family, var(--text-font-family));
+  line-height: var(--text-xs-line-height, var(--text-line-height));
+  font-weight: var(--text-xs-font-weight, var(--text-font-weight));
+  letter-spacing: var(--text-xs-letter-spacing, var(--text-letter-spacing));
+  max-width: var(--text-xs-max-width, var(--text-max-width));
+  font-style: var(--text-xs-font-style, var(--text-font-style));
+  text-transform: var(--text-xs-text-transform, var(--text-text-transform));
+  text-wrap: var(--text-xs-text-wrap, var(--text-text-wrap));
+}
+.text--s {
+  font-size: var(--text-s);
+  color: var(--text-s-color, var(--text-color));
+  font-family: var(--text-s-font-family, var(--text-font-family));
+  line-height: var(--text-s-line-height, var(--text-line-height));
+  font-weight: var(--text-s-font-weight, var(--text-font-weight));
+  letter-spacing: var(--text-s-letter-spacing, var(--text-letter-spacing));
+  max-width: var(--text-s-max-width, var(--text-max-width));
+  font-style: var(--text-s-font-style, var(--text-font-style));
+  text-transform: var(--text-s-text-transform, var(--text-text-transform));
+  text-wrap: var(--text-s-text-wrap, var(--text-text-wrap));
+}
+.text--m {
+  font-size: var(--text-m);
+  color: var(--text-m-color, var(--text-color));
+  font-family: var(--text-m-font-family, var(--text-font-family));
+  line-height: var(--text-m-line-height, var(--text-line-height));
+  font-weight: var(--text-m-font-weight, var(--text-font-weight));
+  letter-spacing: var(--text-m-letter-spacing, var(--text-letter-spacing));
+  max-width: var(--text-m-max-width, var(--text-max-width));
+  font-style: var(--text-m-font-style, var(--text-font-style));
+  text-transform: var(--text-m-text-transform, var(--text-text-transform));
+  text-wrap: var(--text-m-text-wrap, var(--text-text-wrap));
+}
+.text--l {
+  font-size: var(--text-l);
+  color: var(--text-l-color, var(--text-color));
+  font-family: var(--text-l-font-family, var(--text-font-family));
+  line-height: var(--text-l-line-height, var(--text-line-height));
+  font-weight: var(--text-l-font-weight, var(--text-font-weight));
+  letter-spacing: var(--text-l-letter-spacing, var(--text-letter-spacing));
+  max-width: var(--text-l-max-width, var(--text-max-width));
+  font-style: var(--text-l-font-style, var(--text-font-style));
+  text-transform: var(--text-l-text-transform, var(--text-text-transform));
+  text-wrap: var(--text-l-text-wrap, var(--text-text-wrap));
+}
+.text--xl {
+  font-size: var(--text-xl);
+  color: var(--text-xl-color, var(--text-color));
+  font-family: var(--text-xl-font-family, var(--text-font-family));
+  line-height: var(--text-xl-line-height, var(--text-line-height));
+  font-weight: var(--text-xl-font-weight, var(--text-font-weight));
+  letter-spacing: var(--text-xl-letter-spacing, var(--text-letter-spacing));
+  max-width: var(--text-xl-max-width, var(--text-max-width));
+  font-style: var(--text-xl-font-style, var(--text-font-style));
+  text-transform: var(--text-xl-text-transform, var(--text-text-transform));
+  text-wrap: var(--text-xl-text-wrap, var(--text-text-wrap));
+}
+.text--xxl {
+  font-size: var(--text-xxl);
+  color: var(--text-xxl-color, var(--text-color));
+  font-family: var(--text-xxl-font-family, var(--text-font-family));
+  line-height: var(--text-xxl-line-height, var(--text-line-height));
+  font-weight: var(--text-xxl-font-weight, var(--text-font-weight));
+  letter-spacing: var(--text-xxl-letter-spacing, var(--text-letter-spacing));
+  max-width: var(--text-xxl-max-width, var(--text-max-width));
+  font-style: var(--text-xxl-font-style, var(--text-font-style));
+  text-transform: var(--text-xxl-text-transform, var(--text-text-transform));
+  text-wrap: var(--text-xxl-text-wrap, var(--text-text-wrap));
+}
+
+/* ======================================================================
+   SPACING
+   ====================================================================== */
+/* Base spacing: a Base Value at M and a Base Scale ratio (mobile/desktop)
+   generate XS-XXL. Section spacing multiplies that same scale, fluidly. */
+:root {
+  /* base spacing: anchored on M, 1.333 ratio mobile / 1.5 ratio desktop, 16px at 320px viewport to 24px at 1366px */
+  --space-xs: clamp(0.5628rem, calc(0.1589vw + 0.531rem), 0.6667rem);
+  --space-s: clamp(0.7502rem, calc(0.3821vw + 0.6738rem), 1rem);
+  --space-m: clamp(1rem, calc(0.7648vw + 0.847rem), 1.5rem);
+  --space-l: clamp(1.333rem, calc(1.4027vw + 1.0525rem), 2.25rem);
+  --space-xl: clamp(1.7769rem, calc(2.4445vw + 1.288rem), 3.375rem);
+  --space-xxl: clamp(2.3686rem, calc(4.1207vw + 1.5445rem), 5.0625rem);
+
+  /* section spacing: base spacing x2 mobile / x3 desktop, fluid */
+  --section-space-xs: clamp(1.1256rem, calc(1.3376vw + 0.858rem), 2rem);
+  --section-space-s: clamp(1.5004rem, calc(2.2939vw + 1.0416rem), 3rem);
+  --section-space-m: clamp(2rem, calc(3.8241vw + 1.2352rem), 4.5rem);
+  --section-space-l: clamp(2.666rem, calc(6.247vw + 1.4166rem), 6.75rem);
+  --section-space-xl: clamp(3.5538rem, calc(10.0516vw + 1.5435rem), 10.125rem);
+  --section-space-xxl: clamp(4.7372rem, calc(15.9852vw + 1.5401rem), 15.1875rem);
+
+  /* gutter: the website's inline edge spacing */
+  --gutter: clamp(1.25rem, calc(5.7361vw + 0.1028rem), 5rem);
+
+  /* bridge variables: desktop max of the larger size, mobile min of the smaller size */
+  --space-s-to-xs: clamp(0.5628rem, calc(0.6688vw + 0.429rem), 1rem);
+  --space-m-to-xs: clamp(0.5628rem, calc(1.4336vw + 0.2761rem), 1.5rem);
+  --space-m-to-s: clamp(0.7502rem, calc(1.1469vw + 0.5208rem), 1.5rem);
+  --space-l-to-xs: clamp(0.5628rem, calc(2.5808vw + 0.0466rem), 2.25rem);
+  --space-l-to-s: clamp(0.7502rem, calc(2.2942vw + 0.2914rem), 2.25rem);
+  --space-l-to-m: clamp(1rem, calc(1.912vw + 0.6176rem), 2.25rem);
+  --space-xl-to-xs: clamp(0.5628rem, calc(4.3017vw + -0.2976rem), 3.375rem);
+  --space-xl-to-s: clamp(0.7502rem, calc(4.015vw + -0.0528rem), 3.375rem);
+  --space-xl-to-m: clamp(1rem, calc(3.6329vw + 0.2734rem), 3.375rem);
+  --space-xl-to-l: clamp(1.333rem, calc(3.1235vw + 0.7083rem), 3.375rem);
+  --space-xxl-to-xs: clamp(0.5628rem, calc(6.8829vw + -0.8138rem), 5.0625rem);
+  --space-xxl-to-s: clamp(0.7502rem, calc(6.5963vw + -0.5691rem), 5.0625rem);
+  --space-xxl-to-m: clamp(1rem, calc(6.2141vw + -0.2428rem), 5.0625rem);
+  --space-xxl-to-l: clamp(1.333rem, calc(5.7048vw + 0.192rem), 5.0625rem);
+  --space-xxl-to-xl: clamp(1.7769rem, calc(5.0258vw + 0.7717rem), 5.0625rem);
+  --section-space-s-to-xs: clamp(1.1256rem, calc(2.8672vw + 0.5521rem), 3rem);
+  --section-space-m-to-xs: clamp(1.1256rem, calc(5.1617vw + 0.0932rem), 4.5rem);
+  --section-space-m-to-s: clamp(1.5004rem, calc(4.5883vw + 0.5827rem), 4.5rem);
+  --section-space-l-to-xs: clamp(1.1256rem, calc(8.6033vw + -0.5951rem), 6.75rem);
+  --section-space-l-to-s: clamp(1.5004rem, calc(8.03vw + -0.1056rem), 6.75rem);
+  --section-space-l-to-m: clamp(2rem, calc(7.2658vw + 0.5468rem), 6.75rem);
+  --section-space-xl-to-xs: clamp(1.1256rem, calc(13.7659vw + -1.6276rem), 10.125rem);
+  --section-space-xl-to-s: clamp(1.5004rem, calc(13.1925vw + -1.1381rem), 10.125rem);
+  --section-space-xl-to-m: clamp(2rem, calc(12.4283vw + -0.4857rem), 10.125rem);
+  --section-space-xl-to-l: clamp(2.666rem, calc(11.4096vw + 0.3841rem), 10.125rem);
+  --section-space-xxl-to-xs: clamp(1.1256rem, calc(21.5097vw + -3.1764rem), 15.1875rem);
+  --section-space-xxl-to-s: clamp(1.5004rem, calc(20.9363vw + -2.6869rem), 15.1875rem);
+  --section-space-xxl-to-m: clamp(2rem, calc(20.1721vw + -2.0344rem), 15.1875rem);
+  --section-space-xxl-to-l: clamp(2.666rem, calc(19.1533vw + -1.1647rem), 15.1875rem);
+  --section-space-xxl-to-xl: clamp(3.5538rem, calc(17.7954vw + -0.0053rem), 15.1875rem);
+}
+section {
+  padding-block: var(--section-space-m);
+  padding-inline: var(--gutter);
+}
+
+/* ======================================================================
+   CONTEXTUAL SPACING
+   Each just points at one of the --space-* sizes above; change which size backs each context here.
+   ====================================================================== */
+:root {
+  --container-gap: var(--space-l);
+  --content-gap: var(--space-m);
+  --grid-gap: var(--space-m);
+}
+
+/* ======================================================================
+   AUTOMATIC SPACING
+   Applies container/content gap sitewide with zero specificity, so any class or ID still overrides it. Set the toggle variable to 0 to turn one off without touching these selectors. Auto grid gap hooks in once grid classes exist.
+   ====================================================================== */
+:root {
+  --auto-container-gap: 1;
+  --auto-content-gap: 1;
+}
+:where(section) {
+  gap: calc(var(--container-gap) * var(--auto-container-gap));
+}
+:where(div) {
+  gap: calc(var(--content-gap) * var(--auto-content-gap));
+}
+
+/* ======================================================================
+   LAYOUT
+   Grid templates for grid-template-columns, and the content width the auto-fit grids size against.
+   ====================================================================== */
+:root {
+  --content-width: 1366px;
+  --auto-grid-aggressiveness: 0.7;
+
+  /* grid templates are generated -- equal columns, ratio columns (1-2 is one part, then two),
+     and auto-fit: up to N columns, each at least (content width / N) x aggressiveness wide */
+  --grid-1: repeat(1, minmax(0, 1fr));
+  --grid-2: repeat(2, minmax(0, 1fr));
+  --grid-3: repeat(3, minmax(0, 1fr));
+  --grid-4: repeat(4, minmax(0, 1fr));
+  --grid-5: repeat(5, minmax(0, 1fr));
+  --grid-6: repeat(6, minmax(0, 1fr));
+  --grid-7: repeat(7, minmax(0, 1fr));
+  --grid-8: repeat(8, minmax(0, 1fr));
+  --grid-9: repeat(9, minmax(0, 1fr));
+  --grid-10: repeat(10, minmax(0, 1fr));
+  --grid-11: repeat(11, minmax(0, 1fr));
+  --grid-12: repeat(12, minmax(0, 1fr));
+  --grid-1-2: minmax(0, 1fr) minmax(0, 2fr);
+  --grid-1-3: minmax(0, 1fr) minmax(0, 3fr);
+  --grid-2-1: minmax(0, 2fr) minmax(0, 1fr);
+  --grid-2-3: minmax(0, 2fr) minmax(0, 3fr);
+  --grid-3-1: minmax(0, 3fr) minmax(0, 1fr);
+  --grid-3-2: minmax(0, 3fr) minmax(0, 2fr);
+  --grid-auto-2: repeat(auto-fit, minmax(min(100%, max((var(--content-width) - 1 * var(--grid-gap)) / 2 * var(--auto-grid-aggressiveness), (100% - 1 * var(--grid-gap)) / 2)), 1fr));
+  --grid-auto-3: repeat(auto-fit, minmax(min(100%, max((var(--content-width) - 2 * var(--grid-gap)) / 3 * var(--auto-grid-aggressiveness), (100% - 2 * var(--grid-gap)) / 3)), 1fr));
+  --grid-auto-4: repeat(auto-fit, minmax(min(100%, max((var(--content-width) - 3 * var(--grid-gap)) / 4 * var(--auto-grid-aggressiveness), (100% - 3 * var(--grid-gap)) / 4)), 1fr));
+  --grid-auto-5: repeat(auto-fit, minmax(min(100%, max((var(--content-width) - 4 * var(--grid-gap)) / 5 * var(--auto-grid-aggressiveness), (100% - 4 * var(--grid-gap)) / 5)), 1fr));
+  --grid-auto-6: repeat(auto-fit, minmax(min(100%, max((var(--content-width) - 5 * var(--grid-gap)) / 6 * var(--auto-grid-aggressiveness), (100% - 5 * var(--grid-gap)) / 6)), 1fr));
+  --grid-auto-7: repeat(auto-fit, minmax(min(100%, max((var(--content-width) - 6 * var(--grid-gap)) / 7 * var(--auto-grid-aggressiveness), (100% - 6 * var(--grid-gap)) / 7)), 1fr));
+  --grid-auto-8: repeat(auto-fit, minmax(min(100%, max((var(--content-width) - 7 * var(--grid-gap)) / 8 * var(--auto-grid-aggressiveness), (100% - 7 * var(--grid-gap)) / 8)), 1fr));
+  --grid-auto-9: repeat(auto-fit, minmax(min(100%, max((var(--content-width) - 8 * var(--grid-gap)) / 9 * var(--auto-grid-aggressiveness), (100% - 8 * var(--grid-gap)) / 9)), 1fr));
+  --grid-auto-10: repeat(auto-fit, minmax(min(100%, max((var(--content-width) - 9 * var(--grid-gap)) / 10 * var(--auto-grid-aggressiveness), (100% - 9 * var(--grid-gap)) / 10)), 1fr));
+  --grid-auto-11: repeat(auto-fit, minmax(min(100%, max((var(--content-width) - 10 * var(--grid-gap)) / 11 * var(--auto-grid-aggressiveness), (100% - 10 * var(--grid-gap)) / 11)), 1fr));
+  --grid-auto-12: repeat(auto-fit, minmax(min(100%, max((var(--content-width) - 11 * var(--grid-gap)) / 12 * var(--auto-grid-aggressiveness), (100% - 11 * var(--grid-gap)) / 12)), 1fr));
+}
+
+/* ======================================================================
+   ASPECT RATIOS
+   Utility classes: add .aspect-ratio-16-9 (or any below) to an element.
+   ====================================================================== */
+.aspect-ratio-1 { aspect-ratio: 1; }
+.aspect-ratio-4-3 { aspect-ratio: 4 / 3; }
+.aspect-ratio-3-4 { aspect-ratio: 3 / 4; }
+.aspect-ratio-3-2 { aspect-ratio: 3 / 2; }
+.aspect-ratio-2-3 { aspect-ratio: 2 / 3; }
+.aspect-ratio-16-9 { aspect-ratio: 16 / 9; }
+.aspect-ratio-9-16 { aspect-ratio: 9 / 16; }
+
+/* ======================================================================
+   LISTS
+   Utility class: .list--none removes the bullets or numbers from a list.
+   ====================================================================== */
+.list--none { list-style-type: none; }
+
+/* ======================================================================
+   RADIUS
+   ====================================================================== */
+/* Radius scale: a base value at M (mobile/desktop) and one scale ratio generate XS-XL,
+   rebuilt from the GUIDE SETTINGS above. */
+:root {
+  /* anchored on M, 1.5 ratio, 10px at 320px viewport to 12px at 1366px */
+  --radius-xs: clamp(0.2778rem, calc(0.085vw + 0.2608rem), 0.3333rem);
+  --radius-s: clamp(0.4167rem, calc(0.1275vw + 0.3912rem), 0.5rem);
+  --radius-m: clamp(0.625rem, calc(0.1912vw + 0.5868rem), 0.75rem);
+  --radius-l: clamp(0.9375rem, calc(0.2868vw + 0.8801rem), 1.125rem);
+  --radius-xl: clamp(1.4063rem, calc(0.4302vw + 1.3202rem), 1.6875rem);
+  --radius-full: 999rem;
+
+  /* contextual radius: points at one of the sizes above */
+  --radius: var(--radius-m);
+}
+
+/* ======================================================================
+   SMART SPACING
+   Full ACSS parity: paragraph, heading (with H2-H6 overrides), list, list indent, list item, nested list variants, flow, figure, figcaption, blockquote spacing, custom target selectors, and duplicate-margin avoidance.
+   ====================================================================== */
+/* Smart Spacing only applies inside an element with the .smart-spacing class (or a
+   selector added under Target Additional Selectors) -- best for content you don't
+   fully control the markup of, like a WYSIWYG editor or an imported blog post. */
+:root {
+  --paragraph-spacing: 1em;
+  --heading-spacing: 1.2em;
+  --h2-spacing: var(--heading-spacing);
+  --h3-spacing: var(--heading-spacing);
+  --h4-spacing: var(--heading-spacing);
+  --h5-spacing: var(--heading-spacing);
+  --h6-spacing: var(--heading-spacing);
+  --list-spacing: var(--paragraph-spacing);
+  --list-indent-spacing: 2em;
+  --list-item-spacing: .5em;
+  --nested-list-spacing: 1em;
+  --nested-list-indent-spacing: 1em;
+  --nested-list-item-spacing: .5em;
+  --flow-spacing: var(--paragraph-spacing);
+  --figure-spacing: var(--paragraph-spacing);
+  --figcaption-spacing: .5em;
+  --blockquote-spacing: var(--paragraph-spacing);
+}
+:where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, figcaption, blockquote) {
+  margin: 0;
+}
+:where(ul, ol) {
+  padding-inline-start: var(--list-indent-spacing);
+}
+:where(li ul, li ol) {
+  padding-inline-start: var(--nested-list-indent-spacing);
+}
+:where(.smart-spacing) > * + * {
+  margin-block-start: var(--flow-spacing);
+}
+:where(.smart-spacing) > * + p {
+  margin-block-start: var(--paragraph-spacing);
+}
+:where(.smart-spacing) > * + :where(ul, ol) {
+  margin-block: var(--list-spacing);
+}
+:where(.smart-spacing) > * + h2 {
+  margin-block-start: var(--h2-spacing);
+}
+:where(.smart-spacing) > * + h3 {
+  margin-block-start: var(--h3-spacing);
+}
+:where(.smart-spacing) > * + h4 {
+  margin-block-start: var(--h4-spacing);
+}
+:where(.smart-spacing) > * + h5 {
+  margin-block-start: var(--h5-spacing);
+}
+:where(.smart-spacing) > * + h6 {
+  margin-block-start: var(--h6-spacing);
+}
+:where(.smart-spacing) li + li {
+  margin-block-start: var(--list-item-spacing);
+}
+:where(.smart-spacing) li ul,
+:where(.smart-spacing) li ol {
+  margin-block: var(--nested-list-spacing);
+}
+:where(.smart-spacing) li li + li {
+  margin-block-start: var(--nested-list-item-spacing);
+}
+:where(.smart-spacing) > * + figure {
+  margin-block: var(--figure-spacing);
+}
+:where(.smart-spacing) > * + blockquote {
+  margin-block: var(--blockquote-spacing);
+}
+:where(.smart-spacing) figure > * + figcaption {
+  margin-block-start: var(--figcaption-spacing);
+}
+:is(figure, blockquote, ul, ol) + * {
+  margin-block-start: 0;
+}
+.smart-spacing--off,
+.smart-spacing--off * {
+  margin-block-start: 0;
+}
+
+/* ======================================================================
+   FOCUS
+   Keyboard focus ring for every focusable element. Buttons set --focus-color to their own
+   per-variant focus color, so each button gets a matching ring.
+   ====================================================================== */
+:root {
+  --focus-color: var(--primary);
+  --focus-width: 2px;
+  --focus-offset: 2px;
+}
+:focus-visible {
+  outline: var(--focus-width) solid var(--focus-color);
+  outline-offset: var(--focus-offset);
+}
+
+/* ======================================================================
+   CLICKABLE PARENT
+   Same convention as Automatic.css: put .clickable-parent on a card's heading (<h3><a>) or on
+   the link itself (<h3><a> or <a><h3>). The card -- the closest parent that isn't a heading --
+   becomes clickable through that link; any other links or buttons in it stay clickable on top.
+   ====================================================================== */
+/* the card is positioned so the overlay below fills it (zero specificity, easy to override) */
+:where(:not(:is(h1, h2, h3, h4, h5, h6)):has(> .clickable-parent, > :is(h1, h2, h3, h4, h5, h6) > a.clickable-parent)) {
+  position: relative;
+}
+/* the link and the element holding the class stay unpositioned, or the overlay would stop at them */
+.clickable-parent, :is(.clickable-parent:not(a, button) > a, a.clickable-parent, button.clickable-parent) {
+  position: static;
+}
+:is(.clickable-parent:not(a, button) > a, a.clickable-parent, button.clickable-parent)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: pointer !important;
+}
+/* other links and buttons in the card sit above the overlay */
+:where(:not(:is(h1, h2, h3, h4, h5, h6)):has(> .clickable-parent, > :is(h1, h2, h3, h4, h5, h6) > a.clickable-parent)) :is(a, button):not(:is(.clickable-parent:not(a, button) > a, a.clickable-parent, button.clickable-parent)) {
+  position: relative;
+  z-index: 2;
+}
+/* keyboard focus on the link outlines the whole card instead of the link */
+:where(:not(:is(h1, h2, h3, h4, h5, h6)):has(> .clickable-parent, > :is(h1, h2, h3, h4, h5, h6) > a.clickable-parent)):has(> .clickable-parent:not(a, button) > a:focus-visible, > .clickable-parent:focus-visible, > :is(h1, h2, h3, h4, h5, h6) > a.clickable-parent:focus-visible) {
+  outline: var(--focus-width) solid var(--focus-color);
+  outline-offset: var(--focus-offset);
+}
+:is(.clickable-parent:not(a, button) > a, a.clickable-parent, button.clickable-parent):focus-visible {
+  outline: none;
+}
+
+/* ======================================================================
+   BUTTONS
+   One class per color -- never the status colors. Each of solid/dark/light, plain and outline (6 variant groups total) has its own editable background, text color, border color and focus color, matching ACSS's per-variant button settings. Shared --btn-* tokens (matching ACSS's own variable names) apply to every button regardless of variant.
+   ====================================================================== */
+:root {
+  --btn-padding-block: 0.75em;
+  --btn-padding-inline: 1.5em;
+  --btn-min-width: 0;
+  --btn-border-width: 2px;
+  --btn-border-style: solid;
+  --btn-border-radius: 0.5rem;
+  --btn-font-family: inherit;
+  --btn-font-weight: 600;
+  --btn-font-style: normal;
+  --btn-line-height: 1;
+  --btn-letter-spacing: normal;
+  --btn-text-transform: none;
+  --btn-text-decoration: none;
+  --btn-text-decoration-hover: none;
+  --btn-transition-duration: 0.2s;
+  --btn-outline-background-color: transparent;
+  --btn-outline-border-width: var(--btn-border-width);
+  /* primary */
+  --btn-primary-solid-background: var(--primary);
+  --btn-primary-solid-text-color: var(--primary-l-4);
+  --btn-primary-solid-border-color: var(--primary);
+  --btn-primary-solid-focus-color: var(--primary-l-2);
+  --btn-primary-solid-background-hover: var(--primary-hover);
+  --btn-primary-solid-text-color-hover: var(--primary-l-4);
+  --btn-primary-solid-border-color-hover: var(--primary-hover);
+  --btn-primary-dark-background: var(--primary-d-2);
+  --btn-primary-dark-text-color: var(--primary-l-4);
+  --btn-primary-dark-border-color: var(--primary-d-2);
+  --btn-primary-dark-focus-color: var(--primary-d-1);
+  --btn-primary-dark-background-hover: var(--primary-d-4);
+  --btn-primary-dark-text-color-hover: var(--primary-l-4);
+  --btn-primary-dark-border-color-hover: var(--primary-d-4);
+  --btn-primary-light-background: var(--primary-l-4);
+  --btn-primary-light-text-color: var(--primary);
+  --btn-primary-light-border-color: var(--primary-l-4);
+  --btn-primary-light-focus-color: var(--primary-l-2);
+  --btn-primary-light-background-hover: var(--primary-l-2);
+  --btn-primary-light-text-color-hover: var(--primary);
+  --btn-primary-light-border-color-hover: var(--primary-l-2);
+  --btn-primary-outline-background: transparent;
+  --btn-primary-outline-text-color: var(--primary);
+  --btn-primary-outline-border-color: var(--primary);
+  --btn-primary-outline-focus-color: var(--primary-l-1);
+  --btn-primary-outline-background-hover: var(--primary);
+  --btn-primary-outline-text-color-hover: var(--primary-l-4);
+  --btn-primary-outline-border-color-hover: var(--primary);
+  --btn-primary-outline-dark-background: transparent;
+  --btn-primary-outline-dark-text-color: var(--primary-d-2);
+  --btn-primary-outline-dark-border-color: var(--primary-d-2);
+  --btn-primary-outline-dark-focus-color: var(--primary-d-1);
+  --btn-primary-outline-dark-background-hover: var(--primary-d-2);
+  --btn-primary-outline-dark-text-color-hover: var(--primary-l-4);
+  --btn-primary-outline-dark-border-color-hover: var(--primary-d-2);
+  --btn-primary-outline-light-background: transparent;
+  --btn-primary-outline-light-text-color: var(--primary-l-2);
+  --btn-primary-outline-light-border-color: var(--primary-l-2);
+  --btn-primary-outline-light-focus-color: var(--primary-l-2);
+  --btn-primary-outline-light-background-hover: var(--primary-l-4);
+  --btn-primary-outline-light-text-color-hover: var(--primary);
+  --btn-primary-outline-light-border-color-hover: var(--primary-l-4);
+  /* secondary */
+  --btn-secondary-solid-background: var(--secondary);
+  --btn-secondary-solid-text-color: var(--secondary-l-4);
+  --btn-secondary-solid-border-color: var(--secondary);
+  --btn-secondary-solid-focus-color: var(--secondary-l-2);
+  --btn-secondary-solid-background-hover: var(--secondary-hover);
+  --btn-secondary-solid-text-color-hover: var(--secondary-l-4);
+  --btn-secondary-solid-border-color-hover: var(--secondary-hover);
+  --btn-secondary-dark-background: var(--secondary-d-2);
+  --btn-secondary-dark-text-color: var(--secondary-l-4);
+  --btn-secondary-dark-border-color: var(--secondary-d-2);
+  --btn-secondary-dark-focus-color: var(--secondary-d-1);
+  --btn-secondary-dark-background-hover: var(--secondary-d-4);
+  --btn-secondary-dark-text-color-hover: var(--secondary-l-4);
+  --btn-secondary-dark-border-color-hover: var(--secondary-d-4);
+  --btn-secondary-light-background: var(--secondary-l-4);
+  --btn-secondary-light-text-color: var(--secondary);
+  --btn-secondary-light-border-color: var(--secondary-l-4);
+  --btn-secondary-light-focus-color: var(--secondary-l-2);
+  --btn-secondary-light-background-hover: var(--secondary-l-2);
+  --btn-secondary-light-text-color-hover: var(--secondary);
+  --btn-secondary-light-border-color-hover: var(--secondary-l-2);
+  --btn-secondary-outline-background: transparent;
+  --btn-secondary-outline-text-color: var(--secondary);
+  --btn-secondary-outline-border-color: var(--secondary);
+  --btn-secondary-outline-focus-color: var(--secondary-l-1);
+  --btn-secondary-outline-background-hover: var(--secondary);
+  --btn-secondary-outline-text-color-hover: var(--secondary-l-4);
+  --btn-secondary-outline-border-color-hover: var(--secondary);
+  --btn-secondary-outline-dark-background: transparent;
+  --btn-secondary-outline-dark-text-color: var(--secondary-d-2);
+  --btn-secondary-outline-dark-border-color: var(--secondary-d-2);
+  --btn-secondary-outline-dark-focus-color: var(--secondary-d-1);
+  --btn-secondary-outline-dark-background-hover: var(--secondary-d-2);
+  --btn-secondary-outline-dark-text-color-hover: var(--secondary-l-4);
+  --btn-secondary-outline-dark-border-color-hover: var(--secondary-d-2);
+  --btn-secondary-outline-light-background: transparent;
+  --btn-secondary-outline-light-text-color: var(--secondary-l-2);
+  --btn-secondary-outline-light-border-color: var(--secondary-l-2);
+  --btn-secondary-outline-light-focus-color: var(--secondary-l-2);
+  --btn-secondary-outline-light-background-hover: var(--secondary-l-4);
+  --btn-secondary-outline-light-text-color-hover: var(--secondary);
+  --btn-secondary-outline-light-border-color-hover: var(--secondary-l-4);
+  /* tertiary */
+  --btn-tertiary-solid-background: var(--tertiary);
+  --btn-tertiary-solid-text-color: var(--tertiary-l-4);
+  --btn-tertiary-solid-border-color: var(--tertiary);
+  --btn-tertiary-solid-focus-color: var(--tertiary-l-2);
+  --btn-tertiary-solid-background-hover: var(--tertiary-hover);
+  --btn-tertiary-solid-text-color-hover: var(--tertiary-l-4);
+  --btn-tertiary-solid-border-color-hover: var(--tertiary-hover);
+  --btn-tertiary-dark-background: var(--tertiary-d-2);
+  --btn-tertiary-dark-text-color: var(--tertiary-l-4);
+  --btn-tertiary-dark-border-color: var(--tertiary-d-2);
+  --btn-tertiary-dark-focus-color: var(--tertiary-d-1);
+  --btn-tertiary-dark-background-hover: var(--tertiary-d-4);
+  --btn-tertiary-dark-text-color-hover: var(--tertiary-l-4);
+  --btn-tertiary-dark-border-color-hover: var(--tertiary-d-4);
+  --btn-tertiary-light-background: var(--tertiary-l-4);
+  --btn-tertiary-light-text-color: var(--tertiary);
+  --btn-tertiary-light-border-color: var(--tertiary-l-4);
+  --btn-tertiary-light-focus-color: var(--tertiary-l-2);
+  --btn-tertiary-light-background-hover: var(--tertiary-l-2);
+  --btn-tertiary-light-text-color-hover: var(--tertiary);
+  --btn-tertiary-light-border-color-hover: var(--tertiary-l-2);
+  --btn-tertiary-outline-background: transparent;
+  --btn-tertiary-outline-text-color: var(--tertiary);
+  --btn-tertiary-outline-border-color: var(--tertiary);
+  --btn-tertiary-outline-focus-color: var(--tertiary-l-1);
+  --btn-tertiary-outline-background-hover: var(--tertiary);
+  --btn-tertiary-outline-text-color-hover: var(--tertiary-l-4);
+  --btn-tertiary-outline-border-color-hover: var(--tertiary);
+  --btn-tertiary-outline-dark-background: transparent;
+  --btn-tertiary-outline-dark-text-color: var(--tertiary-d-2);
+  --btn-tertiary-outline-dark-border-color: var(--tertiary-d-2);
+  --btn-tertiary-outline-dark-focus-color: var(--tertiary-d-1);
+  --btn-tertiary-outline-dark-background-hover: var(--tertiary-d-2);
+  --btn-tertiary-outline-dark-text-color-hover: var(--tertiary-l-4);
+  --btn-tertiary-outline-dark-border-color-hover: var(--tertiary-d-2);
+  --btn-tertiary-outline-light-background: transparent;
+  --btn-tertiary-outline-light-text-color: var(--tertiary-l-2);
+  --btn-tertiary-outline-light-border-color: var(--tertiary-l-2);
+  --btn-tertiary-outline-light-focus-color: var(--tertiary-l-2);
+  --btn-tertiary-outline-light-background-hover: var(--tertiary-l-4);
+  --btn-tertiary-outline-light-text-color-hover: var(--tertiary);
+  --btn-tertiary-outline-light-border-color-hover: var(--tertiary-l-4);
+  /* accent */
+  --btn-accent-solid-background: var(--accent);
+  --btn-accent-solid-text-color: var(--accent-l-4);
+  --btn-accent-solid-border-color: var(--accent);
+  --btn-accent-solid-focus-color: var(--accent-l-2);
+  --btn-accent-solid-background-hover: var(--accent-hover);
+  --btn-accent-solid-text-color-hover: var(--accent-l-4);
+  --btn-accent-solid-border-color-hover: var(--accent-hover);
+  --btn-accent-dark-background: var(--accent-d-2);
+  --btn-accent-dark-text-color: var(--accent-l-4);
+  --btn-accent-dark-border-color: var(--accent-d-2);
+  --btn-accent-dark-focus-color: var(--accent-d-1);
+  --btn-accent-dark-background-hover: var(--accent-d-4);
+  --btn-accent-dark-text-color-hover: var(--accent-l-4);
+  --btn-accent-dark-border-color-hover: var(--accent-d-4);
+  --btn-accent-light-background: var(--accent-l-4);
+  --btn-accent-light-text-color: var(--accent);
+  --btn-accent-light-border-color: var(--accent-l-4);
+  --btn-accent-light-focus-color: var(--accent-l-2);
+  --btn-accent-light-background-hover: var(--accent-l-2);
+  --btn-accent-light-text-color-hover: var(--accent);
+  --btn-accent-light-border-color-hover: var(--accent-l-2);
+  --btn-accent-outline-background: transparent;
+  --btn-accent-outline-text-color: var(--accent);
+  --btn-accent-outline-border-color: var(--accent);
+  --btn-accent-outline-focus-color: var(--accent-l-1);
+  --btn-accent-outline-background-hover: var(--accent);
+  --btn-accent-outline-text-color-hover: var(--accent-l-4);
+  --btn-accent-outline-border-color-hover: var(--accent);
+  --btn-accent-outline-dark-background: transparent;
+  --btn-accent-outline-dark-text-color: var(--accent-d-2);
+  --btn-accent-outline-dark-border-color: var(--accent-d-2);
+  --btn-accent-outline-dark-focus-color: var(--accent-d-1);
+  --btn-accent-outline-dark-background-hover: var(--accent-d-2);
+  --btn-accent-outline-dark-text-color-hover: var(--accent-l-4);
+  --btn-accent-outline-dark-border-color-hover: var(--accent-d-2);
+  --btn-accent-outline-light-background: transparent;
+  --btn-accent-outline-light-text-color: var(--accent-l-2);
+  --btn-accent-outline-light-border-color: var(--accent-l-2);
+  --btn-accent-outline-light-focus-color: var(--accent-l-2);
+  --btn-accent-outline-light-background-hover: var(--accent-l-4);
+  --btn-accent-outline-light-text-color-hover: var(--accent);
+  --btn-accent-outline-light-border-color-hover: var(--accent-l-4);
+  /* base */
+  --btn-base-solid-background: var(--base);
+  --btn-base-solid-text-color: var(--base-l-4);
+  --btn-base-solid-border-color: var(--base);
+  --btn-base-solid-focus-color: var(--base-l-2);
+  --btn-base-solid-background-hover: var(--base-hover);
+  --btn-base-solid-text-color-hover: var(--base-l-4);
+  --btn-base-solid-border-color-hover: var(--base-hover);
+  --btn-base-dark-background: var(--base-d-2);
+  --btn-base-dark-text-color: var(--base-l-4);
+  --btn-base-dark-border-color: var(--base-d-2);
+  --btn-base-dark-focus-color: var(--base-d-1);
+  --btn-base-dark-background-hover: var(--base-d-4);
+  --btn-base-dark-text-color-hover: var(--base-l-4);
+  --btn-base-dark-border-color-hover: var(--base-d-4);
+  --btn-base-light-background: var(--base-l-4);
+  --btn-base-light-text-color: var(--base);
+  --btn-base-light-border-color: var(--base-l-4);
+  --btn-base-light-focus-color: var(--base-l-2);
+  --btn-base-light-background-hover: var(--base-l-2);
+  --btn-base-light-text-color-hover: var(--base);
+  --btn-base-light-border-color-hover: var(--base-l-2);
+  --btn-base-outline-background: transparent;
+  --btn-base-outline-text-color: var(--base);
+  --btn-base-outline-border-color: var(--base);
+  --btn-base-outline-focus-color: var(--base-l-1);
+  --btn-base-outline-background-hover: var(--base);
+  --btn-base-outline-text-color-hover: var(--base-l-4);
+  --btn-base-outline-border-color-hover: var(--base);
+  --btn-base-outline-dark-background: transparent;
+  --btn-base-outline-dark-text-color: var(--base-d-2);
+  --btn-base-outline-dark-border-color: var(--base-d-2);
+  --btn-base-outline-dark-focus-color: var(--base-d-1);
+  --btn-base-outline-dark-background-hover: var(--base-d-2);
+  --btn-base-outline-dark-text-color-hover: var(--base-l-4);
+  --btn-base-outline-dark-border-color-hover: var(--base-d-2);
+  --btn-base-outline-light-background: transparent;
+  --btn-base-outline-light-text-color: var(--base-l-2);
+  --btn-base-outline-light-border-color: var(--base-l-2);
+  --btn-base-outline-light-focus-color: var(--base-l-2);
+  --btn-base-outline-light-background-hover: var(--base-l-4);
+  --btn-base-outline-light-text-color-hover: var(--base);
+  --btn-base-outline-light-border-color-hover: var(--base-l-4);
+  /* neutral */
+  --btn-neutral-solid-background: var(--neutral);
+  --btn-neutral-solid-text-color: var(--neutral-l-4);
+  --btn-neutral-solid-border-color: var(--neutral);
+  --btn-neutral-solid-focus-color: var(--neutral-l-2);
+  --btn-neutral-solid-background-hover: var(--neutral-hover);
+  --btn-neutral-solid-text-color-hover: var(--neutral-l-4);
+  --btn-neutral-solid-border-color-hover: var(--neutral-hover);
+  --btn-neutral-dark-background: var(--neutral-d-2);
+  --btn-neutral-dark-text-color: var(--neutral-l-4);
+  --btn-neutral-dark-border-color: var(--neutral-d-2);
+  --btn-neutral-dark-focus-color: var(--neutral-d-1);
+  --btn-neutral-dark-background-hover: var(--neutral-d-4);
+  --btn-neutral-dark-text-color-hover: var(--neutral-l-4);
+  --btn-neutral-dark-border-color-hover: var(--neutral-d-4);
+  --btn-neutral-light-background: var(--neutral-l-4);
+  --btn-neutral-light-text-color: var(--neutral);
+  --btn-neutral-light-border-color: var(--neutral-l-4);
+  --btn-neutral-light-focus-color: var(--neutral-l-2);
+  --btn-neutral-light-background-hover: var(--neutral-l-2);
+  --btn-neutral-light-text-color-hover: var(--neutral);
+  --btn-neutral-light-border-color-hover: var(--neutral-l-2);
+  --btn-neutral-outline-background: transparent;
+  --btn-neutral-outline-text-color: var(--neutral);
+  --btn-neutral-outline-border-color: var(--neutral);
+  --btn-neutral-outline-focus-color: var(--neutral-l-1);
+  --btn-neutral-outline-background-hover: var(--neutral);
+  --btn-neutral-outline-text-color-hover: var(--neutral-l-4);
+  --btn-neutral-outline-border-color-hover: var(--neutral);
+  --btn-neutral-outline-dark-background: transparent;
+  --btn-neutral-outline-dark-text-color: var(--neutral-d-2);
+  --btn-neutral-outline-dark-border-color: var(--neutral-d-2);
+  --btn-neutral-outline-dark-focus-color: var(--neutral-d-1);
+  --btn-neutral-outline-dark-background-hover: var(--neutral-d-2);
+  --btn-neutral-outline-dark-text-color-hover: var(--neutral-l-4);
+  --btn-neutral-outline-dark-border-color-hover: var(--neutral-d-2);
+  --btn-neutral-outline-light-background: transparent;
+  --btn-neutral-outline-light-text-color: var(--neutral-l-2);
+  --btn-neutral-outline-light-border-color: var(--neutral-l-2);
+  --btn-neutral-outline-light-focus-color: var(--neutral-l-2);
+  --btn-neutral-outline-light-background-hover: var(--neutral-l-4);
+  --btn-neutral-outline-light-text-color-hover: var(--neutral);
+  --btn-neutral-outline-light-border-color-hover: var(--neutral-l-4);
+}
+.btn--primary, .btn--secondary, .btn--tertiary, .btn--accent, .btn--base, .btn--neutral, .btn--primary-light, .btn--primary-dark, .btn--secondary-light, .btn--secondary-dark, .btn--tertiary-light, .btn--tertiary-dark, .btn--accent-light, .btn--accent-dark, .btn--base-light, .btn--base-dark, .btn--neutral-light, .btn--neutral-dark {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
+  box-sizing: border-box; cursor: pointer;
+  padding-block: var(--btn-padding-block); padding-inline: var(--btn-padding-inline);
+  min-inline-size: var(--btn-min-width);
+  font-family: var(--btn-font-family); font-size: var(--btn-font-size); font-weight: var(--btn-font-weight);
+  font-style: var(--btn-font-style); line-height: var(--btn-line-height);
+  letter-spacing: var(--btn-letter-spacing); text-transform: var(--btn-text-transform);
+  text-decoration: var(--btn-text-decoration); text-align: center;
+  background: var(--btn-background); color: var(--btn-text-color);
+  border: var(--btn-border-width) var(--btn-border-style) var(--btn-border-color);
+  border-radius: var(--btn-border-radius);
+  transition: background var(--btn-transition-duration) ease-in-out, color var(--btn-transition-duration) ease-in-out, border-color var(--btn-transition-duration) ease-in-out;
+}
+.btn--primary {
+  --btn-background: var(--btn-primary-solid-background); --btn-background-hover: var(--btn-primary-solid-background-hover);
+  --btn-text-color: var(--btn-primary-solid-text-color); --btn-text-color-hover: var(--btn-primary-solid-text-color-hover);
+  --btn-border-color: var(--btn-primary-solid-border-color); --btn-border-color-hover: var(--btn-primary-solid-border-color-hover);
+  --focus-color: var(--btn-primary-solid-focus-color);
+  --btn-outline-background: var(--btn-primary-outline-background);
+  --btn-outline-text-color: var(--btn-primary-outline-text-color);
+  --btn-outline-border-color: var(--btn-primary-outline-border-color);
+  --btn-outline-focus-color: var(--btn-primary-outline-focus-color);
+  --btn-outline-background-hover: var(--btn-primary-outline-background-hover);
+  --btn-outline-text-color-hover: var(--btn-primary-outline-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-primary-outline-border-color-hover);
+}
+.btn--primary-light {
+  --btn-background: var(--btn-primary-light-background); --btn-background-hover: var(--btn-primary-light-background-hover);
+  --btn-text-color: var(--btn-primary-light-text-color); --btn-text-color-hover: var(--btn-primary-light-text-color-hover);
+  --btn-border-color: var(--btn-primary-light-border-color); --btn-border-color-hover: var(--btn-primary-light-border-color-hover);
+  --focus-color: var(--btn-primary-light-focus-color);
+  --btn-outline-background: var(--btn-primary-outline-light-background);
+  --btn-outline-text-color: var(--btn-primary-outline-light-text-color);
+  --btn-outline-border-color: var(--btn-primary-outline-light-border-color);
+  --btn-outline-focus-color: var(--btn-primary-outline-light-focus-color);
+  --btn-outline-background-hover: var(--btn-primary-outline-light-background-hover);
+  --btn-outline-text-color-hover: var(--btn-primary-outline-light-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-primary-outline-light-border-color-hover);
+}
+.btn--primary-dark {
+  --btn-background: var(--btn-primary-dark-background); --btn-background-hover: var(--btn-primary-dark-background-hover);
+  --btn-text-color: var(--btn-primary-dark-text-color); --btn-text-color-hover: var(--btn-primary-dark-text-color-hover);
+  --btn-border-color: var(--btn-primary-dark-border-color); --btn-border-color-hover: var(--btn-primary-dark-border-color-hover);
+  --focus-color: var(--btn-primary-dark-focus-color);
+  --btn-outline-background: var(--btn-primary-outline-dark-background);
+  --btn-outline-text-color: var(--btn-primary-outline-dark-text-color);
+  --btn-outline-border-color: var(--btn-primary-outline-dark-border-color);
+  --btn-outline-focus-color: var(--btn-primary-outline-dark-focus-color);
+  --btn-outline-background-hover: var(--btn-primary-outline-dark-background-hover);
+  --btn-outline-text-color-hover: var(--btn-primary-outline-dark-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-primary-outline-dark-border-color-hover);
+}
+.btn--secondary {
+  --btn-background: var(--btn-secondary-solid-background); --btn-background-hover: var(--btn-secondary-solid-background-hover);
+  --btn-text-color: var(--btn-secondary-solid-text-color); --btn-text-color-hover: var(--btn-secondary-solid-text-color-hover);
+  --btn-border-color: var(--btn-secondary-solid-border-color); --btn-border-color-hover: var(--btn-secondary-solid-border-color-hover);
+  --focus-color: var(--btn-secondary-solid-focus-color);
+  --btn-outline-background: var(--btn-secondary-outline-background);
+  --btn-outline-text-color: var(--btn-secondary-outline-text-color);
+  --btn-outline-border-color: var(--btn-secondary-outline-border-color);
+  --btn-outline-focus-color: var(--btn-secondary-outline-focus-color);
+  --btn-outline-background-hover: var(--btn-secondary-outline-background-hover);
+  --btn-outline-text-color-hover: var(--btn-secondary-outline-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-secondary-outline-border-color-hover);
+}
+.btn--secondary-light {
+  --btn-background: var(--btn-secondary-light-background); --btn-background-hover: var(--btn-secondary-light-background-hover);
+  --btn-text-color: var(--btn-secondary-light-text-color); --btn-text-color-hover: var(--btn-secondary-light-text-color-hover);
+  --btn-border-color: var(--btn-secondary-light-border-color); --btn-border-color-hover: var(--btn-secondary-light-border-color-hover);
+  --focus-color: var(--btn-secondary-light-focus-color);
+  --btn-outline-background: var(--btn-secondary-outline-light-background);
+  --btn-outline-text-color: var(--btn-secondary-outline-light-text-color);
+  --btn-outline-border-color: var(--btn-secondary-outline-light-border-color);
+  --btn-outline-focus-color: var(--btn-secondary-outline-light-focus-color);
+  --btn-outline-background-hover: var(--btn-secondary-outline-light-background-hover);
+  --btn-outline-text-color-hover: var(--btn-secondary-outline-light-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-secondary-outline-light-border-color-hover);
+}
+.btn--secondary-dark {
+  --btn-background: var(--btn-secondary-dark-background); --btn-background-hover: var(--btn-secondary-dark-background-hover);
+  --btn-text-color: var(--btn-secondary-dark-text-color); --btn-text-color-hover: var(--btn-secondary-dark-text-color-hover);
+  --btn-border-color: var(--btn-secondary-dark-border-color); --btn-border-color-hover: var(--btn-secondary-dark-border-color-hover);
+  --focus-color: var(--btn-secondary-dark-focus-color);
+  --btn-outline-background: var(--btn-secondary-outline-dark-background);
+  --btn-outline-text-color: var(--btn-secondary-outline-dark-text-color);
+  --btn-outline-border-color: var(--btn-secondary-outline-dark-border-color);
+  --btn-outline-focus-color: var(--btn-secondary-outline-dark-focus-color);
+  --btn-outline-background-hover: var(--btn-secondary-outline-dark-background-hover);
+  --btn-outline-text-color-hover: var(--btn-secondary-outline-dark-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-secondary-outline-dark-border-color-hover);
+}
+.btn--tertiary {
+  --btn-background: var(--btn-tertiary-solid-background); --btn-background-hover: var(--btn-tertiary-solid-background-hover);
+  --btn-text-color: var(--btn-tertiary-solid-text-color); --btn-text-color-hover: var(--btn-tertiary-solid-text-color-hover);
+  --btn-border-color: var(--btn-tertiary-solid-border-color); --btn-border-color-hover: var(--btn-tertiary-solid-border-color-hover);
+  --focus-color: var(--btn-tertiary-solid-focus-color);
+  --btn-outline-background: var(--btn-tertiary-outline-background);
+  --btn-outline-text-color: var(--btn-tertiary-outline-text-color);
+  --btn-outline-border-color: var(--btn-tertiary-outline-border-color);
+  --btn-outline-focus-color: var(--btn-tertiary-outline-focus-color);
+  --btn-outline-background-hover: var(--btn-tertiary-outline-background-hover);
+  --btn-outline-text-color-hover: var(--btn-tertiary-outline-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-tertiary-outline-border-color-hover);
+}
+.btn--tertiary-light {
+  --btn-background: var(--btn-tertiary-light-background); --btn-background-hover: var(--btn-tertiary-light-background-hover);
+  --btn-text-color: var(--btn-tertiary-light-text-color); --btn-text-color-hover: var(--btn-tertiary-light-text-color-hover);
+  --btn-border-color: var(--btn-tertiary-light-border-color); --btn-border-color-hover: var(--btn-tertiary-light-border-color-hover);
+  --focus-color: var(--btn-tertiary-light-focus-color);
+  --btn-outline-background: var(--btn-tertiary-outline-light-background);
+  --btn-outline-text-color: var(--btn-tertiary-outline-light-text-color);
+  --btn-outline-border-color: var(--btn-tertiary-outline-light-border-color);
+  --btn-outline-focus-color: var(--btn-tertiary-outline-light-focus-color);
+  --btn-outline-background-hover: var(--btn-tertiary-outline-light-background-hover);
+  --btn-outline-text-color-hover: var(--btn-tertiary-outline-light-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-tertiary-outline-light-border-color-hover);
+}
+.btn--tertiary-dark {
+  --btn-background: var(--btn-tertiary-dark-background); --btn-background-hover: var(--btn-tertiary-dark-background-hover);
+  --btn-text-color: var(--btn-tertiary-dark-text-color); --btn-text-color-hover: var(--btn-tertiary-dark-text-color-hover);
+  --btn-border-color: var(--btn-tertiary-dark-border-color); --btn-border-color-hover: var(--btn-tertiary-dark-border-color-hover);
+  --focus-color: var(--btn-tertiary-dark-focus-color);
+  --btn-outline-background: var(--btn-tertiary-outline-dark-background);
+  --btn-outline-text-color: var(--btn-tertiary-outline-dark-text-color);
+  --btn-outline-border-color: var(--btn-tertiary-outline-dark-border-color);
+  --btn-outline-focus-color: var(--btn-tertiary-outline-dark-focus-color);
+  --btn-outline-background-hover: var(--btn-tertiary-outline-dark-background-hover);
+  --btn-outline-text-color-hover: var(--btn-tertiary-outline-dark-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-tertiary-outline-dark-border-color-hover);
+}
+.btn--accent {
+  --btn-background: var(--btn-accent-solid-background); --btn-background-hover: var(--btn-accent-solid-background-hover);
+  --btn-text-color: var(--btn-accent-solid-text-color); --btn-text-color-hover: var(--btn-accent-solid-text-color-hover);
+  --btn-border-color: var(--btn-accent-solid-border-color); --btn-border-color-hover: var(--btn-accent-solid-border-color-hover);
+  --focus-color: var(--btn-accent-solid-focus-color);
+  --btn-outline-background: var(--btn-accent-outline-background);
+  --btn-outline-text-color: var(--btn-accent-outline-text-color);
+  --btn-outline-border-color: var(--btn-accent-outline-border-color);
+  --btn-outline-focus-color: var(--btn-accent-outline-focus-color);
+  --btn-outline-background-hover: var(--btn-accent-outline-background-hover);
+  --btn-outline-text-color-hover: var(--btn-accent-outline-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-accent-outline-border-color-hover);
+}
+.btn--accent-light {
+  --btn-background: var(--btn-accent-light-background); --btn-background-hover: var(--btn-accent-light-background-hover);
+  --btn-text-color: var(--btn-accent-light-text-color); --btn-text-color-hover: var(--btn-accent-light-text-color-hover);
+  --btn-border-color: var(--btn-accent-light-border-color); --btn-border-color-hover: var(--btn-accent-light-border-color-hover);
+  --focus-color: var(--btn-accent-light-focus-color);
+  --btn-outline-background: var(--btn-accent-outline-light-background);
+  --btn-outline-text-color: var(--btn-accent-outline-light-text-color);
+  --btn-outline-border-color: var(--btn-accent-outline-light-border-color);
+  --btn-outline-focus-color: var(--btn-accent-outline-light-focus-color);
+  --btn-outline-background-hover: var(--btn-accent-outline-light-background-hover);
+  --btn-outline-text-color-hover: var(--btn-accent-outline-light-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-accent-outline-light-border-color-hover);
+}
+.btn--accent-dark {
+  --btn-background: var(--btn-accent-dark-background); --btn-background-hover: var(--btn-accent-dark-background-hover);
+  --btn-text-color: var(--btn-accent-dark-text-color); --btn-text-color-hover: var(--btn-accent-dark-text-color-hover);
+  --btn-border-color: var(--btn-accent-dark-border-color); --btn-border-color-hover: var(--btn-accent-dark-border-color-hover);
+  --focus-color: var(--btn-accent-dark-focus-color);
+  --btn-outline-background: var(--btn-accent-outline-dark-background);
+  --btn-outline-text-color: var(--btn-accent-outline-dark-text-color);
+  --btn-outline-border-color: var(--btn-accent-outline-dark-border-color);
+  --btn-outline-focus-color: var(--btn-accent-outline-dark-focus-color);
+  --btn-outline-background-hover: var(--btn-accent-outline-dark-background-hover);
+  --btn-outline-text-color-hover: var(--btn-accent-outline-dark-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-accent-outline-dark-border-color-hover);
+}
+.btn--base {
+  --btn-background: var(--btn-base-solid-background); --btn-background-hover: var(--btn-base-solid-background-hover);
+  --btn-text-color: var(--btn-base-solid-text-color); --btn-text-color-hover: var(--btn-base-solid-text-color-hover);
+  --btn-border-color: var(--btn-base-solid-border-color); --btn-border-color-hover: var(--btn-base-solid-border-color-hover);
+  --focus-color: var(--btn-base-solid-focus-color);
+  --btn-outline-background: var(--btn-base-outline-background);
+  --btn-outline-text-color: var(--btn-base-outline-text-color);
+  --btn-outline-border-color: var(--btn-base-outline-border-color);
+  --btn-outline-focus-color: var(--btn-base-outline-focus-color);
+  --btn-outline-background-hover: var(--btn-base-outline-background-hover);
+  --btn-outline-text-color-hover: var(--btn-base-outline-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-base-outline-border-color-hover);
+}
+.btn--base-light {
+  --btn-background: var(--btn-base-light-background); --btn-background-hover: var(--btn-base-light-background-hover);
+  --btn-text-color: var(--btn-base-light-text-color); --btn-text-color-hover: var(--btn-base-light-text-color-hover);
+  --btn-border-color: var(--btn-base-light-border-color); --btn-border-color-hover: var(--btn-base-light-border-color-hover);
+  --focus-color: var(--btn-base-light-focus-color);
+  --btn-outline-background: var(--btn-base-outline-light-background);
+  --btn-outline-text-color: var(--btn-base-outline-light-text-color);
+  --btn-outline-border-color: var(--btn-base-outline-light-border-color);
+  --btn-outline-focus-color: var(--btn-base-outline-light-focus-color);
+  --btn-outline-background-hover: var(--btn-base-outline-light-background-hover);
+  --btn-outline-text-color-hover: var(--btn-base-outline-light-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-base-outline-light-border-color-hover);
+}
+.btn--base-dark {
+  --btn-background: var(--btn-base-dark-background); --btn-background-hover: var(--btn-base-dark-background-hover);
+  --btn-text-color: var(--btn-base-dark-text-color); --btn-text-color-hover: var(--btn-base-dark-text-color-hover);
+  --btn-border-color: var(--btn-base-dark-border-color); --btn-border-color-hover: var(--btn-base-dark-border-color-hover);
+  --focus-color: var(--btn-base-dark-focus-color);
+  --btn-outline-background: var(--btn-base-outline-dark-background);
+  --btn-outline-text-color: var(--btn-base-outline-dark-text-color);
+  --btn-outline-border-color: var(--btn-base-outline-dark-border-color);
+  --btn-outline-focus-color: var(--btn-base-outline-dark-focus-color);
+  --btn-outline-background-hover: var(--btn-base-outline-dark-background-hover);
+  --btn-outline-text-color-hover: var(--btn-base-outline-dark-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-base-outline-dark-border-color-hover);
+}
+.btn--neutral {
+  --btn-background: var(--btn-neutral-solid-background); --btn-background-hover: var(--btn-neutral-solid-background-hover);
+  --btn-text-color: var(--btn-neutral-solid-text-color); --btn-text-color-hover: var(--btn-neutral-solid-text-color-hover);
+  --btn-border-color: var(--btn-neutral-solid-border-color); --btn-border-color-hover: var(--btn-neutral-solid-border-color-hover);
+  --focus-color: var(--btn-neutral-solid-focus-color);
+  --btn-outline-background: var(--btn-neutral-outline-background);
+  --btn-outline-text-color: var(--btn-neutral-outline-text-color);
+  --btn-outline-border-color: var(--btn-neutral-outline-border-color);
+  --btn-outline-focus-color: var(--btn-neutral-outline-focus-color);
+  --btn-outline-background-hover: var(--btn-neutral-outline-background-hover);
+  --btn-outline-text-color-hover: var(--btn-neutral-outline-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-neutral-outline-border-color-hover);
+}
+.btn--neutral-light {
+  --btn-background: var(--btn-neutral-light-background); --btn-background-hover: var(--btn-neutral-light-background-hover);
+  --btn-text-color: var(--btn-neutral-light-text-color); --btn-text-color-hover: var(--btn-neutral-light-text-color-hover);
+  --btn-border-color: var(--btn-neutral-light-border-color); --btn-border-color-hover: var(--btn-neutral-light-border-color-hover);
+  --focus-color: var(--btn-neutral-light-focus-color);
+  --btn-outline-background: var(--btn-neutral-outline-light-background);
+  --btn-outline-text-color: var(--btn-neutral-outline-light-text-color);
+  --btn-outline-border-color: var(--btn-neutral-outline-light-border-color);
+  --btn-outline-focus-color: var(--btn-neutral-outline-light-focus-color);
+  --btn-outline-background-hover: var(--btn-neutral-outline-light-background-hover);
+  --btn-outline-text-color-hover: var(--btn-neutral-outline-light-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-neutral-outline-light-border-color-hover);
+}
+.btn--neutral-dark {
+  --btn-background: var(--btn-neutral-dark-background); --btn-background-hover: var(--btn-neutral-dark-background-hover);
+  --btn-text-color: var(--btn-neutral-dark-text-color); --btn-text-color-hover: var(--btn-neutral-dark-text-color-hover);
+  --btn-border-color: var(--btn-neutral-dark-border-color); --btn-border-color-hover: var(--btn-neutral-dark-border-color-hover);
+  --focus-color: var(--btn-neutral-dark-focus-color);
+  --btn-outline-background: var(--btn-neutral-outline-dark-background);
+  --btn-outline-text-color: var(--btn-neutral-outline-dark-text-color);
+  --btn-outline-border-color: var(--btn-neutral-outline-dark-border-color);
+  --btn-outline-focus-color: var(--btn-neutral-outline-dark-focus-color);
+  --btn-outline-background-hover: var(--btn-neutral-outline-dark-background-hover);
+  --btn-outline-text-color-hover: var(--btn-neutral-outline-dark-text-color-hover);
+  --btn-outline-border-color-hover: var(--btn-neutral-outline-dark-border-color-hover);
+}
+.btn--primary:hover,
+.btn--primary-light:hover,
+.btn--primary-dark:hover,
+.btn--secondary:hover,
+.btn--secondary-light:hover,
+.btn--secondary-dark:hover,
+.btn--tertiary:hover,
+.btn--tertiary-light:hover,
+.btn--tertiary-dark:hover,
+.btn--accent:hover,
+.btn--accent-light:hover,
+.btn--accent-dark:hover,
+.btn--base:hover,
+.btn--base-light:hover,
+.btn--base-dark:hover,
+.btn--neutral:hover,
+.btn--neutral-light:hover,
+.btn--neutral-dark:hover {
+  background: var(--btn-background-hover); color: var(--btn-text-color-hover);
+  border-color: var(--btn-border-color-hover); text-decoration: var(--btn-text-decoration-hover);
+}
+
+/* ======================================================================
+   BUTTON OUTLINE VARIANT
+   Combine with .btn--{color}, .btn--{color}-light or .btn--{color}-dark; reads whichever outline-context variables that base class points at.
+   ====================================================================== */
+.btn--outline {
+  background: var(--btn-outline-background);
+  color: var(--btn-outline-text-color);
+  border-width: var(--btn-outline-border-width);
+  border-color: var(--btn-outline-border-color);
+  --focus-color: var(--btn-outline-focus-color);
+}
+.btn--outline:hover {
+  background: var(--btn-outline-background-hover);
+  color: var(--btn-outline-text-color-hover);
+  border-color: var(--btn-outline-border-color-hover);
+}
+
+/* ======================================================================
+   BUTTON SIZE CLASSES
+   ====================================================================== */
+.btn--xs { --btn-font-size: calc(var(--text-m) * 0.75); }
+.btn--s { --btn-font-size: calc(var(--text-m) * 0.875); }
+.btn--m { --btn-font-size: calc(var(--text-m) * 1); }
+.btn--l { --btn-font-size: calc(var(--text-m) * 1.25); }
+.btn--xl { --btn-font-size: calc(var(--text-m) * 1.5); }
+.btn--xxl { --btn-font-size: calc(var(--text-m) * 1.875); }
+
+/* ======================================================================
+   LINKS
+   Default styling for every <a>, plus .link--{color} for every active color (status colors included, matching ACSS). Override --link-color / --link-color-hover directly, or use a .link--{color} class on the link itself or a parent element -- custom properties inherit down, so a class on a wrapping div colors every link inside it.
+   ====================================================================== */
+:root {
+  --link-color: var(--primary);
+  --link-color-hover: var(--primary-hover);
+  --link-font-weight: inherit;
+  --link-text-decoration: inherit;
+  --link-decoration-color: currentColor;
+  --link-decoration-thickness: auto;
+  --link-underline-offset: auto;
+  --link-transition-duration: var(--btn-transition-duration);
+}
+:where(a) {
+  color: var(--link-color);
+  font-weight: var(--link-font-weight);
+  text-decoration: var(--link-text-decoration);
+  text-decoration-color: var(--link-decoration-color);
+  text-decoration-thickness: var(--link-decoration-thickness);
+  text-underline-offset: var(--link-underline-offset);
+  transition: color var(--link-transition-duration) ease-in-out;
+}
+:where(a:hover) {
+  color: var(--link-color-hover);
+}
+
+/* ======================================================================
+   LINK COLOR CLASSES
+   ====================================================================== */
+.link--primary { --link-color: var(--primary); --link-color-hover: var(--primary-hover); }
+.link--secondary { --link-color: var(--secondary); --link-color-hover: var(--secondary-hover); }
+.link--tertiary { --link-color: var(--tertiary); --link-color-hover: var(--tertiary-hover); }
+.link--accent { --link-color: var(--accent); --link-color-hover: var(--accent-hover); }
+.link--base { --link-color: var(--base); --link-color-hover: var(--base-hover); }
+.link--neutral { --link-color: var(--neutral); --link-color-hover: var(--neutral-hover); }
+.link--success { --link-color: var(--success); --link-color-hover: var(--success-hover); }
+.link--warning { --link-color: var(--warning); --link-color-hover: var(--warning-hover); }
+.link--danger { --link-color: var(--danger); --link-color-hover: var(--danger-hover); }
+.link--info { --link-color: var(--info); --link-color-hover: var(--info-hover); }
