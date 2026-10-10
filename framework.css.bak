@@ -15,12 +15,12 @@
   --fw-text-base-desktop: 18;
   --fw-text-ratio-mobile: 1.125;
   --fw-text-ratio-desktop: 1.125;
-  --fw-space-base-mobile: 16;
-  --fw-space-base-desktop: 24;
+  --fw-space-base-mobile: 20;
+  --fw-space-base-desktop: 30;
   --fw-space-ratio-mobile: 1.333;
-  --fw-space-ratio-desktop: 1.5;
-  --fw-section-multiplier-mobile: 2;
-  --fw-section-multiplier-desktop: 3;
+  --fw-space-ratio-desktop: 1.333;
+  --fw-section-multiplier-mobile: 2.5;
+  --fw-section-multiplier-desktop: 3.4;
   --fw-gutter-mobile: 20;
   --fw-gutter-desktop: 80;
   --fw-breakpoint-xl: 1366;
@@ -440,6 +440,25 @@ h6, .h6 {
   text-wrap: var(--h6-text-wrap, var(--heading-text-wrap));
   max-width: var(--h6-max-width);
 }
+
+/* ======================================================================
+   BLOG HEADINGS
+   One step smaller than the global headings: --blog-h1 is the size of --h2, and so on down; --blog-h6 is body text size (--text-m). Put .blog-content on the post content wrapper to apply them to every heading inside it. To pin one to your own value, follow it on the same line with a comment containing just the word override.
+   ====================================================================== */
+:root {
+  --blog-h1: var(--h2);
+  --blog-h2: var(--h3);
+  --blog-h3: var(--h4);
+  --blog-h4: var(--h5);
+  --blog-h5: var(--h6);
+  --blog-h6: var(--text-m);
+}
+.blog-content :where(h1, .h1) { font-size: var(--blog-h1); }
+.blog-content :where(h2, .h2) { font-size: var(--blog-h2); }
+.blog-content :where(h3, .h3) { font-size: var(--blog-h3); }
+.blog-content :where(h4, .h4) { font-size: var(--blog-h4); }
+.blog-content :where(h5, .h5) { font-size: var(--blog-h5); }
+.blog-content :where(h6, .h6) { font-size: var(--blog-h6); }
 
 /* ======================================================================
    TEXT WIDTH
@@ -871,6 +890,7 @@ section {
   --btn-border-style: solid;
   --btn-border-radius: 0.5rem;
   --btn-font-family: inherit;
+  --btn-font-size: var(--text-m);
   --btn-font-weight: 600;
   --btn-font-style: normal;
   --btn-line-height: 1;
@@ -1140,7 +1160,7 @@ section {
   --btn-neutral-outline-light-text-color-hover: var(--neutral);
   --btn-neutral-outline-light-border-color-hover: var(--neutral-l-4);
 }
-.btn--primary, .btn--secondary, .btn--tertiary, .btn--accent, .btn--base, .btn--neutral, .btn--primary-light, .btn--primary-dark, .btn--secondary-light, .btn--secondary-dark, .btn--tertiary-light, .btn--tertiary-dark, .btn--accent-light, .btn--accent-dark, .btn--base-light, .btn--base-dark, .btn--neutral-light, .btn--neutral-dark {
+.btn--primary, .btn--primary-light, .btn--primary-dark, .btn--primary-outline, .btn--primary-light-outline, .btn--primary-dark-outline, .btn--secondary, .btn--secondary-light, .btn--secondary-dark, .btn--secondary-outline, .btn--secondary-light-outline, .btn--secondary-dark-outline, .btn--tertiary, .btn--tertiary-light, .btn--tertiary-dark, .btn--tertiary-outline, .btn--tertiary-light-outline, .btn--tertiary-dark-outline, .btn--accent, .btn--accent-light, .btn--accent-dark, .btn--accent-outline, .btn--accent-light-outline, .btn--accent-dark-outline, .btn--base, .btn--base-light, .btn--base-dark, .btn--base-outline, .btn--base-light-outline, .btn--base-dark-outline, .btn--neutral, .btn--neutral-light, .btn--neutral-dark, .btn--neutral-outline, .btn--neutral-light-outline, .btn--neutral-dark-outline {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
   box-sizing: border-box; cursor: pointer;
   padding-block: var(--btn-padding-block); padding-inline: var(--btn-padding-inline);
@@ -1159,272 +1179,273 @@ section {
   --btn-text-color: var(--btn-primary-solid-text-color); --btn-text-color-hover: var(--btn-primary-solid-text-color-hover);
   --btn-border-color: var(--btn-primary-solid-border-color); --btn-border-color-hover: var(--btn-primary-solid-border-color-hover);
   --focus-color: var(--btn-primary-solid-focus-color);
-  --btn-outline-background: var(--btn-primary-outline-background);
-  --btn-outline-text-color: var(--btn-primary-outline-text-color);
-  --btn-outline-border-color: var(--btn-primary-outline-border-color);
-  --btn-outline-focus-color: var(--btn-primary-outline-focus-color);
-  --btn-outline-background-hover: var(--btn-primary-outline-background-hover);
-  --btn-outline-text-color-hover: var(--btn-primary-outline-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-primary-outline-border-color-hover);
 }
 .btn--primary-light {
   --btn-background: var(--btn-primary-light-background); --btn-background-hover: var(--btn-primary-light-background-hover);
   --btn-text-color: var(--btn-primary-light-text-color); --btn-text-color-hover: var(--btn-primary-light-text-color-hover);
   --btn-border-color: var(--btn-primary-light-border-color); --btn-border-color-hover: var(--btn-primary-light-border-color-hover);
   --focus-color: var(--btn-primary-light-focus-color);
-  --btn-outline-background: var(--btn-primary-outline-light-background);
-  --btn-outline-text-color: var(--btn-primary-outline-light-text-color);
-  --btn-outline-border-color: var(--btn-primary-outline-light-border-color);
-  --btn-outline-focus-color: var(--btn-primary-outline-light-focus-color);
-  --btn-outline-background-hover: var(--btn-primary-outline-light-background-hover);
-  --btn-outline-text-color-hover: var(--btn-primary-outline-light-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-primary-outline-light-border-color-hover);
 }
 .btn--primary-dark {
   --btn-background: var(--btn-primary-dark-background); --btn-background-hover: var(--btn-primary-dark-background-hover);
   --btn-text-color: var(--btn-primary-dark-text-color); --btn-text-color-hover: var(--btn-primary-dark-text-color-hover);
   --btn-border-color: var(--btn-primary-dark-border-color); --btn-border-color-hover: var(--btn-primary-dark-border-color-hover);
   --focus-color: var(--btn-primary-dark-focus-color);
-  --btn-outline-background: var(--btn-primary-outline-dark-background);
-  --btn-outline-text-color: var(--btn-primary-outline-dark-text-color);
-  --btn-outline-border-color: var(--btn-primary-outline-dark-border-color);
-  --btn-outline-focus-color: var(--btn-primary-outline-dark-focus-color);
-  --btn-outline-background-hover: var(--btn-primary-outline-dark-background-hover);
-  --btn-outline-text-color-hover: var(--btn-primary-outline-dark-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-primary-outline-dark-border-color-hover);
+}
+.btn--primary-outline {
+  --btn-background: var(--btn-primary-outline-background); --btn-background-hover: var(--btn-primary-outline-background-hover);
+  --btn-text-color: var(--btn-primary-outline-text-color); --btn-text-color-hover: var(--btn-primary-outline-text-color-hover);
+  --btn-border-color: var(--btn-primary-outline-border-color); --btn-border-color-hover: var(--btn-primary-outline-border-color-hover);
+  --focus-color: var(--btn-primary-outline-focus-color);
+  border-width: var(--btn-outline-border-width);
+}
+.btn--primary-light-outline {
+  --btn-background: var(--btn-primary-outline-light-background); --btn-background-hover: var(--btn-primary-outline-light-background-hover);
+  --btn-text-color: var(--btn-primary-outline-light-text-color); --btn-text-color-hover: var(--btn-primary-outline-light-text-color-hover);
+  --btn-border-color: var(--btn-primary-outline-light-border-color); --btn-border-color-hover: var(--btn-primary-outline-light-border-color-hover);
+  --focus-color: var(--btn-primary-outline-light-focus-color);
+  border-width: var(--btn-outline-border-width);
+}
+.btn--primary-dark-outline {
+  --btn-background: var(--btn-primary-outline-dark-background); --btn-background-hover: var(--btn-primary-outline-dark-background-hover);
+  --btn-text-color: var(--btn-primary-outline-dark-text-color); --btn-text-color-hover: var(--btn-primary-outline-dark-text-color-hover);
+  --btn-border-color: var(--btn-primary-outline-dark-border-color); --btn-border-color-hover: var(--btn-primary-outline-dark-border-color-hover);
+  --focus-color: var(--btn-primary-outline-dark-focus-color);
+  border-width: var(--btn-outline-border-width);
 }
 .btn--secondary {
   --btn-background: var(--btn-secondary-solid-background); --btn-background-hover: var(--btn-secondary-solid-background-hover);
   --btn-text-color: var(--btn-secondary-solid-text-color); --btn-text-color-hover: var(--btn-secondary-solid-text-color-hover);
   --btn-border-color: var(--btn-secondary-solid-border-color); --btn-border-color-hover: var(--btn-secondary-solid-border-color-hover);
   --focus-color: var(--btn-secondary-solid-focus-color);
-  --btn-outline-background: var(--btn-secondary-outline-background);
-  --btn-outline-text-color: var(--btn-secondary-outline-text-color);
-  --btn-outline-border-color: var(--btn-secondary-outline-border-color);
-  --btn-outline-focus-color: var(--btn-secondary-outline-focus-color);
-  --btn-outline-background-hover: var(--btn-secondary-outline-background-hover);
-  --btn-outline-text-color-hover: var(--btn-secondary-outline-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-secondary-outline-border-color-hover);
 }
 .btn--secondary-light {
   --btn-background: var(--btn-secondary-light-background); --btn-background-hover: var(--btn-secondary-light-background-hover);
   --btn-text-color: var(--btn-secondary-light-text-color); --btn-text-color-hover: var(--btn-secondary-light-text-color-hover);
   --btn-border-color: var(--btn-secondary-light-border-color); --btn-border-color-hover: var(--btn-secondary-light-border-color-hover);
   --focus-color: var(--btn-secondary-light-focus-color);
-  --btn-outline-background: var(--btn-secondary-outline-light-background);
-  --btn-outline-text-color: var(--btn-secondary-outline-light-text-color);
-  --btn-outline-border-color: var(--btn-secondary-outline-light-border-color);
-  --btn-outline-focus-color: var(--btn-secondary-outline-light-focus-color);
-  --btn-outline-background-hover: var(--btn-secondary-outline-light-background-hover);
-  --btn-outline-text-color-hover: var(--btn-secondary-outline-light-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-secondary-outline-light-border-color-hover);
 }
 .btn--secondary-dark {
   --btn-background: var(--btn-secondary-dark-background); --btn-background-hover: var(--btn-secondary-dark-background-hover);
   --btn-text-color: var(--btn-secondary-dark-text-color); --btn-text-color-hover: var(--btn-secondary-dark-text-color-hover);
   --btn-border-color: var(--btn-secondary-dark-border-color); --btn-border-color-hover: var(--btn-secondary-dark-border-color-hover);
   --focus-color: var(--btn-secondary-dark-focus-color);
-  --btn-outline-background: var(--btn-secondary-outline-dark-background);
-  --btn-outline-text-color: var(--btn-secondary-outline-dark-text-color);
-  --btn-outline-border-color: var(--btn-secondary-outline-dark-border-color);
-  --btn-outline-focus-color: var(--btn-secondary-outline-dark-focus-color);
-  --btn-outline-background-hover: var(--btn-secondary-outline-dark-background-hover);
-  --btn-outline-text-color-hover: var(--btn-secondary-outline-dark-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-secondary-outline-dark-border-color-hover);
+}
+.btn--secondary-outline {
+  --btn-background: var(--btn-secondary-outline-background); --btn-background-hover: var(--btn-secondary-outline-background-hover);
+  --btn-text-color: var(--btn-secondary-outline-text-color); --btn-text-color-hover: var(--btn-secondary-outline-text-color-hover);
+  --btn-border-color: var(--btn-secondary-outline-border-color); --btn-border-color-hover: var(--btn-secondary-outline-border-color-hover);
+  --focus-color: var(--btn-secondary-outline-focus-color);
+  border-width: var(--btn-outline-border-width);
+}
+.btn--secondary-light-outline {
+  --btn-background: var(--btn-secondary-outline-light-background); --btn-background-hover: var(--btn-secondary-outline-light-background-hover);
+  --btn-text-color: var(--btn-secondary-outline-light-text-color); --btn-text-color-hover: var(--btn-secondary-outline-light-text-color-hover);
+  --btn-border-color: var(--btn-secondary-outline-light-border-color); --btn-border-color-hover: var(--btn-secondary-outline-light-border-color-hover);
+  --focus-color: var(--btn-secondary-outline-light-focus-color);
+  border-width: var(--btn-outline-border-width);
+}
+.btn--secondary-dark-outline {
+  --btn-background: var(--btn-secondary-outline-dark-background); --btn-background-hover: var(--btn-secondary-outline-dark-background-hover);
+  --btn-text-color: var(--btn-secondary-outline-dark-text-color); --btn-text-color-hover: var(--btn-secondary-outline-dark-text-color-hover);
+  --btn-border-color: var(--btn-secondary-outline-dark-border-color); --btn-border-color-hover: var(--btn-secondary-outline-dark-border-color-hover);
+  --focus-color: var(--btn-secondary-outline-dark-focus-color);
+  border-width: var(--btn-outline-border-width);
 }
 .btn--tertiary {
   --btn-background: var(--btn-tertiary-solid-background); --btn-background-hover: var(--btn-tertiary-solid-background-hover);
   --btn-text-color: var(--btn-tertiary-solid-text-color); --btn-text-color-hover: var(--btn-tertiary-solid-text-color-hover);
   --btn-border-color: var(--btn-tertiary-solid-border-color); --btn-border-color-hover: var(--btn-tertiary-solid-border-color-hover);
   --focus-color: var(--btn-tertiary-solid-focus-color);
-  --btn-outline-background: var(--btn-tertiary-outline-background);
-  --btn-outline-text-color: var(--btn-tertiary-outline-text-color);
-  --btn-outline-border-color: var(--btn-tertiary-outline-border-color);
-  --btn-outline-focus-color: var(--btn-tertiary-outline-focus-color);
-  --btn-outline-background-hover: var(--btn-tertiary-outline-background-hover);
-  --btn-outline-text-color-hover: var(--btn-tertiary-outline-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-tertiary-outline-border-color-hover);
 }
 .btn--tertiary-light {
   --btn-background: var(--btn-tertiary-light-background); --btn-background-hover: var(--btn-tertiary-light-background-hover);
   --btn-text-color: var(--btn-tertiary-light-text-color); --btn-text-color-hover: var(--btn-tertiary-light-text-color-hover);
   --btn-border-color: var(--btn-tertiary-light-border-color); --btn-border-color-hover: var(--btn-tertiary-light-border-color-hover);
   --focus-color: var(--btn-tertiary-light-focus-color);
-  --btn-outline-background: var(--btn-tertiary-outline-light-background);
-  --btn-outline-text-color: var(--btn-tertiary-outline-light-text-color);
-  --btn-outline-border-color: var(--btn-tertiary-outline-light-border-color);
-  --btn-outline-focus-color: var(--btn-tertiary-outline-light-focus-color);
-  --btn-outline-background-hover: var(--btn-tertiary-outline-light-background-hover);
-  --btn-outline-text-color-hover: var(--btn-tertiary-outline-light-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-tertiary-outline-light-border-color-hover);
 }
 .btn--tertiary-dark {
   --btn-background: var(--btn-tertiary-dark-background); --btn-background-hover: var(--btn-tertiary-dark-background-hover);
   --btn-text-color: var(--btn-tertiary-dark-text-color); --btn-text-color-hover: var(--btn-tertiary-dark-text-color-hover);
   --btn-border-color: var(--btn-tertiary-dark-border-color); --btn-border-color-hover: var(--btn-tertiary-dark-border-color-hover);
   --focus-color: var(--btn-tertiary-dark-focus-color);
-  --btn-outline-background: var(--btn-tertiary-outline-dark-background);
-  --btn-outline-text-color: var(--btn-tertiary-outline-dark-text-color);
-  --btn-outline-border-color: var(--btn-tertiary-outline-dark-border-color);
-  --btn-outline-focus-color: var(--btn-tertiary-outline-dark-focus-color);
-  --btn-outline-background-hover: var(--btn-tertiary-outline-dark-background-hover);
-  --btn-outline-text-color-hover: var(--btn-tertiary-outline-dark-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-tertiary-outline-dark-border-color-hover);
+}
+.btn--tertiary-outline {
+  --btn-background: var(--btn-tertiary-outline-background); --btn-background-hover: var(--btn-tertiary-outline-background-hover);
+  --btn-text-color: var(--btn-tertiary-outline-text-color); --btn-text-color-hover: var(--btn-tertiary-outline-text-color-hover);
+  --btn-border-color: var(--btn-tertiary-outline-border-color); --btn-border-color-hover: var(--btn-tertiary-outline-border-color-hover);
+  --focus-color: var(--btn-tertiary-outline-focus-color);
+  border-width: var(--btn-outline-border-width);
+}
+.btn--tertiary-light-outline {
+  --btn-background: var(--btn-tertiary-outline-light-background); --btn-background-hover: var(--btn-tertiary-outline-light-background-hover);
+  --btn-text-color: var(--btn-tertiary-outline-light-text-color); --btn-text-color-hover: var(--btn-tertiary-outline-light-text-color-hover);
+  --btn-border-color: var(--btn-tertiary-outline-light-border-color); --btn-border-color-hover: var(--btn-tertiary-outline-light-border-color-hover);
+  --focus-color: var(--btn-tertiary-outline-light-focus-color);
+  border-width: var(--btn-outline-border-width);
+}
+.btn--tertiary-dark-outline {
+  --btn-background: var(--btn-tertiary-outline-dark-background); --btn-background-hover: var(--btn-tertiary-outline-dark-background-hover);
+  --btn-text-color: var(--btn-tertiary-outline-dark-text-color); --btn-text-color-hover: var(--btn-tertiary-outline-dark-text-color-hover);
+  --btn-border-color: var(--btn-tertiary-outline-dark-border-color); --btn-border-color-hover: var(--btn-tertiary-outline-dark-border-color-hover);
+  --focus-color: var(--btn-tertiary-outline-dark-focus-color);
+  border-width: var(--btn-outline-border-width);
 }
 .btn--accent {
   --btn-background: var(--btn-accent-solid-background); --btn-background-hover: var(--btn-accent-solid-background-hover);
   --btn-text-color: var(--btn-accent-solid-text-color); --btn-text-color-hover: var(--btn-accent-solid-text-color-hover);
   --btn-border-color: var(--btn-accent-solid-border-color); --btn-border-color-hover: var(--btn-accent-solid-border-color-hover);
   --focus-color: var(--btn-accent-solid-focus-color);
-  --btn-outline-background: var(--btn-accent-outline-background);
-  --btn-outline-text-color: var(--btn-accent-outline-text-color);
-  --btn-outline-border-color: var(--btn-accent-outline-border-color);
-  --btn-outline-focus-color: var(--btn-accent-outline-focus-color);
-  --btn-outline-background-hover: var(--btn-accent-outline-background-hover);
-  --btn-outline-text-color-hover: var(--btn-accent-outline-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-accent-outline-border-color-hover);
 }
 .btn--accent-light {
   --btn-background: var(--btn-accent-light-background); --btn-background-hover: var(--btn-accent-light-background-hover);
   --btn-text-color: var(--btn-accent-light-text-color); --btn-text-color-hover: var(--btn-accent-light-text-color-hover);
   --btn-border-color: var(--btn-accent-light-border-color); --btn-border-color-hover: var(--btn-accent-light-border-color-hover);
   --focus-color: var(--btn-accent-light-focus-color);
-  --btn-outline-background: var(--btn-accent-outline-light-background);
-  --btn-outline-text-color: var(--btn-accent-outline-light-text-color);
-  --btn-outline-border-color: var(--btn-accent-outline-light-border-color);
-  --btn-outline-focus-color: var(--btn-accent-outline-light-focus-color);
-  --btn-outline-background-hover: var(--btn-accent-outline-light-background-hover);
-  --btn-outline-text-color-hover: var(--btn-accent-outline-light-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-accent-outline-light-border-color-hover);
 }
 .btn--accent-dark {
   --btn-background: var(--btn-accent-dark-background); --btn-background-hover: var(--btn-accent-dark-background-hover);
   --btn-text-color: var(--btn-accent-dark-text-color); --btn-text-color-hover: var(--btn-accent-dark-text-color-hover);
   --btn-border-color: var(--btn-accent-dark-border-color); --btn-border-color-hover: var(--btn-accent-dark-border-color-hover);
   --focus-color: var(--btn-accent-dark-focus-color);
-  --btn-outline-background: var(--btn-accent-outline-dark-background);
-  --btn-outline-text-color: var(--btn-accent-outline-dark-text-color);
-  --btn-outline-border-color: var(--btn-accent-outline-dark-border-color);
-  --btn-outline-focus-color: var(--btn-accent-outline-dark-focus-color);
-  --btn-outline-background-hover: var(--btn-accent-outline-dark-background-hover);
-  --btn-outline-text-color-hover: var(--btn-accent-outline-dark-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-accent-outline-dark-border-color-hover);
+}
+.btn--accent-outline {
+  --btn-background: var(--btn-accent-outline-background); --btn-background-hover: var(--btn-accent-outline-background-hover);
+  --btn-text-color: var(--btn-accent-outline-text-color); --btn-text-color-hover: var(--btn-accent-outline-text-color-hover);
+  --btn-border-color: var(--btn-accent-outline-border-color); --btn-border-color-hover: var(--btn-accent-outline-border-color-hover);
+  --focus-color: var(--btn-accent-outline-focus-color);
+  border-width: var(--btn-outline-border-width);
+}
+.btn--accent-light-outline {
+  --btn-background: var(--btn-accent-outline-light-background); --btn-background-hover: var(--btn-accent-outline-light-background-hover);
+  --btn-text-color: var(--btn-accent-outline-light-text-color); --btn-text-color-hover: var(--btn-accent-outline-light-text-color-hover);
+  --btn-border-color: var(--btn-accent-outline-light-border-color); --btn-border-color-hover: var(--btn-accent-outline-light-border-color-hover);
+  --focus-color: var(--btn-accent-outline-light-focus-color);
+  border-width: var(--btn-outline-border-width);
+}
+.btn--accent-dark-outline {
+  --btn-background: var(--btn-accent-outline-dark-background); --btn-background-hover: var(--btn-accent-outline-dark-background-hover);
+  --btn-text-color: var(--btn-accent-outline-dark-text-color); --btn-text-color-hover: var(--btn-accent-outline-dark-text-color-hover);
+  --btn-border-color: var(--btn-accent-outline-dark-border-color); --btn-border-color-hover: var(--btn-accent-outline-dark-border-color-hover);
+  --focus-color: var(--btn-accent-outline-dark-focus-color);
+  border-width: var(--btn-outline-border-width);
 }
 .btn--base {
   --btn-background: var(--btn-base-solid-background); --btn-background-hover: var(--btn-base-solid-background-hover);
   --btn-text-color: var(--btn-base-solid-text-color); --btn-text-color-hover: var(--btn-base-solid-text-color-hover);
   --btn-border-color: var(--btn-base-solid-border-color); --btn-border-color-hover: var(--btn-base-solid-border-color-hover);
   --focus-color: var(--btn-base-solid-focus-color);
-  --btn-outline-background: var(--btn-base-outline-background);
-  --btn-outline-text-color: var(--btn-base-outline-text-color);
-  --btn-outline-border-color: var(--btn-base-outline-border-color);
-  --btn-outline-focus-color: var(--btn-base-outline-focus-color);
-  --btn-outline-background-hover: var(--btn-base-outline-background-hover);
-  --btn-outline-text-color-hover: var(--btn-base-outline-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-base-outline-border-color-hover);
 }
 .btn--base-light {
   --btn-background: var(--btn-base-light-background); --btn-background-hover: var(--btn-base-light-background-hover);
   --btn-text-color: var(--btn-base-light-text-color); --btn-text-color-hover: var(--btn-base-light-text-color-hover);
   --btn-border-color: var(--btn-base-light-border-color); --btn-border-color-hover: var(--btn-base-light-border-color-hover);
   --focus-color: var(--btn-base-light-focus-color);
-  --btn-outline-background: var(--btn-base-outline-light-background);
-  --btn-outline-text-color: var(--btn-base-outline-light-text-color);
-  --btn-outline-border-color: var(--btn-base-outline-light-border-color);
-  --btn-outline-focus-color: var(--btn-base-outline-light-focus-color);
-  --btn-outline-background-hover: var(--btn-base-outline-light-background-hover);
-  --btn-outline-text-color-hover: var(--btn-base-outline-light-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-base-outline-light-border-color-hover);
 }
 .btn--base-dark {
   --btn-background: var(--btn-base-dark-background); --btn-background-hover: var(--btn-base-dark-background-hover);
   --btn-text-color: var(--btn-base-dark-text-color); --btn-text-color-hover: var(--btn-base-dark-text-color-hover);
   --btn-border-color: var(--btn-base-dark-border-color); --btn-border-color-hover: var(--btn-base-dark-border-color-hover);
   --focus-color: var(--btn-base-dark-focus-color);
-  --btn-outline-background: var(--btn-base-outline-dark-background);
-  --btn-outline-text-color: var(--btn-base-outline-dark-text-color);
-  --btn-outline-border-color: var(--btn-base-outline-dark-border-color);
-  --btn-outline-focus-color: var(--btn-base-outline-dark-focus-color);
-  --btn-outline-background-hover: var(--btn-base-outline-dark-background-hover);
-  --btn-outline-text-color-hover: var(--btn-base-outline-dark-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-base-outline-dark-border-color-hover);
+}
+.btn--base-outline {
+  --btn-background: var(--btn-base-outline-background); --btn-background-hover: var(--btn-base-outline-background-hover);
+  --btn-text-color: var(--btn-base-outline-text-color); --btn-text-color-hover: var(--btn-base-outline-text-color-hover);
+  --btn-border-color: var(--btn-base-outline-border-color); --btn-border-color-hover: var(--btn-base-outline-border-color-hover);
+  --focus-color: var(--btn-base-outline-focus-color);
+  border-width: var(--btn-outline-border-width);
+}
+.btn--base-light-outline {
+  --btn-background: var(--btn-base-outline-light-background); --btn-background-hover: var(--btn-base-outline-light-background-hover);
+  --btn-text-color: var(--btn-base-outline-light-text-color); --btn-text-color-hover: var(--btn-base-outline-light-text-color-hover);
+  --btn-border-color: var(--btn-base-outline-light-border-color); --btn-border-color-hover: var(--btn-base-outline-light-border-color-hover);
+  --focus-color: var(--btn-base-outline-light-focus-color);
+  border-width: var(--btn-outline-border-width);
+}
+.btn--base-dark-outline {
+  --btn-background: var(--btn-base-outline-dark-background); --btn-background-hover: var(--btn-base-outline-dark-background-hover);
+  --btn-text-color: var(--btn-base-outline-dark-text-color); --btn-text-color-hover: var(--btn-base-outline-dark-text-color-hover);
+  --btn-border-color: var(--btn-base-outline-dark-border-color); --btn-border-color-hover: var(--btn-base-outline-dark-border-color-hover);
+  --focus-color: var(--btn-base-outline-dark-focus-color);
+  border-width: var(--btn-outline-border-width);
 }
 .btn--neutral {
   --btn-background: var(--btn-neutral-solid-background); --btn-background-hover: var(--btn-neutral-solid-background-hover);
   --btn-text-color: var(--btn-neutral-solid-text-color); --btn-text-color-hover: var(--btn-neutral-solid-text-color-hover);
   --btn-border-color: var(--btn-neutral-solid-border-color); --btn-border-color-hover: var(--btn-neutral-solid-border-color-hover);
   --focus-color: var(--btn-neutral-solid-focus-color);
-  --btn-outline-background: var(--btn-neutral-outline-background);
-  --btn-outline-text-color: var(--btn-neutral-outline-text-color);
-  --btn-outline-border-color: var(--btn-neutral-outline-border-color);
-  --btn-outline-focus-color: var(--btn-neutral-outline-focus-color);
-  --btn-outline-background-hover: var(--btn-neutral-outline-background-hover);
-  --btn-outline-text-color-hover: var(--btn-neutral-outline-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-neutral-outline-border-color-hover);
 }
 .btn--neutral-light {
   --btn-background: var(--btn-neutral-light-background); --btn-background-hover: var(--btn-neutral-light-background-hover);
   --btn-text-color: var(--btn-neutral-light-text-color); --btn-text-color-hover: var(--btn-neutral-light-text-color-hover);
   --btn-border-color: var(--btn-neutral-light-border-color); --btn-border-color-hover: var(--btn-neutral-light-border-color-hover);
   --focus-color: var(--btn-neutral-light-focus-color);
-  --btn-outline-background: var(--btn-neutral-outline-light-background);
-  --btn-outline-text-color: var(--btn-neutral-outline-light-text-color);
-  --btn-outline-border-color: var(--btn-neutral-outline-light-border-color);
-  --btn-outline-focus-color: var(--btn-neutral-outline-light-focus-color);
-  --btn-outline-background-hover: var(--btn-neutral-outline-light-background-hover);
-  --btn-outline-text-color-hover: var(--btn-neutral-outline-light-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-neutral-outline-light-border-color-hover);
 }
 .btn--neutral-dark {
   --btn-background: var(--btn-neutral-dark-background); --btn-background-hover: var(--btn-neutral-dark-background-hover);
   --btn-text-color: var(--btn-neutral-dark-text-color); --btn-text-color-hover: var(--btn-neutral-dark-text-color-hover);
   --btn-border-color: var(--btn-neutral-dark-border-color); --btn-border-color-hover: var(--btn-neutral-dark-border-color-hover);
   --focus-color: var(--btn-neutral-dark-focus-color);
-  --btn-outline-background: var(--btn-neutral-outline-dark-background);
-  --btn-outline-text-color: var(--btn-neutral-outline-dark-text-color);
-  --btn-outline-border-color: var(--btn-neutral-outline-dark-border-color);
-  --btn-outline-focus-color: var(--btn-neutral-outline-dark-focus-color);
-  --btn-outline-background-hover: var(--btn-neutral-outline-dark-background-hover);
-  --btn-outline-text-color-hover: var(--btn-neutral-outline-dark-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-neutral-outline-dark-border-color-hover);
+}
+.btn--neutral-outline {
+  --btn-background: var(--btn-neutral-outline-background); --btn-background-hover: var(--btn-neutral-outline-background-hover);
+  --btn-text-color: var(--btn-neutral-outline-text-color); --btn-text-color-hover: var(--btn-neutral-outline-text-color-hover);
+  --btn-border-color: var(--btn-neutral-outline-border-color); --btn-border-color-hover: var(--btn-neutral-outline-border-color-hover);
+  --focus-color: var(--btn-neutral-outline-focus-color);
+  border-width: var(--btn-outline-border-width);
+}
+.btn--neutral-light-outline {
+  --btn-background: var(--btn-neutral-outline-light-background); --btn-background-hover: var(--btn-neutral-outline-light-background-hover);
+  --btn-text-color: var(--btn-neutral-outline-light-text-color); --btn-text-color-hover: var(--btn-neutral-outline-light-text-color-hover);
+  --btn-border-color: var(--btn-neutral-outline-light-border-color); --btn-border-color-hover: var(--btn-neutral-outline-light-border-color-hover);
+  --focus-color: var(--btn-neutral-outline-light-focus-color);
+  border-width: var(--btn-outline-border-width);
+}
+.btn--neutral-dark-outline {
+  --btn-background: var(--btn-neutral-outline-dark-background); --btn-background-hover: var(--btn-neutral-outline-dark-background-hover);
+  --btn-text-color: var(--btn-neutral-outline-dark-text-color); --btn-text-color-hover: var(--btn-neutral-outline-dark-text-color-hover);
+  --btn-border-color: var(--btn-neutral-outline-dark-border-color); --btn-border-color-hover: var(--btn-neutral-outline-dark-border-color-hover);
+  --focus-color: var(--btn-neutral-outline-dark-focus-color);
+  border-width: var(--btn-outline-border-width);
 }
 .btn--primary:hover,
 .btn--primary-light:hover,
 .btn--primary-dark:hover,
+.btn--primary-outline:hover,
+.btn--primary-light-outline:hover,
+.btn--primary-dark-outline:hover,
 .btn--secondary:hover,
 .btn--secondary-light:hover,
 .btn--secondary-dark:hover,
+.btn--secondary-outline:hover,
+.btn--secondary-light-outline:hover,
+.btn--secondary-dark-outline:hover,
 .btn--tertiary:hover,
 .btn--tertiary-light:hover,
 .btn--tertiary-dark:hover,
+.btn--tertiary-outline:hover,
+.btn--tertiary-light-outline:hover,
+.btn--tertiary-dark-outline:hover,
 .btn--accent:hover,
 .btn--accent-light:hover,
 .btn--accent-dark:hover,
+.btn--accent-outline:hover,
+.btn--accent-light-outline:hover,
+.btn--accent-dark-outline:hover,
 .btn--base:hover,
 .btn--base-light:hover,
 .btn--base-dark:hover,
+.btn--base-outline:hover,
+.btn--base-light-outline:hover,
+.btn--base-dark-outline:hover,
 .btn--neutral:hover,
 .btn--neutral-light:hover,
-.btn--neutral-dark:hover {
+.btn--neutral-dark:hover,
+.btn--neutral-outline:hover,
+.btn--neutral-light-outline:hover,
+.btn--neutral-dark-outline:hover {
   background: var(--btn-background-hover); color: var(--btn-text-color-hover);
   border-color: var(--btn-border-color-hover); text-decoration: var(--btn-text-decoration-hover);
-}
-
-/* ======================================================================
-   BUTTON OUTLINE VARIANT
-   Combine with .btn--{color}, .btn--{color}-light or .btn--{color}-dark; reads whichever outline-context variables that base class points at.
-   ====================================================================== */
-.btn--outline {
-  background: var(--btn-outline-background);
-  color: var(--btn-outline-text-color);
-  border-width: var(--btn-outline-border-width);
-  border-color: var(--btn-outline-border-color);
-  --focus-color: var(--btn-outline-focus-color);
-}
-.btn--outline:hover {
-  background: var(--btn-outline-background-hover);
-  color: var(--btn-outline-text-color-hover);
-  border-color: var(--btn-outline-border-color-hover);
 }
 
 /* ======================================================================
