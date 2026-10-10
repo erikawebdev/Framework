@@ -122,7 +122,7 @@ body { margin: 0; background: var(--sg-bg); color: var(--sg-ink); font-family: "
 <header class="sg-top">
   <div class="sg-brand">Framework reference</div>
   <div class="sg-export">
-    <input type="text" id="export-name" placeholder="client-name.css" spellcheck="false" aria-label="File name for the downloaded CSS">
+    <input type="text" id="export-name" placeholder="client-name" spellcheck="false" aria-label="Client name for the downloaded files">
     <button class="sg-btn" id="export-bricks" type="button">Download for Bricks</button>
     <button class="sg-btn" id="export" data-primary="true" type="button">Download CSS</button>
   </div>
@@ -215,12 +215,12 @@ body { margin: 0; background: var(--sg-bg); color: var(--sg-ink); font-family: "
 
   <div class="sg-stage">
     <div class="sg-typeform">
-      <label>Base value, mobile (px)<input type="number" id="sp-bm" value="16"></label>
-      <label>Base value, desktop (px)<input type="number" id="sp-bd" value="24"></label>
+      <label>Base value, mobile (px)<input type="number" id="sp-bm" value="20"></label>
+      <label>Base value, desktop (px)<input type="number" id="sp-bd" value="30"></label>
       <label>Scale ratio, mobile<select id="sp-rm"></select></label>
       <label>Scale ratio, desktop<select id="sp-rd"></select></label>
-      <label>Section multiplier, mobile<input type="number" step="0.1" id="sp-sm" value="2"></label>
-      <label>Section multiplier, desktop<input type="number" step="0.1" id="sp-sd" value="3"></label>
+      <label>Section multiplier, mobile<input type="number" step="0.1" id="sp-sm" value="2.5"></label>
+      <label>Section multiplier, desktop<input type="number" step="0.1" id="sp-sd" value="3.4"></label>
       <label>Gutter, mobile (px)<input type="number" id="sp-gm" value="20"></label>
       <label>Gutter, desktop (px)<input type="number" id="sp-gd" value="80"></label>
     </div>
@@ -385,12 +385,12 @@ body { margin: 0; background: var(--sg-bg); color: var(--sg-ink); font-family: "
       <span style="display:inline-block;padding:.6rem 1rem;border-radius:6px;background:var(--sg-soft);outline:var(--focus-width) solid var(--focus-color);outline-offset:var(--focus-offset)">Focused element</span>
       <a href="#focus" onclick="return false">A link</a>
       <button type="button" class="btn--primary">Primary button</button>
-      <button type="button" class="btn--secondary btn--outline">Outline button</button>
+      <button type="button" class="btn--secondary-outline">Outline button</button>
     </div>
   </div>
 
   <h1 class="sg-title" id="buttons" style="margin-top:4rem">Buttons</h1>
-  <p class="sg-lead">One class per color, never the status colors. Check a color to give it a button style (.btn--{color}, plus light, dark, and outline); uncheck it to remove that button entirely. Every button shares one set of global settings below, matching ACSS's own button variables.</p>
+  <p class="sg-lead">One class per color, never the status colors. Check a color to give it a button style (.btn--{color} and .btn--{color}-outline, each with -light and -dark versions); uncheck it to remove that button entirely. Every button shares one set of global settings below, matching ACSS's own button variables.</p>
 
   <div class="sg-stage">
     <div id="btn-color-checks" class="sg-row" style="gap:1.25rem;flex-wrap:wrap"></div>
@@ -736,6 +736,14 @@ function renderType() {
     const px = parseFloat(getComputedStyle(sample).fontSize);
     $('.px', r).textContent = px.toFixed(1) + 'px at ' + window.innerWidth + 'px viewport';
   });
+}
+// a blog heading is the global heading one level down; h6 drops to body text size
+function blogHeadingSize(lv) {
+  const n = +lv.slice(1);
+  return markedOverride('--blog-' + lv) || (n < 6 ? `var(--h${n + 1})` : 'var(--text-m)');
+}
+function blogContentCSS() {
+  return LEVELS.map(lv => `.blog-content :where(${lv}, .${lv}) { font-size: var(--blog-${lv}); }`).join('\n');
 }
 /* ---------------- heading style (All / H1-H6) ---------------- */
 const HEADING_PROPS = ['font-family', 'color', 'line-height', 'font-weight', 'letter-spacing', 'font-style', 'text-transform', 'text-wrap'];
@@ -1110,6 +1118,11 @@ function buildFullCSS() {
     if (rootDecls.length) L.push(`:root { ${rootDecls.join(' ')} }`);
     L.push(`${lv}, .${lv} {\n  ${headingDecls(lv).join('\n  ')}\n}`);
   });
+  head('BLOG HEADINGS', "One step smaller than the global headings: --blog-h1 is the size of --h2, and so on down; --blog-h6 is body text size (--text-m). Put .blog-content on the post content wrapper to apply them to every heading inside it. To pin one to your own value, follow it on the same line with a comment containing just the word override.");
+  L.push(':root {');
+  LEVELS.forEach(lv => L.push(`  --blog-${lv}: ${blogHeadingSize(lv)};${markedOverride('--blog-' + lv) ? '  /* override */' : ''}`));
+  L.push('}');
+  L.push(blogContentCSS());
   head('TEXT WIDTH', 'A named scale of line-length limits in ch units.');
   L.push(':root {');
   TEXT_WIDTHS.forEach(n => L.push(`  --text-width-${n}: ${readVar('--text-width-' + n)};`));
@@ -1229,9 +1242,6 @@ function buildFullCSS() {
   L.push('}');
   L.push(buildButtonCSS(btnColors));
 
-  head('BUTTON OUTLINE VARIANT', "Combine with .btn--{color}, .btn--{color}-light or .btn--{color}-dark; reads whichever outline-context variables that base class points at.");
-  L.push(BTN_OUTLINE_CSS);
-
   head('BUTTON SIZE CLASSES');
   Object.keys(BTN_SIZES).forEach(sz => L.push(btnSizeCSS(sz)));
 
@@ -1265,7 +1275,7 @@ const BRICKS_FORMAT = 'blueprint-bricks/1';
 // framework.css section title -> Bricks variable category
 const BRICKS_CATEGORIES = {
   'GUIDE SETTINGS': 'Framework Settings', 'HEADER': 'Header', 'COLOR': 'Colors', 'TEXT COLORS': 'Colors',
-  'TYPOGRAPHY': 'Typography', 'HEADING DEFAULTS': 'Heading Defaults', 'TEXT WIDTH': 'Text Defaults',
+  'TYPOGRAPHY': 'Typography', 'HEADING DEFAULTS': 'Heading Defaults', 'BLOG HEADINGS': 'Blog Headings', 'TEXT WIDTH': 'Text Defaults',
   'TEXT STYLE DEFAULTS': 'Text Defaults', 'SPACING': 'Spacing', 'CONTEXTUAL SPACING': 'Contextual Spacing',
   'AUTOMATIC SPACING': 'Contextual Spacing', 'LAYOUT': 'Layout & Grid', 'RADIUS': 'Radius',
   'SMART SPACING': 'Smart Spacing', 'FOCUS': 'Focus', 'BUTTONS': 'Buttons', 'LINKS': 'Links',
@@ -1327,6 +1337,7 @@ function bricksClasses() {
   add('Header', 'hero-offset', HERO_OFFSET_CSS);
   add('Header', 'header-transparent', HEADER_TRANSPARENT_CSS);
   LEVELS.forEach(lv => add('Typography', lv, `.${lv} {\n  ${headingDecls(lv).join('\n  ')}\n}`));
+  add('Typography', 'blog-content', blogContentCSS());
   TSIZE_LEVELS.forEach(lv => add('Typography', `text--${lv}`, `.text--${lv} {\n  ${textDecls(lv).join('\n  ')}\n}`));
   ASPECT_RATIOS.forEach(([name, value]) => add('Utilities', `aspect-ratio-${name}`, `.aspect-ratio-${name} { aspect-ratio: ${ruleValue('.aspect-ratio-' + name, 'aspect-ratio') || value}; }`));
   add('Utilities', 'list--none', `.list--none { list-style-type: ${ruleValue('.list--none', 'list-style-type') || 'none'}; }`);
@@ -1337,9 +1348,6 @@ function bricksClasses() {
     const cls = `.btn--${c}${suffix}`;
     add('Buttons', cls.slice(1), [`${cls} {\n${BTN_BASE_DECLS}\n}`, btnVariantBlock(c, suffix, variant), `${cls}:hover {\n${BTN_HOVER_DECLS}\n}`]);
   }));
-  // Bricks doesn't promise to print classes in this order, so the outline rules double
-  // the class to beat the color class they're combined with, instead of relying on order
-  add('Buttons', 'btn--outline', BTN_OUTLINE_CSS.replace(/\.btn--outline/g, '.btn--outline.btn--outline'));
   Object.keys(BTN_SIZES).forEach(sz => add('Buttons', `btn--${sz}`, btnSizeCSS(sz)));
   linkColorList().forEach(c => add('Links', `link--${c}`, linkColorCSS(c)));
   return out;
@@ -1451,7 +1459,7 @@ $('#export').addEventListener('click', () => {
   const filename = checkedExportName();
   if (filename) saveFile(filename, buildFullCSS(), 'text/css');
 });
-// the Bricks files share the CSS file's name: acme.css -> acme-bricks.json and acme-global.css
+// the Bricks files are named after the client: acme -> acme-bricks.json and acme-global.css
 $('#export-bricks').addEventListener('click', async () => {
   const filename = checkedExportName();
   if (!filename) return;
@@ -1472,7 +1480,7 @@ $$('.sg-nav2 a').forEach(a => a.addEventListener('click', (e) => {
 const SPACE_LEVELS = [['xs', -2], ['s', -1], ['m', 0], ['l', 1], ['xl', 2], ['xxl', 3]];
 const SIZE_ORDER = ['xs', 's', 'm', 'l', 'xl', 'xxl'];
 fillRatioSelect($('#sp-rm'), 1.333);
-fillRatioSelect($('#sp-rd'), 1.5);
+fillRatioSelect($('#sp-rd'), 1.333);
 function spaceInputs() {
   const t = typeInputs(); // reuse the shared viewport from Typography
   return {
@@ -1522,11 +1530,11 @@ function probeWidth(varName) {
   return w;
 }
 function readouts() {
-  const maxBar = Math.max(1, ...$$('[data-bar]').map(r => probeWidth(r.dataset.bar)));
+  // bars are drawn at their real size (capped at the row), so changing one scale never moves another's bars
   $$('[data-bar]').forEach(r => {
     const w = probeWidth(r.dataset.bar);
     const bar = $('.sg-bar', r);
-    if (bar) bar.style.inlineSize = Math.max(2, (w / maxBar) * 100) + '%';
+    if (bar) bar.style.inlineSize = `min(100%, ${Math.max(2, w)}px)`;
     const px = $('.pxv', r); if (px) px.textContent = Math.round(w) + 'px';
   });
 }
@@ -1786,56 +1794,39 @@ const BTN_BASE_DECLS = `  display: inline-flex; align-items: center; justify-con
   transition: background var(--btn-transition-duration) ease-in-out, color var(--btn-transition-duration) ease-in-out, border-color var(--btn-transition-duration) ease-in-out;`;
 const BTN_HOVER_DECLS = `  background: var(--btn-background-hover); color: var(--btn-text-color-hover);
   border-color: var(--btn-border-color-hover); text-decoration: var(--btn-text-decoration-hover);`;
-// each button class and the variant its variables come from; outline variables follow the same variant
-const BTN_CLASS_VARIANTS = [['', 'solid'], ['-light', 'light'], ['-dark', 'dark']];
+// each button class suffix and the variant its variables come from
+const BTN_CLASS_VARIANTS = [
+  ['', 'solid'], ['-light', 'light'], ['-dark', 'dark'],
+  ['-outline', 'outline'], ['-light-outline', 'outline-light'], ['-dark-outline', 'outline-dark'],
+];
 function btnVariantBlock(c, clsSuffix, variant) {
-  const outlineVariant = variant === 'solid' ? 'outline' : `outline-${variant}`;
+  const outlineWidth = variant.startsWith('outline') ? '\n  border-width: var(--btn-outline-border-width);' : '';
   return `.btn--${c}${clsSuffix} {
   --btn-background: var(--btn-${c}-${variant}-background); --btn-background-hover: var(--btn-${c}-${variant}-background-hover);
   --btn-text-color: var(--btn-${c}-${variant}-text-color); --btn-text-color-hover: var(--btn-${c}-${variant}-text-color-hover);
   --btn-border-color: var(--btn-${c}-${variant}-border-color); --btn-border-color-hover: var(--btn-${c}-${variant}-border-color-hover);
-  --focus-color: var(--btn-${c}-${variant}-focus-color);
-  --btn-outline-background: var(--btn-${c}-${outlineVariant}-background);
-  --btn-outline-text-color: var(--btn-${c}-${outlineVariant}-text-color);
-  --btn-outline-border-color: var(--btn-${c}-${outlineVariant}-border-color);
-  --btn-outline-focus-color: var(--btn-${c}-${outlineVariant}-focus-color);
-  --btn-outline-background-hover: var(--btn-${c}-${outlineVariant}-background-hover);
-  --btn-outline-text-color-hover: var(--btn-${c}-${outlineVariant}-text-color-hover);
-  --btn-outline-border-color-hover: var(--btn-${c}-${outlineVariant}-border-color-hover);
+  --focus-color: var(--btn-${c}-${variant}-focus-color);${outlineWidth}
 }`;
 }
 function buildButtonCSS(colors) {
   const L = [];
   if (!colors.length) return '';
-  const baseSel = colors.map(c => `.btn--${c}`).concat(colors.flatMap(c => [`.btn--${c}-light`, `.btn--${c}-dark`])).join(', ');
-  L.push(`${baseSel} {\n${BTN_BASE_DECLS}\n}`);
+  const classes = colors.flatMap(c => BTN_CLASS_VARIANTS.map(([suffix]) => `.btn--${c}${suffix}`));
+  L.push(`${classes.join(', ')} {\n${BTN_BASE_DECLS}\n}`);
   colors.forEach(c => BTN_CLASS_VARIANTS.forEach(([suffix, variant]) => L.push(btnVariantBlock(c, suffix, variant))));
-  L.push(colors.flatMap(c => [`.btn--${c}:hover`, `.btn--${c}-light:hover`, `.btn--${c}-dark:hover`]).join(',\n') + ` {\n${BTN_HOVER_DECLS}\n}`);
+  L.push(classes.map(cls => `${cls}:hover`).join(',\n') + ` {\n${BTN_HOVER_DECLS}\n}`);
   return L.join('\n');
 }
 const BTN_SIZES = { xs: 0.75, s: 0.875, m: 1, l: 1.25, xl: 1.5, xxl: 1.875 };
 function btnSizeCSS(sz) { return `.btn--${sz} { --btn-font-size: calc(var(--text-m) * ${BTN_SIZES[sz]}); }`; }
-const BTN_OUTLINE_CSS = `.btn--outline {
-  background: var(--btn-outline-background);
-  color: var(--btn-outline-text-color);
-  border-width: var(--btn-outline-border-width);
-  border-color: var(--btn-outline-border-color);
-  --focus-color: var(--btn-outline-focus-color);
-}
-.btn--outline:hover {
-  background: var(--btn-outline-background-hover);
-  color: var(--btn-outline-text-color-hover);
-  border-color: var(--btn-outline-border-color-hover);
-}`;
 function applyDynamicButtonCSS() {
   const sheet = $('#framework-css').textContent;
   // only colors with no button rules in framework.css (added or switched on in the
-  // guide) need CSS generated live; the outline rules are repeated after them so
-  // .btn--outline still wins over their base rules, as it does in framework.css.
+  // guide) need CSS generated live
   const missing = buttonColorList().filter(isButtonEnabled).filter(c => !sheet.includes(`.btn--${c} {`));
   let tag = $('#dynamic-buttons');
   if (!tag) { tag = document.createElement('style'); tag.id = 'dynamic-buttons'; document.head.appendChild(tag); }
-  tag.textContent = missing.length ? buildButtonCSS(missing) + '\n' + BTN_OUTLINE_CSS : '';
+  tag.textContent = buildButtonCSS(missing);
 }
 function renderButtonChecks() {
   const box = $('#btn-color-checks'); box.innerHTML = '';
@@ -1866,7 +1857,7 @@ function renderButtonPreview() {
     const items = $('.sg-btnrow-items', row);
     ['', '-light', '-dark'].forEach(variant => {
       items.appendChild(h(`<button type="button" class="sg-btn-demo btn--${c}${variant}">Button</button>`));
-      items.appendChild(h(`<button type="button" class="sg-btn-demo btn--${c}${variant} btn--outline">Button</button>`));
+      items.appendChild(h(`<button type="button" class="sg-btn-demo btn--${c}${variant}-outline">Button</button>`));
     });
     box.appendChild(row);
   });
@@ -1928,9 +1919,8 @@ function renderButtonVariantForm() {
   });
   const sample = $('#btn-variant-sample');
   if (sample) {
-    const isOutline = currentBtnVariantTab.startsWith('outline');
-    const base = currentBtnVariantTab === 'outline' ? '' : currentBtnVariantTab === 'outline-dark' ? '-dark' : currentBtnVariantTab === 'outline-light' ? '-light' : currentBtnVariantTab === 'dark' ? '-dark' : currentBtnVariantTab === 'light' ? '-light' : '';
-    sample.className = 'sg-btn-demo btn--' + c + base + (isOutline ? ' btn--outline' : '');
+    const [suffix] = BTN_CLASS_VARIANTS.find(([, v]) => v === currentBtnVariantTab);
+    sample.className = `sg-btn-demo btn--${c}${suffix}`;
   }
 }
 function initButtons() {

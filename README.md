@@ -7,7 +7,7 @@ A variable-driven CSS framework for Bricks Builder sites, modeled on Automatic.c
 | File | What it is |
 | --- | --- |
 | `framework.css` | The **defaults**. This is the starting point for every project. The guide reads it but never writes to it. |
-| `framework-guide.html` | The visual guide and editor. It loads `framework.css`, shows every setting live, lets you change them, and downloads the result as a **new file you name** (e.g. `client-name.css`). |
+| `framework-guide.html` | The visual guide and editor. It loads `framework.css`, shows every setting live, lets you change them, and downloads the result as a **new file named after the client** (e.g. `client-name.css`). |
 | `build.py` | A helper script that serves the guide locally and checks or rebuilds `framework.css`. |
 | `framework.css.bak` | The previous `framework.css`, saved automatically by `build.py --write`. |
 
@@ -19,14 +19,14 @@ A variable-driven CSS framework for Bricks Builder sites, modeled on Automatic.c
    ```
    The guide opens at `http://127.0.0.1:8765/framework-guide.html`. (It has to be served this way, because a double-clicked HTML file isn't allowed to read `framework.css`.) Leave the terminal running, and press Ctrl-C when you're done.
 2. Work through the guide's pages (Color, Typography, Spacing, Layout, Radius, Focus, Buttons, Links) and set them up for the client.
-3. Type a file name in the box at the top (e.g. `acme-plumbing.css`) and click **Download CSS**. If no download is available, the CSS is copied to the clipboard instead.
+3. Type the client name in the box at the top (e.g. `acme-plumbing`) and click **Download CSS** to get `acme-plumbing.css`. If no download is available, the CSS is copied to the clipboard instead.
 4. Add that file to the client's Bricks site.
 
 `framework.css` stays untouched, so the next project starts from the same defaults.
 
 ## Importing into Bricks natively
 
-Instead of loading the CSS file, you can put the framework into Bricks' own Style Manager. Type a file name as above and click **Download for Bricks**. You get two files, named after the CSS file:
+Instead of loading the CSS file, you can put the framework into Bricks' own Style Manager. Type the client name as above and click **Download for Bricks**. You get two files, named after the client:
 
 - `acme-plumbing-global.css`: element rules Bricks has no control for (resets, focus ring, links, header breakpoints). Paste it into **Bricks > Settings > Custom code > Custom CSS**.
 - `acme-plumbing-bricks.json`: everything else, for an AI agent with the Bricks MCP connection to import. It contains:
