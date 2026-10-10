@@ -1255,11 +1255,12 @@ function buildFullCSS() {
 }
 
 /* ---------------- Bricks export ----------------
-   Download for Bricks writes one JSON file for importing the framework into Bricks
-   natively: the scale inputs (Bricks generates the steps itself), a color palette,
-   every other variable by category, one global class per framework class with its
-   CSS, theme style values, and the element CSS with no native home in Bricks.
-   Variables are read back out of buildFullCSS(), so both downloads always agree. */
+   Download for Bricks writes two files for importing the framework into Bricks natively:
+   a JSON file with the scale inputs (Bricks generates the steps itself), a color palette,
+   every other variable by category, one global class per framework class with its CSS,
+   and theme style values; and a CSS file with the element rules that have no native home
+   in Bricks, to paste into its Custom CSS. Variables are read back out of buildFullCSS(),
+   so the Bricks and CSS downloads always agree. */
 const BRICKS_FORMAT = 'blueprint-bricks/1';
 // framework.css section title -> Bricks variable category
 const BRICKS_CATEGORIES = {
@@ -1269,7 +1270,7 @@ const BRICKS_CATEGORIES = {
   'AUTOMATIC SPACING': 'Contextual Spacing', 'LAYOUT': 'Layout & Grid', 'RADIUS': 'Radius',
   'SMART SPACING': 'Smart Spacing', 'FOCUS': 'Focus', 'BUTTONS': 'Buttons', 'LINKS': 'Links',
 };
-// heading props a theme style's typography controls can hold; the rest stay in globalCss
+// heading props a theme style's typography controls can hold; the rest go in the global CSS file
 const THEME_HEADING_PROPS = ['font-size', 'font-family', 'color', 'line-height', 'font-weight', 'letter-spacing', 'font-style', 'text-transform'];
 
 // every unconditional custom property in the CSS, with the section it was declared in
@@ -1406,7 +1407,6 @@ function buildBricksExport(project) {
     variables,
     classes: bricksClasses(),
     themeStyle: bricksThemeStyle(),
-    globalCss: bricksGlobalCSS(),
   };
 }
 
@@ -1451,12 +1451,13 @@ $('#export').addEventListener('click', () => {
   const filename = checkedExportName();
   if (filename) saveFile(filename, buildFullCSS(), 'text/css');
 });
-// the Bricks file shares the CSS file's name: acme.css -> acme-bricks.json
-$('#export-bricks').addEventListener('click', () => {
+// the Bricks files share the CSS file's name: acme.css -> acme-bricks.json and acme-global.css
+$('#export-bricks').addEventListener('click', async () => {
   const filename = checkedExportName();
   if (!filename) return;
   const project = filename.replace(/\.css$/i, '');
-  saveFile(project + '-bricks.json', JSON.stringify(buildBricksExport(project), null, 2) + '\n', 'application/json');
+  await saveFile(project + '-bricks.json', JSON.stringify(buildBricksExport(project), null, 2) + '\n', 'application/json');
+  await saveFile(project + '-global.css', bricksGlobalCSS(), 'text/css');
 });
 
 /* tab nav */

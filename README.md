@@ -26,7 +26,10 @@ A variable-driven CSS framework for Bricks Builder sites, modeled on Automatic.c
 
 ## Importing into Bricks natively
 
-Instead of loading the CSS file, you can put the framework into Bricks' own Style Manager. Type a file name as above and click **Download for Bricks**. You get `acme-plumbing-bricks.json` (named after the CSS file), which an AI agent with the Bricks MCP connection can import. It contains:
+Instead of loading the CSS file, you can put the framework into Bricks' own Style Manager. Type a file name as above and click **Download for Bricks**. You get two files, named after the CSS file:
+
+- `acme-plumbing-global.css`: element rules Bricks has no control for (resets, focus ring, links, header breakpoints). Paste it into **Bricks > Settings > Custom code > Custom CSS**.
+- `acme-plumbing-bricks.json`: everything else, for an AI agent with the Bricks MCP connection to import. It contains:
 
 | Key | Becomes in Bricks |
 | --- | --- |
@@ -36,7 +39,8 @@ Instead of loading the CSS file, you can put the framework into Bricks' own Styl
 | `variables` | Every other variable, grouped by category (transparencies, bridges, grids, button tokens and so on) |
 | `classes` | One global class per framework class, with its CSS |
 | `themeStyle` | Body and h1–h6 typography and section padding, for a site-wide theme style |
-| `globalCss` | Element rules Bricks has no control for (resets, focus ring, links, header breakpoints). Paste into **Bricks > Settings > Custom code > Custom CSS**. |
+
+Your browser may ask once whether this site can download multiple files; allow it to get both.
 
 Use one or the other on a site, not both, or every rule is defined twice.
 
